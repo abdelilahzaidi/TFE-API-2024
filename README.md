@@ -72,3 +72,17 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 
 Nest is [MIT licensed](LICENSE).
 # TFE-API-2024
+
+
+# Project's step
+
+14-05-24
+---
+1.Create project
+2.install dependencie:
+    2.1-typeorm
+    2.2-config
+3.Create modules
+    3.1-auth
+    3.2-user
+    
