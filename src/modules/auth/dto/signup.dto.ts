@@ -29,8 +29,6 @@ export class SignUpDTO {
     @IsIn(['male', 'female'], { message: 'Invalid gender' }) 
     gender: UserGender
   
-    @IsNotEmpty()
-      grade:string;
   
     @IsNotEmpty()
     birthDate: Date;
@@ -53,4 +51,6 @@ export class SignUpDTO {
     constructor() {
       this.status = UserStatus.MEMBER; 
   }
+  @IsNotEmpty()
+  attributionDate : Date
   }

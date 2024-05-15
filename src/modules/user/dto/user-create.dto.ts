@@ -1,4 +1,4 @@
-import { IsBoolean, IsEmail, IsIn, IsNotEmpty } from "class-validator";
+import { IsBoolean, IsEmail, IsIn, IsNotEmpty, MinLength } from "class-validator";
 import { UserGender } from "src/common/enums/gender.enum";
 import { UserStatus } from "src/common/enums/status.enum";
 
@@ -12,11 +12,12 @@ export class UserCreateDTO{
   
     @IsNotEmpty()
     @IsEmail({}, { message: 'Please enter correct email address' })
-    email: string;   
-  
+    email: string;  
+    
+   
     @IsNotEmpty()
     @IsIn(['member', 'admin','responsable'], { message: 'Invalid status' }) 
-    status: UserStatus;
+    status?: UserStatus;
 
 
     @IsNotEmpty()
@@ -44,7 +45,10 @@ export class UserCreateDTO{
     @IsNotEmpty()
     gsm: string;
 
+    @MinLength(6,{ message : 'Please enter minimum 6 character'})
     @IsNotEmpty()
-    grade:number;
+    password: string;
+
+  
    
 }
