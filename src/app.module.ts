@@ -6,6 +6,8 @@ import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './modules/user/user.module';
 import { BdModule } from './common/BD/bd.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { LevelModule } from './modules/level/level.module';
+import { ProgramModule } from './modules/program/program.module';
 
 @Module({
   imports: [
@@ -16,6 +18,8 @@ import { AuthModule } from './modules/auth/auth.module';
     BdModule,
     AuthModule,
     UserModule,
+    LevelModule,
+    ProgramModule
   ],
   controllers: [AppController],
   providers: [AppService],
