@@ -46,12 +46,12 @@ export class UserCreateDTO{
     @IsNotEmpty()
     gsm: string;
 
-    // @MinLength(6,{ message : 'Please enter minimum 6 character'})
-    // @IsNotEmpty()
-    // password: string;
+    @MinLength(6,{ message : 'Please enter minimum 6 character'})
+    @IsNotEmpty()
+    password: string;
 
     @IsNotEmpty()
-    level:number;
+    level?:number ;
   
    
 }

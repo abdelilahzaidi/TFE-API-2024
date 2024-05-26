@@ -13,5 +13,6 @@ export enum TecnhicTypeEnum {
   SONG_LUYEN_VAT_MOT='Song luyen vat mot' ,
   SONG_LUYEN_VAT_HAI='Song luyen vat hai',
   SONG_LUYEN_DAO='Song luyen dao',
-  SONG_LUYEN_KIEM='Song luyen kiem'
+  SONG_LUYEN_KIEM='Song luyen kiem',
+  QUYEN='Quyen'
 }

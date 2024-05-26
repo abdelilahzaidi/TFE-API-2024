@@ -8,6 +8,7 @@ import { BdModule } from './common/BD/bd.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { LevelModule } from './modules/level/level.module';
 import { ProgramModule } from './modules/program/program.module';
+import { TechnicalTypeModule } from './modules/technical-type/technical-type.module';
 
 @Module({
   imports: [
@@ -19,7 +20,8 @@ import { ProgramModule } from './modules/program/program.module';
     AuthModule,
     UserModule,
     LevelModule,
-    ProgramModule
+    ProgramModule,
+    TechnicalTypeModule
   ],
   controllers: [AppController],
   providers: [AppService],

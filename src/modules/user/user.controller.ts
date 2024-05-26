@@ -32,7 +32,7 @@ export class UserController {
     });
     return users;
   }
-  //Get a user by id
+  //Get a user by id 
   @Get(':id')
   async getById(@Param('id') id: number): Promise<UserI> {
     const existingUser = await this.userService.findOneById(id);
@@ -41,9 +41,11 @@ export class UserController {
       console.log('id :' + id + " n'existe pas");
       throw new BadRequestException(`User ${id} doesn't exist!`);
     }
+
     console.log('id :' + id + '  user :' + existingUser.id);
+    //delete existingUser['status'];
     delete existingUser['password'];
-    return await this.userService.findOneById(id);
+    return existingUser;
   }
   //Get a user by level
   @Get(':id/level')

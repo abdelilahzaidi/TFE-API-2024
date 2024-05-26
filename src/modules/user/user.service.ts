@@ -105,7 +105,23 @@ export class UserService {
   }
   //Find a user by id
   async findOneById(id: number): Promise<UserI> {
-    return this.userRepository.findOne({ where: { id } });
+    try {
+      const user = await this.userRepository.findOne({
+        where: { id },
+        relations: ['level', 'level.program'], // Incluez 'level.program' pour charger également ProgramEntity
+      });
+  
+      if (!user) {
+        throw new NotFoundException(`Utilisateur avec l'ID ${id} non trouvé !`);
+      }
+  
+      return user;
+    } catch (error) {
+      throw new InternalServerErrorException(
+        `Une erreur est survenue lors de la récupération de l'utilisateur avec l'ID ${id}.`,
+        error.message,
+      );
+    }
   }
 
   //Find a user by status
@@ -122,37 +138,55 @@ export class UserService {
 
   async update(id: number, dto: UserUpdateDTO) {
     try {
-      const existingUser = await this.userRepository.findOne({ where: { id } });
-      console.log(existingUser)
+      // Vérifier si l'utilisateur existe
+      const existingUser = await this.userRepository.findOne({ where: { id }, relations: ['level'] });
       if (!existingUser) {
-        throw new NotFoundException('User not found!');
+        throw new NotFoundException('Utilisateur non trouvé !');
       }
-
-      const user = new UserEntity();
-
-      user.first_name = dto.first_name;
-      user.last_name = dto.last_name;
-      user.rue = dto.rue;
-      user.birthDate = dto.birthDate;
-      user.attributionDate = new Date();
-      user.actif = dto.actif;
-      user.gsm = dto.gsm;
-      user.status = dto.status;
-      //user.level=dto.level;
-      
-
+  
+      // Hacher le mot de passe si fourni
+      if (dto.password) {
+        existingUser.password = await bcrypt.hash(dto.password, 12);
+      }
+  
+      // Mettre à jour le niveau si fourni
+      if (dto.level) {
+        const level = await this.levelService.findLevelById(dto.level);
+        if (!level) {
+          throw new NotFoundException(`Le niveau ${dto.level} n'existe pas !`);
+        }
+        existingUser.level = level;
+      }
+  
+      // Mettre à jour les autres propriétés de l'utilisateur existant
+      existingUser.first_name = dto.first_name ?? existingUser.first_name;
+      existingUser.last_name = dto.last_name ?? existingUser.last_name;
+      existingUser.gender = dto.gender ?? existingUser.gender;
+      existingUser.email = dto.email ?? existingUser.email;
+      existingUser.rue = dto.rue ?? existingUser.rue;
+      existingUser.commune = dto.commune ?? existingUser.commune;
+      existingUser.ville = dto.ville ?? existingUser.ville;
+      existingUser.birthDate = dto.birthDate ?? existingUser.birthDate;
+      existingUser.attributionDate = new Date(); // Mettre à jour la date d'attribution
+      existingUser.actif = dto.actif ?? existingUser.actif;
+      existingUser.gsm = dto.gsm ?? existingUser.gsm;
+      existingUser.status = dto.status ?? existingUser.status;
+  
+      // Sauvegarder l'utilisateur mis à jour dans la base de données
       const updateResult = await this.userRepository.save(existingUser);
-
-      console.log('Utilisateur mis à jour:', user.level,' ',dto.level);
-
+  
+      console.log('Utilisateur mis à jour:', updateResult);
+  
       return updateResult;
     } catch (error) {
       throw new InternalServerErrorException(
-        error,
         "Une erreur est survenue lors de la modification de l'utilisateur.",
+        error.message,
       );
     }
   }
+  
+  
   async findOneByLevel(userId: number): Promise<UserI> {
     return await this.userRepository.findOne({
       where: { id: userId },
