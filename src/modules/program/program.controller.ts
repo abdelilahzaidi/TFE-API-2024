@@ -1,6 +1,6 @@
 import { ProgramI } from './interface/program.interface';
 import { ProgramService } from './program.service';
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 
 @Controller('program')
 export class ProgramController {
@@ -11,4 +11,11 @@ export class ProgramController {
     async all():Promise<ProgramI[]>{
         return await this.programService.all();
     }
+
+    @Get(':id')
+    async getProgramById(@Param('id') id: number): Promise<ProgramI> {
+        return await this.programService.findOneByProgram(id);
+    }
+    
+
 }

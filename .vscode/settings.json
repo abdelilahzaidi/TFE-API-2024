@@ -9,5 +9,6 @@
             "database": "dragonbleu",
             "name": "zaidi-dragon-b leu"
         }
-    ]
+    ],
+    "CodeGPT.apiKey": "CodeGPT Plus Beta"
 }

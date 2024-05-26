@@ -1,6 +1,7 @@
 import { Exclude } from "class-transformer";
 import { UserGender } from "src/common/enums/gender.enum";
 import { UserStatus } from "src/common/enums/status.enum";
+import { LevelEntity } from "src/modules/level/entity/level.entity";
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
 
 @Entity('user')
@@ -47,4 +48,6 @@ export class UserEntity {
   
     @Column({ type: 'enum', enum: UserStatus, default: UserStatus.MEMBER })
     status: UserStatus;
+    @ManyToOne(() => LevelEntity, (level) => level.users, { nullable: true })
+    level: LevelEntity;
 }

@@ -1,6 +1,7 @@
 import { IsBoolean, IsEmail, IsIn, IsNotEmpty, MinLength } from "class-validator";
 import { UserGender } from "src/common/enums/gender.enum";
 import { UserStatus } from "src/common/enums/status.enum";
+import { LevelEntity } from "src/modules/level/entity/level.entity";
 
 
 export class UserCreateDTO{
@@ -45,10 +46,12 @@ export class UserCreateDTO{
     @IsNotEmpty()
     gsm: string;
 
-    @MinLength(6,{ message : 'Please enter minimum 6 character'})
-    @IsNotEmpty()
-    password: string;
+    // @MinLength(6,{ message : 'Please enter minimum 6 character'})
+    // @IsNotEmpty()
+    // password: string;
 
+    @IsNotEmpty()
+    level:number;
   
    
 }

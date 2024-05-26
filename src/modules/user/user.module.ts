@@ -3,15 +3,18 @@ import { Module, forwardRef } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { UserEntity } from './entity/user.entity';
-import { AuthService } from '../auth/auth.service';
-import { AuthModule } from '../auth/auth.module';
+import { LevelEntity } from '../level/entity/level.entity';
+import { ProgramEntity } from '../program/entity/program.entity';
+import { ProgramModule } from '../program/program.module';
+import { LevelService } from '../level/level.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity])
+  imports: [TypeOrmModule.forFeature([UserEntity,LevelEntity,ProgramEntity]),
+  forwardRef(()=>ProgramModule)
   
 ],
 
-  providers: [UserService],
+  providers: [UserService,LevelService],
   controllers: [UserController],
   exports:[UserService]
 })
