@@ -1,3 +1,4 @@
+import { TechnicalTypeService } from './../technical-type/technical-type.service';
 import { TechnichalTypeEntity } from './../technical-type/entity/technical-type.entity';
 import { ProgramService } from './../program/program.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -8,13 +9,13 @@ import { LevelEntity } from './entity/level.entity';
 import { InitialDataService } from 'src/common/scripts/initialData';
 import { ProgramEntity } from '../program/entity/program.entity';
 import { ProgramModule } from '../program/program.module';
-import { TechnicalTypeService } from '../technical-type/technical-type.service';
+
 
 
 @Module({
   imports:[TypeOrmModule.forFeature([LevelEntity,ProgramEntity,TechnichalTypeEntity])],
   controllers: [LevelController],
-  providers: [LevelService,InitialDataService,ProgramService],
+  providers: [LevelService,InitialDataService,ProgramService,TechnicalTypeService],
   exports:[LevelService]
 })
 export class LevelModule {}

@@ -108,7 +108,7 @@ export class UserService {
     try {
       const user = await this.userRepository.findOne({
         where: { id },
-        relations: ['level', 'level.program'], // Incluez 'level.program' pour charger également ProgramEntity
+        relations: ['level', 'level.program','level.program.technicalTypes'], // Incluez 'level.program' pour charger également ProgramEntity
       });
   
       if (!user) {

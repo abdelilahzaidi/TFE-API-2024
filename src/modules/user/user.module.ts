@@ -7,9 +7,10 @@ import { LevelEntity } from '../level/entity/level.entity';
 import { ProgramEntity } from '../program/entity/program.entity';
 import { ProgramModule } from '../program/program.module';
 import { LevelService } from '../level/level.service';
+import { TechnichalTypeEntity } from '../technical-type/entity/technical-type.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity,LevelEntity,ProgramEntity]),
+  imports: [TypeOrmModule.forFeature([UserEntity,LevelEntity,ProgramEntity,TechnichalTypeEntity]),
   forwardRef(()=>ProgramModule)
   
 ],

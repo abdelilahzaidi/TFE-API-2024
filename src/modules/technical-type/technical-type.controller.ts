@@ -1,4 +1,4 @@
-import { Controller,Get } from '@nestjs/common';
+import { Controller,Get, Param } from '@nestjs/common';
 import { TechnicalTypeService } from './technical-type.service';
 
 @Controller('technical-type')
@@ -9,5 +9,9 @@ export class TechnicalTypeController {
     @Get()
     async all():Promise<any>{
         return await this.technichalTypeService.all();
+    }
+    @Get(':id')
+    async getById(@Param('id') id : number):Promise<any>{
+        return await this.technichalTypeService.findById(id)
     }
 }

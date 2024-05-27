@@ -12,4 +12,7 @@ export class TechnicalTypeService {
     async all():Promise<any>{
         return await this.technicalTypeRepository.find()
     }
+    async findById(id:number):Promise<any>{
+        return await this.technicalTypeRepository.findOne({where:{id}})
+    }
 }
