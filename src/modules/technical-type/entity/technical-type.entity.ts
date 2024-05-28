@@ -1,5 +1,6 @@
 import { ProgramEntity } from "src/modules/program/entity/program.entity";
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { TechnichalEntity } from "src/modules/technichal/entity/technichal.entity";
+import { Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('technical-type')
 export class TechnichalTypeEntity{
@@ -7,9 +8,7 @@ export class TechnichalTypeEntity{
     id:number;
     @Column()
     type:string;
-    @ManyToMany(
-        type => ProgramEntity,
-        program =>program.technicalTypes
-    )
-    programs:ProgramEntity[];
+    @OneToMany(() => TechnichalEntity, (technichal) => technichal)
+    technichals?: TechnichalEntity[];
+
 }

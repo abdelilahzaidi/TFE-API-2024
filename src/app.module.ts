@@ -9,6 +9,9 @@ import { AuthModule } from './modules/auth/auth.module';
 import { LevelModule } from './modules/level/level.module';
 import { ProgramModule } from './modules/program/program.module';
 import { TechnicalTypeModule } from './modules/technical-type/technical-type.module';
+import { TechnichalModule } from './modules/technichal/technichal.module';
+import { MessageModule } from './modules/message/message.module';
+
 
 @Module({
   imports: [
@@ -21,7 +24,9 @@ import { TechnicalTypeModule } from './modules/technical-type/technical-type.mod
     UserModule,
     LevelModule,
     ProgramModule,
-    TechnicalTypeModule
+    TechnicalTypeModule,
+    TechnichalModule,
+    MessageModule
   ],
   controllers: [AppController],
   providers: [AppService],

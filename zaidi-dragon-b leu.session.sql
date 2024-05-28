@@ -1,1 +1,1 @@
-DROP TABLE level
+DROP TABLE technichal

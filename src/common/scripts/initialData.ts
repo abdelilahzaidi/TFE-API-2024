@@ -7,6 +7,8 @@ import { ProgramEntity } from 'src/modules/program/entity/program.entity';
 import { ProgramEnum } from '../enums/program.enum';
 import { TechnichalTypeEntity } from 'src/modules/technical-type/entity/technical-type.entity';
 import { TecnhicTypeEnum } from '../enums/technical-type.enum';
+import { TechnichalEntity } from 'src/modules/technichal/entity/technichal.entity';
+import { TechnichalEnum } from '../enums/tecnichal.enum';
 
 @Injectable()
 export class InitialDataService implements OnModuleInit {
@@ -17,11 +19,23 @@ export class InitialDataService implements OnModuleInit {
     private readonly programRepository: Repository<ProgramEntity>,
     @InjectRepository(TechnichalTypeEntity)
     private readonly technicalTypeRepository: Repository<TechnichalTypeEntity>,
+    @InjectRepository(TechnichalEntity) 
+    private readonly technichalRepository : Repository<TechnichalEntity>
   ) {}
+
   async onModuleInit() {
+    console.log('Initializing data...');
+
     const levelCount = await this.levelRepository.count();
     const programCount = await this.programRepository.count();
-    const technichalType = await this.technicalTypeRepository.count();
+    const technichalTypeCount = await this.technicalTypeRepository.count();
+    const technichalCount = await this.technichalRepository.count();
+
+    console.log(`Level count: ${levelCount}`);
+    console.log(`Program count: ${programCount}`);
+    console.log(`TechnichalType count: ${technichalTypeCount}`);
+    console.log(`Technichal count: ${technichalCount}`);
+
     if (levelCount === 0) {
       await this.levelRepository.save([
         { grade: LevelEnum.BLEU_0, during: '6 mois' },
@@ -39,7 +53,9 @@ export class InitialDataService implements OnModuleInit {
         { grade: LevelEnum.ROUGE_5, during: '6 mois' },
         { grade: LevelEnum.ROUGE_6, during: '6 mois' },
       ]);
+      console.log('Level data initialized.');
     }
+
     if (programCount === 0) {
       await this.programRepository.save([
         { title: ProgramEnum.BLEU_0 },
@@ -57,8 +73,10 @@ export class InitialDataService implements OnModuleInit {
         { title: ProgramEnum.ROUGE_5 },
         { title: ProgramEnum.ROUGE_6 },
       ]);
+      console.log('Program data initialized.');
     }
-    if (technichalType === 0) {
+
+    if (technichalTypeCount === 0) {
       await this.technicalTypeRepository.save([
         { type: TecnhicTypeEnum.TECHNIQUE_DE_BASE },
         { type: TecnhicTypeEnum.POSITION },
@@ -71,6 +89,21 @@ export class InitialDataService implements OnModuleInit {
         { type: TecnhicTypeEnum.SONG_LUYEN_DAO },
         { type: TecnhicTypeEnum.SONG_LUYEN_VAT_HAI },
       ]);
+      console.log('TechnichalType data initialized.');
+    }
+
+    if (technichalCount === 0) {
+      await this.technichalRepository.save([
+        {
+          nom: TechnichalEnum.Ciseau_1,          
+          description: 'Description de DAM_THANG'
+        },
+        {
+          nom: TechnichalEnum.Coup_de_pied_1,          
+          description: 'Description de POSITION'
+        }
+      ]);
+      console.log('Technichal data initialized.');
     }
   }
 }

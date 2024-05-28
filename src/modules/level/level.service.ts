@@ -12,6 +12,7 @@ import { ProgramI } from '../program/interface/program.interface';
 import { LevelI } from './interface/level.interface';
 import { TechnicalTypeService } from '../technical-type/technical-type.service';
 import { TechnichalTypeEntity } from '../technical-type/entity/technical-type.entity';
+import { TechnichalEntity } from '../technichal/entity/technichal.entity';
 
 @Injectable()
 export class LevelService {
@@ -19,8 +20,8 @@ export class LevelService {
     @InjectRepository(LevelEntity)
     private levelRepository: Repository<LevelEntity>,
     private readonly programService: ProgramService,
-    @InjectRepository(TechnichalTypeEntity)
-    private readonly technicalTypeRepository: Repository<TechnichalTypeEntity>
+    @InjectRepository(TechnichalEntity)
+    private readonly technichalRepository: Repository<TechnichalEntity>
     //private readonly technicalTypeService : TechnicalTypeService
   ) {}
 
@@ -111,14 +112,14 @@ export class LevelService {
         }
   
         // Si des technicalTypeIds sont fournis, les récupérer et les associer au program
-        if (dto.technicalTypeIds && dto.technicalTypeIds.length > 0) {
-          const technicalTypes = await this.technicalTypeRepository.find({
-           where:{id:In(dto.technicalTypeIds)}
+        if (dto.technicalIds && dto.technicalIds.length > 0) {
+          const technicals = await this.technichalRepository.find({
+           where:{id:In(dto.technicalIds)}
           });
-          program.technicalTypes = technicalTypes;
+          program.technicals = technicals;
         } else {
           // Si aucun technicalTypeId n'est fourni, on vide la relation
-          program.technicalTypes = [];
+          program.technicals = [];
         }
 
         // Mettre à jour la relation 'program' dans l'entité 'LevelEntity'
