@@ -15,13 +15,15 @@ import { TechnichalService } from '../technichal/technichal.service';
 import { MessageService } from '../message/message.service';
 import { UserService } from '../user/user.service';
 import { UserEntity } from '../user/entity/user.entity';
+import { EventService } from '../event/event.service';
+import { EventEntity } from '../event/entity/event.entity';
 
 
 
 @Module({
-  imports:[TypeOrmModule.forFeature([LevelEntity,ProgramEntity,TechnichalTypeEntity,TechnichalEntity,MessageEntity,UserEntity])],
+  imports:[TypeOrmModule.forFeature([LevelEntity,ProgramEntity,TechnichalTypeEntity,TechnichalEntity,MessageEntity,UserEntity,EventEntity])],
   controllers: [LevelController],
-  providers: [LevelService,InitialDataService,ProgramService,TechnicalTypeService,TechnichalService,MessageService,UserService],
+  providers: [LevelService,InitialDataService,ProgramService,TechnicalTypeService,TechnichalService,MessageService,UserService,EventService],
   exports:[LevelService]
 })
 export class LevelModule {}

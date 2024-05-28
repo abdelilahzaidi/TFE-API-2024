@@ -11,6 +11,8 @@ import { ProgramModule } from './modules/program/program.module';
 import { TechnicalTypeModule } from './modules/technical-type/technical-type.module';
 import { TechnichalModule } from './modules/technichal/technichal.module';
 import { MessageModule } from './modules/message/message.module';
+import { EventModule } from './modules/event/event.module';
+import { TypeEventModule } from './modules/type-event/type-event.module';
 
 
 @Module({
@@ -26,7 +28,9 @@ import { MessageModule } from './modules/message/message.module';
     ProgramModule,
     TechnicalTypeModule,
     TechnichalModule,
-    MessageModule
+    MessageModule,
+    EventModule,
+    TypeEventModule
   ],
   controllers: [AppController],
   providers: [AppService],

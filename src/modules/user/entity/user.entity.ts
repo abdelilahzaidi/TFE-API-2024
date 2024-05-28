@@ -1,6 +1,7 @@
 import { Exclude } from 'class-transformer';
 import { UserGender } from 'src/common/enums/gender.enum';
 import { UserStatus } from 'src/common/enums/status.enum';
+import { EventEntity } from 'src/modules/event/entity/event.entity';
 import { LevelEntity } from 'src/modules/level/entity/level.entity';
 import { MessageEntity } from 'src/modules/message/entity/message.entity';
 import {
@@ -10,6 +11,7 @@ import {
   ManyToOne,
   ManyToMany,
   OneToMany,
+  JoinTable,
 } from 'typeorm';
 
 @Entity('user')
@@ -63,4 +65,18 @@ export class UserEntity {
 
   @OneToMany(() => MessageEntity, (message) => message.sender)
   sentMessages: MessageEntity[];
+
+  @ManyToMany(() => EventEntity, (event) => event.users)
+  @JoinTable({
+    name: 'user_event',
+    joinColumn: {
+      name: 'userId',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'eventId',
+      referencedColumnName: 'id',
+    },
+  })
+  events: EventEntity[];
 }

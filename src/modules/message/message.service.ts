@@ -34,7 +34,7 @@ export class MessageService {
         sender: sender,
       });
   
-   
+      console.log('message : ',message)
       return await this.messageRepository.save(message);
     }
 

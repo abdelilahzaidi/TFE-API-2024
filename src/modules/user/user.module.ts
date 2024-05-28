@@ -11,14 +11,16 @@ import { TechnichalTypeEntity } from '../technical-type/entity/technical-type.en
 import { TechnichalEntity } from '../technichal/entity/technichal.entity';
 import { MessageEntity } from '../message/entity/message.entity';
 import { MessageService } from '../message/message.service';
+import { EventEntity } from '../event/entity/event.entity';
+import { EventService } from '../event/event.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity,LevelEntity,ProgramEntity,TechnichalTypeEntity,TechnichalEntity,MessageEntity]),
+  imports: [TypeOrmModule.forFeature([UserEntity,LevelEntity,ProgramEntity,TechnichalTypeEntity,TechnichalEntity,MessageEntity,EventEntity]),
   forwardRef(()=>ProgramModule)
   
 ],
 
-  providers: [UserService,LevelService,MessageService],
+  providers: [UserService,LevelService,MessageService,EventService],
   controllers: [UserController],
   exports:[UserService]
 })
