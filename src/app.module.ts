@@ -13,6 +13,7 @@ import { TechnichalModule } from './modules/technichal/technichal.module';
 import { MessageModule } from './modules/message/message.module';
 import { EventModule } from './modules/event/event.module';
 import { TypeEventModule } from './modules/type-event/type-event.module';
+import { AbonnementModule } from './modules/abonnement/abonnement.module';
 
 
 @Module({
@@ -30,7 +31,8 @@ import { TypeEventModule } from './modules/type-event/type-event.module';
     TechnichalModule,
     MessageModule,
     EventModule,
-    TypeEventModule
+    TypeEventModule,
+    AbonnementModule
   ],
   controllers: [AppController],
   providers: [AppService],

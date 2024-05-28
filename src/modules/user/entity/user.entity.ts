@@ -1,6 +1,7 @@
 import { Exclude } from 'class-transformer';
 import { UserGender } from 'src/common/enums/gender.enum';
 import { UserStatus } from 'src/common/enums/status.enum';
+import { AbonnementEntity } from 'src/modules/abonnement/entity/abonnement.entity';
 import { EventEntity } from 'src/modules/event/entity/event.entity';
 import { LevelEntity } from 'src/modules/level/entity/level.entity';
 import { MessageEntity } from 'src/modules/message/entity/message.entity';
@@ -79,4 +80,18 @@ export class UserEntity {
     },
   })
   events: EventEntity[];
+
+  @ManyToMany(() => AbonnementEntity, (abonnement) => abonnement.users)
+  @JoinTable({
+    name: 'user_abonnement',
+    joinColumn: {
+      name: 'userId',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'abonnementId',
+      referencedColumnName: 'id',
+    },
+  })
+  abonnements: AbonnementEntity[];
 }
