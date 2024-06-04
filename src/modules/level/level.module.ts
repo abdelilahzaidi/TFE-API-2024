@@ -17,13 +17,15 @@ import { UserService } from '../user/user.service';
 import { UserEntity } from '../user/entity/user.entity';
 import { EventService } from '../event/event.service';
 import { EventEntity } from '../event/entity/event.entity';
+import { TypeAbonnementEntity } from '../type-abonnement/entity/type-abonnement';
+import { TypeAbonnementService } from '../type-abonnement/type-abonnement.service';
 
 
 
 @Module({
-  imports:[TypeOrmModule.forFeature([LevelEntity,ProgramEntity,TechnichalTypeEntity,TechnichalEntity,MessageEntity,UserEntity,EventEntity])],
+  imports:[TypeOrmModule.forFeature([LevelEntity,ProgramEntity,TechnichalTypeEntity,TechnichalEntity,MessageEntity,UserEntity,EventEntity,TypeAbonnementEntity])],
   controllers: [LevelController],
-  providers: [LevelService,InitialDataService,ProgramService,TechnicalTypeService,TechnichalService,MessageService,UserService,EventService],
+  providers: [LevelService,InitialDataService,ProgramService,TechnicalTypeService,TechnichalService,MessageService,UserService,EventService,TypeAbonnementService],
   exports:[LevelService]
 })
 export class LevelModule {}

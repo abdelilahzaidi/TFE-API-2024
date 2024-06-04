@@ -8,7 +8,7 @@ export class TechnichalTypeEntity{
     id:number;
     @Column()
     type:string;
-    @OneToMany(() => TechnichalEntity, (technichal) => technichal)
+    @OneToMany(() => TechnichalEntity, (technichal) => technichal.technichalType)
     technichals?: TechnichalEntity[];
 
 }

@@ -1,3 +1,4 @@
+import { TechnicalTypeService } from './../technical-type/technical-type.service';
 import { Module } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { MessageController } from './message.controller';
@@ -11,10 +12,11 @@ import { ProgramEntity } from '../program/entity/program.entity';
 import { ProgramService } from '../program/program.service';
 import { TechnichalEntity } from '../technichal/entity/technichal.entity';
 import { TechnichalService } from '../technichal/technichal.service';
+import { TechnichalTypeEntity } from '../technical-type/entity/technical-type.entity';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([MessageEntity,UserEntity,LevelEntity,ProgramEntity,TechnichalEntity])],
-  providers: [MessageService,UserService,LevelService,ProgramService,TechnichalService],
+  imports:[TypeOrmModule.forFeature([MessageEntity,UserEntity,LevelEntity,ProgramEntity,TechnichalEntity,TechnichalTypeEntity])],
+  providers: [MessageService,UserService,LevelService,ProgramService,TechnichalService,TechnicalTypeService],
   controllers: [MessageController],
   exports:[MessageService]
 })

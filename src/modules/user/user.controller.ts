@@ -8,11 +8,14 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserI } from './interface/user.interface';
 import { UserCreateDTO } from './dto/user-create.dto';
-import { UserUpdateDTO } from './dto/user-update.dto';
+import { UserStatus } from 'src/common/enums/status.enum';
+import { Status } from 'src/common/decorators/status.decorator';
+import { StatusGuard } from 'src/common/guards/status.guards';
 
 @Controller('user')
 export class UserController {
@@ -28,7 +31,8 @@ export class UserController {
   async all(): Promise<UserI[]> {
     const users = await this.userService.all();
     users.forEach(user => {
-      delete user['password']; // Supprimer la propriété 'password' de chaque utilisateur
+      // Supprimer les propriétés 
+      delete user['password'];
     });
     return users;
   }
@@ -57,6 +61,8 @@ export class UserController {
     return user
   }
   //create a user
+  // @UseGuards(StatusGuard)
+  // @Status(UserStatus.ADMIN)
   @Post()
   async createUser(@Body() dto: UserCreateDTO): Promise<UserI> {
     console.log('DTO in controler ', dto);
@@ -67,6 +73,8 @@ export class UserController {
     return await this.userService.create(dto);
   }
   //Delete a user
+  @UseGuards(StatusGuard)
+  @Status(UserStatus.ADMIN)
   @Delete(':id')
   async delete(@Param('id') id: number): Promise<UserI> {
     const existingUser = await this.userService.findOneById(id);
@@ -81,6 +89,8 @@ export class UserController {
   }
 
   //Update a user
+  @UseGuards(StatusGuard)
+  @Status(UserStatus.ADMIN)
   @Put(':id')
   async put(@Param('id') id: number, @Body() body): Promise<UserI> {
     const { ...data } = body;

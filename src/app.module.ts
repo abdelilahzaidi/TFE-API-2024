@@ -14,6 +14,7 @@ import { MessageModule } from './modules/message/message.module';
 import { EventModule } from './modules/event/event.module';
 import { TypeEventModule } from './modules/type-event/type-event.module';
 import { AbonnementModule } from './modules/abonnement/abonnement.module';
+import { TypeAbonnementModule } from './modules/type-abonnement/type-abonnement.module';
 
 
 @Module({
@@ -32,7 +33,8 @@ import { AbonnementModule } from './modules/abonnement/abonnement.module';
     MessageModule,
     EventModule,
     TypeEventModule,
-    AbonnementModule
+    AbonnementModule,
+    TypeAbonnementModule
   ],
   controllers: [AppController],
   providers: [AppService],

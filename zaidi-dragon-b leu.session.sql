@@ -1,1 +1,1 @@
-DROP TABLE technichal
+DROP TABLE user_abonnement

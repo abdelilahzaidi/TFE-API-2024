@@ -59,12 +59,14 @@ export class UserEntity {
 
   @Column({ type: 'enum', enum: UserStatus, default: UserStatus.MEMBER })
   status: UserStatus;
-  @ManyToOne(() => LevelEntity, (level) => level.users, { nullable: true })
+
+  @ManyToOne(() => LevelEntity, (level) => level.users, { nullable: true ,eager:true})
   level: LevelEntity;
-  @ManyToMany(() => MessageEntity, (message) => message.receivers)
+
+  @ManyToMany(() => MessageEntity, (message) => message.receivers, { cascade: true })
   receivedMessages: MessageEntity[];
 
-  @OneToMany(() => MessageEntity, (message) => message.sender)
+  @OneToMany(() => MessageEntity, (message) => message.sender, { cascade: ['remove'] })
   sentMessages: MessageEntity[];
 
   @ManyToMany(() => EventEntity, (event) => event.users)
@@ -81,17 +83,6 @@ export class UserEntity {
   })
   events: EventEntity[];
 
-  @ManyToMany(() => AbonnementEntity, (abonnement) => abonnement.users)
-  @JoinTable({
-    name: 'user_abonnement',
-    joinColumn: {
-      name: 'userId',
-      referencedColumnName: 'id',
-    },
-    inverseJoinColumn: {
-      name: 'abonnementId',
-      referencedColumnName: 'id',
-    },
-  })
+  @OneToMany(() => AbonnementEntity, (abonnement) => abonnement.user)
   abonnements: AbonnementEntity[];
 }

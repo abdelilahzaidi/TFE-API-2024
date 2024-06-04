@@ -1,5 +1,7 @@
-export enum Abonnement {
-    MENSUEL = 'mensuel',
-    TRIMESTRIEL = 'trimestriel',
-    ANNUEL="annuel"
-  }
+import { TarifEnum } from "./tarif.enum";
+
+export enum TypeAbonnementEnum {
+  MENSUEL = "Mensuel",
+  TRIMESTRIEL = "Trimestre",  
+  ANNUEL = "Annuel",
+}

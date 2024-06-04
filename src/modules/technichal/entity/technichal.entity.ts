@@ -10,8 +10,8 @@ export class TechnichalEntity {
   nom: string; 
   @Column()
   description: string;
-  @ManyToMany(() => ProgramEntity, (program) => program.technicals)
+  @ManyToMany(() => ProgramEntity, (program) => program.technicals,{eager:true})
   programs: ProgramEntity[];
-  @ManyToOne(() => TechnichalTypeEntity, (technichalType) => technichalType.technichals, { nullable: true })
+  @ManyToOne(() => TechnichalTypeEntity, (technichalType) => technichalType.technichals, { nullable: true, eager :true })
     technichalType: TechnichalTypeEntity;
 }

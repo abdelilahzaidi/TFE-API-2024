@@ -1,3 +1,4 @@
+import { TechnicalTypeService } from './../technical-type/technical-type.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module, forwardRef } from '@nestjs/common';
 import { UserService } from './user.service';
@@ -20,7 +21,7 @@ import { EventService } from '../event/event.service';
   
 ],
 
-  providers: [UserService,LevelService,MessageService,EventService],
+  providers: [UserService,LevelService,MessageService,EventService,TechnicalTypeService],
   controllers: [UserController],
   exports:[UserService]
 })

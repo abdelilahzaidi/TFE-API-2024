@@ -1,6 +1,7 @@
 import { UserGender } from 'src/common/enums/gender.enum';
 import { UserStatus } from 'src/common/enums/status.enum';
 import { LevelEntity } from 'src/modules/level/entity/level.entity';
+import { MessageEntity } from 'src/modules/message/entity/message.entity';
 import { Column } from 'typeorm';
 
 export interface UserI {
@@ -47,4 +48,5 @@ export interface UserI {
   status: UserStatus;
 
   level?:LevelEntity;
+
 }

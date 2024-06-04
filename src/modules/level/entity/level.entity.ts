@@ -21,7 +21,7 @@ export class LevelEntity {
   @OneToMany(() => UserEntity, (user) => user.level)
   users?: UserEntity[];
 
-  @OneToOne(() => ProgramEntity)
+  @OneToOne(() => ProgramEntity, program => program.grade)
   @JoinColumn()
   program?: ProgramEntity;
 }

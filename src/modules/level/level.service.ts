@@ -27,7 +27,7 @@ export class LevelService {
 
   async all(): Promise<LevelEntity[]> {
     try {
-      const levels = await this.levelRepository.find();
+      const levels = await this.levelRepository.find({select:['users'],relations:['users']});
       console.log('Levels:', levels); // Log pour debug
       return levels;
     } catch (error) {
@@ -35,12 +35,24 @@ export class LevelService {
       throw error;
     }
   }
+  // async findLevelById(id: number): Promise<LevelEntity | undefined> {
+  //   const existingLevel = await this.levelRepository.findOne({ where: { id },relations:['users'] });
+  //   if (!existingLevel) {
+  //     throw new NotFoundException(`Level ${id} don't exist!!!`);
+  //   }
+  //   return this.levelRepository.findOne({ where: { id } });
+  // }
   async findLevelById(id: number): Promise<LevelEntity | undefined> {
-    const existingLevel = await this.levelRepository.findOne({ where: { id } });
+    const existingLevel = await this.levelRepository.findOne({
+      where: { id },
+      relations: ['users'], // Charge les utilisateurs associés
+    });
+
     if (!existingLevel) {
-      throw new NotFoundException(`Level ${id} don't exist!!!`);
+      throw new NotFoundException(`Level ${id} doesn't exist!!!`);
     }
-    return this.levelRepository.findOne({ where: { id } });
+
+    return existingLevel;
   }
 
 

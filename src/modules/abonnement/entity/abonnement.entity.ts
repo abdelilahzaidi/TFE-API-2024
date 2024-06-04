@@ -1,5 +1,6 @@
+import { TypeAbonnementEntity } from "src/modules/type-abonnement/entity/type-abonnement";
 import { UserEntity } from "src/modules/user/entity/user.entity";
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('abonnement')
 export class AbonnementEntity{
@@ -9,7 +10,11 @@ export class AbonnementEntity{
     dateDebut:Date;
     @Column()
     dateFin:Date;
-    @ManyToMany(() => UserEntity, (user) => user.abonnements)
-    users:UserEntity[]
+    @ManyToOne(() => UserEntity, user => user.abonnements)
+    user: UserEntity;
+
+    @ManyToOne(() => TypeAbonnementEntity, typeAbonnement => typeAbonnement.abonnements)
+    typeAbonnement: TypeAbonnementEntity;
+
 
 }

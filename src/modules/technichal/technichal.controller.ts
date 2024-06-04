@@ -12,4 +12,6 @@ export class TechnichalController {
     async all():Promise<TechnichalEntity[]>{
         return await this.technichalService.all();
     }
+
+    
 }

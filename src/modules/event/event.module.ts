@@ -11,10 +11,12 @@ import { ProgramService } from '../program/program.service';
 import { ProgramEntity } from '../program/entity/program.entity';
 import { TechnichalEntity } from '../technichal/entity/technichal.entity';
 import { TechnichalService } from '../technichal/technichal.service';
+import { TechnicalTypeModule } from '../technical-type/technical-type.module';
+import { TechnicalTypeService } from '../technical-type/technical-type.service';
 
 @Module({
   imports:[TypeOrmModule.forFeature([EventEntity,UserEntity,LevelEntity,ProgramEntity,
-    TechnichalEntity])],
+    TechnichalEntity,TechnicalTypeModule])],
   providers: [EventService,UserService,LevelService,ProgramService,TechnichalService],
   controllers: [EventController],
   exports:[EventService]

@@ -1,6 +1,9 @@
+
 import { UserStatus } from 'src/common/enums/status.enum';
 import {
   ConflictException,
+  HttpException,
+  HttpStatus,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -23,13 +26,15 @@ export class UserService {
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
 
+  
+
     private readonly levelService: LevelService
   ) {}
   //Features for users
   //List all users
   async all(): Promise<UserI[]> {
     console.log('Hello all');
-    return await this.userRepository.find();
+    return await this.userRepository.find({select:['id','first_name','last_name','gender','birthDate','attributionDate','rue','commune','ville','actif','gsm','email','status','level'],relations:['level','level.program','level.program.technicals']});
   }
   //Create user
   async create(createUser: UserCreateDTO): Promise<UserI> {
@@ -108,7 +113,7 @@ export class UserService {
     try {
       const user = await this.userRepository.findOne({
         where: { id },
-        relations: ['level', 'level.program','level.program.technicalTypes'], // Incluez 'level.program' pour charger également ProgramEntity
+        relations: ['level', 'level.program'], // Incluez 'level.program' pour charger également ProgramEntity
       });
   
       if (!user) {
@@ -133,6 +138,10 @@ export class UserService {
   async delete(id: number): Promise<any> {
     return this.userRepository.delete(id);
   }
+
+
+
+  
 
   //update a user
 
@@ -192,5 +201,15 @@ export class UserService {
       where: { id: userId },
       relations: ['level','level.program'],
     });
+  }
+
+  async findUserStatusByUserId(id: any) {
+    const user = await this.userRepository.findOne({ where: { id } });
+
+    if (!user) {
+      throw new HttpException('No user found by Id', HttpStatus.NOT_FOUND);
+    }
+
+    return user.status;
   }
 }

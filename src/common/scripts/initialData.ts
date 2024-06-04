@@ -1,3 +1,4 @@
+import { TarifEnum } from './../enums/tarif.enum';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LevelEntity } from 'src/modules/level/entity/level.entity';
@@ -9,6 +10,8 @@ import { TechnichalTypeEntity } from 'src/modules/technical-type/entity/technica
 import { TecnhicTypeEnum } from '../enums/technical-type.enum';
 import { TechnichalEntity } from 'src/modules/technichal/entity/technichal.entity';
 import { TechnichalEnum } from '../enums/tecnichal.enum';
+import { TypeAbonnementEnum } from '../enums/abonnement.enum';
+import { TypeAbonnementEntity } from 'src/modules/type-abonnement/entity/type-abonnement';
 
 @Injectable()
 export class InitialDataService implements OnModuleInit {
@@ -20,7 +23,9 @@ export class InitialDataService implements OnModuleInit {
     @InjectRepository(TechnichalTypeEntity)
     private readonly technicalTypeRepository: Repository<TechnichalTypeEntity>,
     @InjectRepository(TechnichalEntity) 
-    private readonly technichalRepository : Repository<TechnichalEntity>
+    private readonly technichalRepository : Repository<TechnichalEntity>,
+    @InjectRepository(TypeAbonnementEntity) 
+    private readonly typeAbonnemntRepository : Repository<TypeAbonnementEntity>
   ) {}
 
   async onModuleInit() {
@@ -30,6 +35,7 @@ export class InitialDataService implements OnModuleInit {
     const programCount = await this.programRepository.count();
     const technichalTypeCount = await this.technicalTypeRepository.count();
     const technichalCount = await this.technichalRepository.count();
+    const typeAbonnementCount = await this.typeAbonnemntRepository.count();
 
     console.log(`Level count: ${levelCount}`);
     console.log(`Program count: ${programCount}`);
@@ -101,6 +107,25 @@ export class InitialDataService implements OnModuleInit {
         {
           nom: TechnichalEnum.Coup_de_pied_1,          
           description: 'Description de POSITION'
+        }
+      ]);
+      console.log('Technichal data initialized.');
+    }
+    if (typeAbonnementCount === 0) {
+      await this.typeAbonnemntRepository.save([
+        {
+          type:TypeAbonnementEnum.MENSUEL,
+          tarif:TarifEnum.MENSUEL
+        },
+        {
+          type:TypeAbonnementEnum.TRIMESTRIEL,
+          tarif:TarifEnum.TRIMESTRE,
+          //dateFin: new Date('2024-12-31') 
+        },
+        {
+          type:TypeAbonnementEnum.ANNUEL,
+          tarif:TarifEnum.ANNUEL,
+          //dateFin: new Date('2024-12-31') 
         }
       ]);
       console.log('Technichal data initialized.');

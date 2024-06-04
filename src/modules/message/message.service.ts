@@ -1,6 +1,6 @@
 import { Body, Get, Injectable, NotFoundException, Param, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { UserEntity } from '../user/entity/user.entity';
 import { MessageEntity } from './entity/message.entity';
 import { CreateMessageDto } from './dto/maessage-create.dto';
@@ -38,6 +38,26 @@ export class MessageService {
       return await this.messageRepository.save(message);
     }
 
+    // async getMessagesBySenders(senderIds: number[]): Promise<MessageEntity[]> {
+    //   return await this.messageRepository.find({
+    //     where: {
+    //       sender: {
+    //         id: In(senderIds)
+    //       }
+    //     },
+    //     relations: ['sender', 'receivers'] // Include relations if necessary
+    //   });
+    // }
+
+    async getMessagesByReceiver(receiverId: number): Promise<MessageEntity[]> {
+      return await this.messageRepository.createQueryBuilder('message')
+        .leftJoinAndSelect('message.receivers', 'receiver')
+        .where('receiver.id = :receiverId', { receiverId })
+        .getMany();
+    }
+
     
  
 }
+
+
