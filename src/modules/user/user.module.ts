@@ -1,3 +1,4 @@
+import { SeanceModule } from './../seance/seance.module';
 import { TechnicalTypeService } from './../technical-type/technical-type.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module, forwardRef } from '@nestjs/common';
@@ -14,14 +15,17 @@ import { MessageEntity } from '../message/entity/message.entity';
 import { MessageService } from '../message/message.service';
 import { EventEntity } from '../event/entity/event.entity';
 import { EventService } from '../event/event.service';
+import { SeanceEntity } from '../seance/entity/seance.entity';
+import { SeanceService } from '../seance/seance.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity,LevelEntity,ProgramEntity,TechnichalTypeEntity,TechnichalEntity,MessageEntity,EventEntity]),
-  forwardRef(()=>ProgramModule)
+  imports: [TypeOrmModule.forFeature([UserEntity,LevelEntity,ProgramEntity,TechnichalTypeEntity,TechnichalEntity,MessageEntity,EventEntity,SeanceEntity]),
+  forwardRef(()=>ProgramModule),
+  forwardRef(()=>SeanceModule)
   
 ],
 
-  providers: [UserService,LevelService,MessageService,EventService,TechnicalTypeService],
+  providers: [UserService,LevelService,MessageService,EventService,TechnicalTypeService,SeanceService],
   controllers: [UserController],
   exports:[UserService]
 })

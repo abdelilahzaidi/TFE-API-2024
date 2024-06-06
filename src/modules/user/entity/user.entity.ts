@@ -5,6 +5,7 @@ import { AbonnementEntity } from 'src/modules/abonnement/entity/abonnement.entit
 import { EventEntity } from 'src/modules/event/entity/event.entity';
 import { LevelEntity } from 'src/modules/level/entity/level.entity';
 import { MessageEntity } from 'src/modules/message/entity/message.entity';
+import { SeanceEntity } from 'src/modules/seance/entity/seance.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -85,4 +86,7 @@ export class UserEntity {
 
   @OneToMany(() => AbonnementEntity, (abonnement) => abonnement.user)
   abonnements: AbonnementEntity[];
+
+  @ManyToMany(() => SeanceEntity, (seance) => seance.users)
+  seances: SeanceEntity[];
 }

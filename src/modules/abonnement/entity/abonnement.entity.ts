@@ -1,6 +1,7 @@
+import { InvoiceEntity } from "src/modules/invoice/entity/invoice.entity";
 import { TypeAbonnementEntity } from "src/modules/type-abonnement/entity/type-abonnement";
 import { UserEntity } from "src/modules/user/entity/user.entity";
-import { Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('abonnement')
 export class AbonnementEntity{
@@ -16,5 +17,7 @@ export class AbonnementEntity{
     @ManyToOne(() => TypeAbonnementEntity, typeAbonnement => typeAbonnement.abonnements)
     typeAbonnement: TypeAbonnementEntity;
 
+    @OneToMany(() => InvoiceEntity, invoice => invoice.abonnement)
+    invoices: InvoiceEntity[];
 
 }
