@@ -1,3 +1,4 @@
+import { HoraireService } from './../horaire/horaire.service';
 import { MessageEntity } from 'src/modules/message/entity/message.entity';
 import { TechnicalTypeService } from './../technical-type/technical-type.service';
 import { TechnichalTypeEntity } from './../technical-type/entity/technical-type.entity';
@@ -19,13 +20,15 @@ import { EventService } from '../event/event.service';
 import { EventEntity } from '../event/entity/event.entity';
 import { TypeAbonnementEntity } from '../type-abonnement/entity/type-abonnement';
 import { TypeAbonnementService } from '../type-abonnement/type-abonnement.service';
+import { HoraireEntity } from '../horaire/entity/horaire.entity';
+import { SeanceUserEntity } from '../seance-user/entity/seance-user.entity';
 
 
 
 @Module({
-  imports:[TypeOrmModule.forFeature([LevelEntity,ProgramEntity,TechnichalTypeEntity,TechnichalEntity,MessageEntity,UserEntity,EventEntity,TypeAbonnementEntity])],
+  imports:[TypeOrmModule.forFeature([LevelEntity,ProgramEntity,TechnichalTypeEntity,TechnichalEntity,MessageEntity,UserEntity,EventEntity,TypeAbonnementEntity,HoraireEntity,SeanceUserEntity])],
   controllers: [LevelController],
-  providers: [LevelService,InitialDataService,ProgramService,TechnicalTypeService,TechnichalService,MessageService,UserService,EventService,TypeAbonnementService],
+  providers: [LevelService,InitialDataService,ProgramService,TechnicalTypeService,TechnichalService,MessageService,UserService,EventService,TypeAbonnementService,HoraireService],
   exports:[LevelService]
 })
 export class LevelModule {}

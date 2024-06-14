@@ -17,9 +17,11 @@ import { UserEntity } from '../user/entity/user.entity';
 import { UserService } from '../user/user.service';
 import { TypeAbonnementService } from '../type-abonnement/type-abonnement.service';
 import { TypeAbonnementEntity } from '../type-abonnement/entity/type-abonnement';
+import { SeanceUserModule } from '../seance-user/seance-user.module';
+import { SeanceUserEntity } from '../seance-user/entity/seance-user.entity';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([ProgramEntity,TechnichalTypeEntity,TechnichalEntity,EventEntity,UserEntity,LevelEntity,TypeAbonnementEntity])],
+  imports:[TypeOrmModule.forFeature([ProgramEntity,TechnichalTypeEntity,TechnichalEntity,EventEntity,UserEntity,LevelEntity,TypeAbonnementEntity,SeanceUserEntity])],
   providers: [ProgramService,TechnicalTypeService,TechnichalService,EventService,UserService,LevelService,TypeAbonnementService],
   controllers: [ProgramController],
   exports:[ProgramService]

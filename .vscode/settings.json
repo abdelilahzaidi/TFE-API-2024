@@ -5,9 +5,9 @@
             "server": "localhost",
             "port": 5432,
             "driver": "PostgreSQL",
-            "username": "postgres",
+            "name": "zyadain-connexion",
             "database": "dragonbleu",
-            "name": "zaidi-dragon-b leu"
+            "username": "postgres"
         }
     ],
     "CodeGPT.apiKey": "CodeGPT Plus Beta"

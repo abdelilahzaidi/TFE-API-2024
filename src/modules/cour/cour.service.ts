@@ -10,35 +10,35 @@ export class CourService {
     constructor(
         @InjectRepository(CourEntity)
         private courRepository: Repository<CourEntity>,
-        //private lieuService : LieuService
+        private lieuService : LieuService
       ) {}
     
       async all(): Promise<CourEntity[]> {
-        return await this.courRepository.find();
+        return await this.courRepository.find({relations:['lieu']});
       }
 
-    //   async createCour(dto: CreateCourDTO): Promise<CourEntity> {
-    //     try {
-    //         const lieu = await this.lieuService.findLieuById(dto.lieuId); // Récupérez le programme associé
-    //         console.log('lieu',lieu)
-    //         const cour = new CourEntity();
-    //         cour.objectifDuCour=dto.objectifDuCour
-    //         cour.lieu=lieu      
+      async createCour(dto: CreateCourDTO): Promise<CourEntity> {
+        try {
+            const lieu = await this.lieuService.findLieuById(dto.lieuId); // Récupérez le programme associé
+            console.log('lieu',lieu)
+            const cour = new CourEntity();
+            cour.objectifDuCour=dto.objectifDuCour
+            cour.lieu=lieu      
      
 
-    //         const savedCour = await this.courRepository.save(cour);
+            const savedCour = await this.courRepository.save(cour);
 
-    //         console.log('in service', savedCour);
-    //         return savedCour;
-    //     } catch (error) {
-    //       throw new InternalServerErrorException(
-    //         error,
+            console.log('in service', savedCour);
+            return savedCour;
+        } catch (error) {
+          throw new InternalServerErrorException(
+            error,
 
-    //         "Une erreur est survenue lors de la création du niveau.",
+            "Une erreur est survenue lors de la création du niveau.",
 
-    //       );
-    //     }
-    // }    
+          );
+        }
+    }    
       async findCourById(id: number): Promise<CourEntity | undefined> {
         return this.courRepository.findOne({ where: { id } });
       }

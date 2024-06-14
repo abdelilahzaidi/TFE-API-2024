@@ -13,11 +13,11 @@ import { DateCourService } from '../date-cour/date-cour.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([CourEntity])
+    TypeOrmModule.forFeature([CourEntity,LieuEntity])
    
     
   ],
-  providers: [CourService],
+  providers: [CourService,LieuService],
   controllers: [CourController],
   exports: [CourService],
 })

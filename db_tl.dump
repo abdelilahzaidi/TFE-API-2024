@@ -1,0 +1,1775 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 16.2
+-- Dumped by pg_dump version 16.2
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: abonnement-type_tarif_enum; Type: TYPE; Schema: public; Owner: postgres
+--
+
+CREATE TYPE public."abonnement-type_tarif_enum" AS ENUM (
+    '25',
+    '75',
+    '250',
+    '50'
+);
+
+
+ALTER TYPE public."abonnement-type_tarif_enum" OWNER TO postgres;
+
+--
+-- Name: abonnement-type_type_enum; Type: TYPE; Schema: public; Owner: postgres
+--
+
+CREATE TYPE public."abonnement-type_type_enum" AS ENUM (
+    'Mensuel',
+    'Trimestre',
+    'Annuel'
+);
+
+
+ALTER TYPE public."abonnement-type_type_enum" OWNER TO postgres;
+
+--
+-- Name: level_grade_enum; Type: TYPE; Schema: public; Owner: postgres
+--
+
+CREATE TYPE public.level_grade_enum AS ENUM (
+    'Bleu 0 cap',
+    'Bleu 1er cap',
+    'Bleu 2ème cap',
+    'Bleu 3ème cap',
+    'Noir 1ère dan',
+    'Noir 2ème dan',
+    'Noir 3ème dan',
+    'Noir 4ème dan',
+    'Noir 5ème dan',
+    'Noir 6ème dan',
+    'Noir 7ème dan',
+    'Noir 8ème dan',
+    'Noir 9ème dan',
+    'Noir 10ème dan',
+    'Blanche suprème',
+    'Blanche du president du conseil des maitres'
+);
+
+
+ALTER TYPE public.level_grade_enum OWNER TO postgres;
+
+--
+-- Name: program_title_enum; Type: TYPE; Schema: public; Owner: postgres
+--
+
+CREATE TYPE public.program_title_enum AS ENUM (
+    'Ceinture Bleu 0 cap',
+    'Ceinture Bleu 1er cap',
+    'Ceinture Bleu 2ème cap',
+    'Ceinture Bleu 3ème cap',
+    'Ceinture Noir 1ère dan',
+    'Ceinture Noir 2ème dan',
+    'Ceinture Noir 3ème dan',
+    'Ceinture Noir 4ème dan',
+    'Ceinture Noir 5ème dan',
+    'Ceinture Noir 6ème dan',
+    'Ceinture Noir 7ème dan',
+    'Ceinture Noir 8ème dan',
+    'Ceinture Noir 9ème dan',
+    'Ceinture Noir 10ème dan'
+);
+
+
+ALTER TYPE public.program_title_enum OWNER TO postgres;
+
+--
+-- Name: user_gender_enum; Type: TYPE; Schema: public; Owner: postgres
+--
+
+CREATE TYPE public.user_gender_enum AS ENUM (
+    'male',
+    'female',
+    'other'
+);
+
+
+ALTER TYPE public.user_gender_enum OWNER TO postgres;
+
+--
+-- Name: user_status_enum; Type: TYPE; Schema: public; Owner: postgres
+--
+
+CREATE TYPE public.user_status_enum AS ENUM (
+    'member',
+    'admin',
+    'responsable'
+);
+
+
+ALTER TYPE public.user_status_enum OWNER TO postgres;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: Seance; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."Seance" (
+    id integer NOT NULL,
+    "dateCourId" integer,
+    "courId" integer,
+    "horaireId" integer
+);
+
+
+ALTER TABLE public."Seance" OWNER TO postgres;
+
+--
+-- Name: Seance_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public."Seance_id_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public."Seance_id_seq" OWNER TO postgres;
+
+--
+-- Name: Seance_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public."Seance_id_seq" OWNED BY public."Seance".id;
+
+
+--
+-- Name: abonnement; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.abonnement (
+    id integer NOT NULL,
+    "dateDebut" timestamp without time zone NOT NULL,
+    "dateFin" timestamp without time zone NOT NULL,
+    "userId" integer,
+    "typeAbonnementId" integer
+);
+
+
+ALTER TABLE public.abonnement OWNER TO postgres;
+
+--
+-- Name: abonnement-type; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."abonnement-type" (
+    id integer NOT NULL,
+    tarif public."abonnement-type_tarif_enum" DEFAULT '25'::public."abonnement-type_tarif_enum" NOT NULL,
+    type public."abonnement-type_type_enum" DEFAULT 'Mensuel'::public."abonnement-type_type_enum" NOT NULL
+);
+
+
+ALTER TABLE public."abonnement-type" OWNER TO postgres;
+
+--
+-- Name: abonnement-type_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public."abonnement-type_id_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public."abonnement-type_id_seq" OWNER TO postgres;
+
+--
+-- Name: abonnement-type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public."abonnement-type_id_seq" OWNED BY public."abonnement-type".id;
+
+
+--
+-- Name: abonnement_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.abonnement_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.abonnement_id_seq OWNER TO postgres;
+
+--
+-- Name: abonnement_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.abonnement_id_seq OWNED BY public.abonnement.id;
+
+
+--
+-- Name: cour; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.cour (
+    id integer NOT NULL,
+    "objectifDuCour" character varying NOT NULL,
+    "lieuId" integer
+);
+
+
+ALTER TABLE public.cour OWNER TO postgres;
+
+--
+-- Name: cour_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.cour_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.cour_id_seq OWNER TO postgres;
+
+--
+-- Name: cour_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.cour_id_seq OWNED BY public.cour.id;
+
+
+--
+-- Name: datecour; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.datecour (
+    id integer NOT NULL,
+    "dateCour" timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.datecour OWNER TO postgres;
+
+--
+-- Name: datecour_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.datecour_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.datecour_id_seq OWNER TO postgres;
+
+--
+-- Name: datecour_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.datecour_id_seq OWNED BY public.datecour.id;
+
+
+--
+-- Name: event; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.event (
+    id integer NOT NULL,
+    nom character varying NOT NULL,
+    "dateDebut" timestamp without time zone NOT NULL,
+    "dateFin" timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.event OWNER TO postgres;
+
+--
+-- Name: event-type; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."event-type" (
+    id integer NOT NULL,
+    type character varying NOT NULL
+);
+
+
+ALTER TABLE public."event-type" OWNER TO postgres;
+
+--
+-- Name: event-type_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public."event-type_id_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public."event-type_id_seq" OWNER TO postgres;
+
+--
+-- Name: event-type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public."event-type_id_seq" OWNED BY public."event-type".id;
+
+
+--
+-- Name: event_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.event_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.event_id_seq OWNER TO postgres;
+
+--
+-- Name: event_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.event_id_seq OWNED BY public.event.id;
+
+
+--
+-- Name: facture; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.facture (
+    id integer NOT NULL,
+    "dateEnvoie" timestamp without time zone NOT NULL,
+    "etatDePaiement" boolean NOT NULL,
+    montant integer NOT NULL,
+    "abonnementId" integer
+);
+
+
+ALTER TABLE public.facture OWNER TO postgres;
+
+--
+-- Name: facture_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.facture_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.facture_id_seq OWNER TO postgres;
+
+--
+-- Name: facture_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.facture_id_seq OWNED BY public.facture.id;
+
+
+--
+-- Name: horaire; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.horaire (
+    id integer NOT NULL,
+    jour character varying NOT NULL,
+    "heureDebut" character varying NOT NULL,
+    "heureFin" character varying NOT NULL
+);
+
+
+ALTER TABLE public.horaire OWNER TO postgres;
+
+--
+-- Name: horaire_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.horaire_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.horaire_id_seq OWNER TO postgres;
+
+--
+-- Name: horaire_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.horaire_id_seq OWNED BY public.horaire.id;
+
+
+--
+-- Name: level; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.level (
+    id integer NOT NULL,
+    grade public.level_grade_enum DEFAULT 'Bleu 0 cap'::public.level_grade_enum NOT NULL,
+    during character varying NOT NULL,
+    "programId" integer
+);
+
+
+ALTER TABLE public.level OWNER TO postgres;
+
+--
+-- Name: level_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.level_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.level_id_seq OWNER TO postgres;
+
+--
+-- Name: level_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.level_id_seq OWNED BY public.level.id;
+
+
+--
+-- Name: lieu; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.lieu (
+    id integer NOT NULL,
+    rue character varying NOT NULL,
+    commune character varying NOT NULL,
+    ville character varying NOT NULL
+);
+
+
+ALTER TABLE public.lieu OWNER TO postgres;
+
+--
+-- Name: lieu_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.lieu_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.lieu_id_seq OWNER TO postgres;
+
+--
+-- Name: lieu_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.lieu_id_seq OWNED BY public.lieu.id;
+
+
+--
+-- Name: message; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.message (
+    id integer NOT NULL,
+    titre character varying NOT NULL,
+    contenu character varying NOT NULL,
+    "dateHeureEnvoie" timestamp without time zone NOT NULL,
+    "senderId" integer
+);
+
+
+ALTER TABLE public.message OWNER TO postgres;
+
+--
+-- Name: message_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.message_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.message_id_seq OWNER TO postgres;
+
+--
+-- Name: message_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.message_id_seq OWNED BY public.message.id;
+
+
+--
+-- Name: message_user; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.message_user (
+    "messageId" integer NOT NULL,
+    "userId" integer NOT NULL
+);
+
+
+ALTER TABLE public.message_user OWNER TO postgres;
+
+--
+-- Name: program; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.program (
+    id integer NOT NULL,
+    title character varying NOT NULL
+);
+
+
+ALTER TABLE public.program OWNER TO postgres;
+
+--
+-- Name: program_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.program_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.program_id_seq OWNER TO postgres;
+
+--
+-- Name: program_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.program_id_seq OWNED BY public.program.id;
+
+
+--
+-- Name: program_technical_types_technical-type; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."program_technical_types_technical-type" (
+    "programId" integer NOT NULL,
+    "technicalTypeId" integer NOT NULL
+);
+
+
+ALTER TABLE public."program_technical_types_technical-type" OWNER TO postgres;
+
+--
+-- Name: program_technicals_technichal; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.program_technicals_technichal (
+    "programId" integer NOT NULL,
+    "technichalId" integer NOT NULL
+);
+
+
+ALTER TABLE public.program_technicals_technichal OWNER TO postgres;
+
+--
+-- Name: seance_user; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.seance_user (
+    id integer NOT NULL,
+    presence boolean DEFAULT false NOT NULL,
+    "userId" integer NOT NULL,
+    "seanceId" integer NOT NULL
+);
+
+
+ALTER TABLE public.seance_user OWNER TO postgres;
+
+--
+-- Name: seance_user_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.seance_user_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.seance_user_id_seq OWNER TO postgres;
+
+--
+-- Name: seance_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.seance_user_id_seq OWNED BY public.seance_user.id;
+
+
+--
+-- Name: seance_users_user; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.seance_users_user (
+    "seanceId" integer NOT NULL,
+    "userId" integer NOT NULL
+);
+
+
+ALTER TABLE public.seance_users_user OWNER TO postgres;
+
+--
+-- Name: technical-type; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."technical-type" (
+    id integer NOT NULL,
+    type character varying NOT NULL
+);
+
+
+ALTER TABLE public."technical-type" OWNER TO postgres;
+
+--
+-- Name: technical-type_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public."technical-type_id_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public."technical-type_id_seq" OWNER TO postgres;
+
+--
+-- Name: technical-type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public."technical-type_id_seq" OWNED BY public."technical-type".id;
+
+
+--
+-- Name: technichal; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.technichal (
+    id integer NOT NULL,
+    nom character varying NOT NULL,
+    description character varying NOT NULL,
+    "technichalTypeId" integer
+);
+
+
+ALTER TABLE public.technichal OWNER TO postgres;
+
+--
+-- Name: technichal_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.technichal_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.technichal_id_seq OWNER TO postgres;
+
+--
+-- Name: technichal_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.technichal_id_seq OWNED BY public.technichal.id;
+
+
+--
+-- Name: user; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."user" (
+    id integer NOT NULL,
+    first_name character varying NOT NULL,
+    last_name character varying NOT NULL,
+    gender public.user_gender_enum DEFAULT 'male'::public.user_gender_enum NOT NULL,
+    "birthDate" timestamp without time zone NOT NULL,
+    rue character varying NOT NULL,
+    commune character varying NOT NULL,
+    ville character varying NOT NULL,
+    actif boolean DEFAULT true NOT NULL,
+    "attributionDate" timestamp without time zone NOT NULL,
+    gsm character varying NOT NULL,
+    email character varying NOT NULL,
+    password character varying NOT NULL,
+    status public.user_status_enum DEFAULT 'member'::public.user_status_enum NOT NULL,
+    "levelId" integer
+);
+
+
+ALTER TABLE public."user" OWNER TO postgres;
+
+--
+-- Name: user_event; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.user_event (
+    "userId" integer NOT NULL,
+    "eventId" integer NOT NULL
+);
+
+
+ALTER TABLE public.user_event OWNER TO postgres;
+
+--
+-- Name: user_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.user_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.user_id_seq OWNER TO postgres;
+
+--
+-- Name: user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.user_id_seq OWNED BY public."user".id;
+
+
+--
+-- Name: Seance id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Seance" ALTER COLUMN id SET DEFAULT nextval('public."Seance_id_seq"'::regclass);
+
+
+--
+-- Name: abonnement id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.abonnement ALTER COLUMN id SET DEFAULT nextval('public.abonnement_id_seq'::regclass);
+
+
+--
+-- Name: abonnement-type id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."abonnement-type" ALTER COLUMN id SET DEFAULT nextval('public."abonnement-type_id_seq"'::regclass);
+
+
+--
+-- Name: cour id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cour ALTER COLUMN id SET DEFAULT nextval('public.cour_id_seq'::regclass);
+
+
+--
+-- Name: datecour id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.datecour ALTER COLUMN id SET DEFAULT nextval('public.datecour_id_seq'::regclass);
+
+
+--
+-- Name: event id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.event ALTER COLUMN id SET DEFAULT nextval('public.event_id_seq'::regclass);
+
+
+--
+-- Name: event-type id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."event-type" ALTER COLUMN id SET DEFAULT nextval('public."event-type_id_seq"'::regclass);
+
+
+--
+-- Name: facture id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.facture ALTER COLUMN id SET DEFAULT nextval('public.facture_id_seq'::regclass);
+
+
+--
+-- Name: horaire id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.horaire ALTER COLUMN id SET DEFAULT nextval('public.horaire_id_seq'::regclass);
+
+
+--
+-- Name: level id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.level ALTER COLUMN id SET DEFAULT nextval('public.level_id_seq'::regclass);
+
+
+--
+-- Name: lieu id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.lieu ALTER COLUMN id SET DEFAULT nextval('public.lieu_id_seq'::regclass);
+
+
+--
+-- Name: message id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.message ALTER COLUMN id SET DEFAULT nextval('public.message_id_seq'::regclass);
+
+
+--
+-- Name: program id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.program ALTER COLUMN id SET DEFAULT nextval('public.program_id_seq'::regclass);
+
+
+--
+-- Name: seance_user id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.seance_user ALTER COLUMN id SET DEFAULT nextval('public.seance_user_id_seq'::regclass);
+
+
+--
+-- Name: technical-type id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."technical-type" ALTER COLUMN id SET DEFAULT nextval('public."technical-type_id_seq"'::regclass);
+
+
+--
+-- Name: technichal id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.technichal ALTER COLUMN id SET DEFAULT nextval('public.technichal_id_seq'::regclass);
+
+
+--
+-- Name: user id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."user" ALTER COLUMN id SET DEFAULT nextval('public.user_id_seq'::regclass);
+
+
+--
+-- Data for Name: Seance; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."Seance" (id, "dateCourId", "courId", "horaireId") FROM stdin;
+1	\N	1	1
+\.
+
+
+--
+-- Data for Name: abonnement; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.abonnement (id, "dateDebut", "dateFin", "userId", "typeAbonnementId") FROM stdin;
+1	2024-06-01 00:00:00	2025-06-01 00:00:00	18	7
+2	2024-06-01 00:00:00	2025-06-01 00:00:00	18	7
+3	2024-06-01 00:00:00	2025-06-01 00:00:00	18	7
+4	2024-06-01 00:00:00	2025-06-01 00:00:00	20	7
+5	2024-06-01 00:00:00	2025-06-01 00:00:00	19	8
+\.
+
+
+--
+-- Data for Name: abonnement-type; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."abonnement-type" (id, tarif, type) FROM stdin;
+7	25	Mensuel
+8	75	Trimestre
+9	250	Annuel
+\.
+
+
+--
+-- Data for Name: cour; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.cour (id, "objectifDuCour", "lieuId") FROM stdin;
+1	Preparation Physique	1
+2	Preparation Physique	1
+3	Preparation Physique	1
+4	Preparation Physique	1
+5	Preparation Physique	1
+6	Preparation Physique	1
+7	Preparation Physique	1
+8	Preparation Physique	1
+9	Preparation Physique	1
+10	Preparation Physique	1
+11	Preparation Physique	1
+\.
+
+
+--
+-- Data for Name: datecour; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.datecour (id, "dateCour") FROM stdin;
+\.
+
+
+--
+-- Data for Name: event; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.event (id, nom, "dateDebut", "dateFin") FROM stdin;
+1	Reprise de l'entrainement	2024-12-12 00:00:00	2024-12-12 00:00:00
+2	Preparation du passage de grade	2024-02-12 00:00:00	2024-05-12 00:00:00
+\.
+
+
+--
+-- Data for Name: event-type; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."event-type" (id, type) FROM stdin;
+\.
+
+
+--
+-- Data for Name: facture; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.facture (id, "dateEnvoie", "etatDePaiement", montant, "abonnementId") FROM stdin;
+1	2024-06-05 02:47:40.212	f	25	1
+2	2024-06-05 03:40:28.518	f	25	4
+\.
+
+
+--
+-- Data for Name: horaire; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.horaire (id, jour, "heureDebut", "heureFin") FROM stdin;
+1	lundi	2023-09-23T15:18:00	2023-09-23T12:21:00
+\.
+
+
+--
+-- Data for Name: level; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.level (id, grade, during, "programId") FROM stdin;
+1	Bleu 0 cap	6 mois	1
+2	Bleu 1er cap	6 mois	2
+3	Bleu 2ème cap	6 mois	3
+4	Bleu 3ème cap	6 mois	4
+5	Noir 1ère dan	6 mois	5
+6	Noir 2ème dan	6 mois	6
+7	Noir 3ème dan	6 mois	7
+8	Noir 4ème dan	6 mois	8
+9	Noir 5ème dan	6 mois	9
+10	Noir 6ème dan	6 mois	10
+11	Noir 7ème dan	6 mois	11
+12	Noir 8ème dan	6 mois	12
+13	Noir 9ème dan	6 mois	13
+14	Noir 10ème dan	4 ans	14
+\.
+
+
+--
+-- Data for Name: lieu; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.lieu (id, rue, commune, ville) FROM stdin;
+1	Rue Des Coteaux 181	Schaerbeek	Bruxelles
+2	Rue des galais 126	Schaerbeek	Bruxelles
+3	Avenue de diamant 123	Schaerbeek	Bruxelles
+\.
+
+
+--
+-- Data for Name: message; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.message (id, titre, contenu, "dateHeureEnvoie", "senderId") FROM stdin;
+1	TFE	bzbzbzbzbz	2024-05-28 22:52:56.84	18
+2	Update TFE	bzbzbzbzbz	2024-05-28 22:55:40.982	16
+3	Update TFE 2	bzbzbzbzbz	2024-05-30 19:20:31.898	16
+4	Update TFE 3	bzbzbzbzbz	2024-05-30 19:21:01.435	19
+\.
+
+
+--
+-- Data for Name: message_user; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.message_user ("messageId", "userId") FROM stdin;
+1	16
+2	18
+3	19
+4	16
+\.
+
+
+--
+-- Data for Name: program; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.program (id, title) FROM stdin;
+1	Ceinture Bleu 0 cap
+2	Ceinture Bleu 1er cap
+3	Ceinture Bleu 2ème cap
+4	Ceinture Bleu 3ème cap
+5	Ceinture Noir 1ère dan
+6	Ceinture Noir 2ème dan
+7	Ceinture Noir 3ème dan
+8	Ceinture Noir 4ème dan
+9	Ceinture Noir 5ème dan
+10	Ceinture Noir 6ème dan
+11	Ceinture Noir 7ème dan
+12	Ceinture Noir 8ème dan
+13	Ceinture Noir 9ème dan
+14	Ceinture Noir 10ème dan
+\.
+
+
+--
+-- Data for Name: program_technical_types_technical-type; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."program_technical_types_technical-type" ("programId", "technicalTypeId") FROM stdin;
+\.
+
+
+--
+-- Data for Name: program_technicals_technichal; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.program_technicals_technichal ("programId", "technichalId") FROM stdin;
+1	1
+1	2
+2	1
+2	2
+5	1
+5	2
+\.
+
+
+--
+-- Data for Name: seance_user; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.seance_user (id, presence, "userId", "seanceId") FROM stdin;
+1	t	19	1
+2	t	16	1
+3	f	18	1
+4	t	20	1
+5	f	21	1
+6	t	22	1
+\.
+
+
+--
+-- Data for Name: seance_users_user; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.seance_users_user ("seanceId", "userId") FROM stdin;
+1	16
+1	18
+1	22
+\.
+
+
+--
+-- Data for Name: technical-type; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."technical-type" (id, type) FROM stdin;
+1	Techniques de base
+2	Positions
+3	Techniques de contre-attaque
+4	Techniques de ciseau
+5	Quyen
+6	Chien luouc
+7	Song luyen hai
+8	Song luyen mot
+9	Song luyen dao
+10	Song luyen vat hai
+\.
+
+
+--
+-- Data for Name: technichal; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.technichal (id, nom, description, "technichalTypeId") FROM stdin;
+1	Ciseau 1	Description de DAM_THANG	\N
+2	Coup de pied_1	Description de POSITION	\N
+\.
+
+
+--
+-- Data for Name: user; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."user" (id, first_name, last_name, gender, "birthDate", rue, commune, ville, actif, "attributionDate", gsm, email, password, status, "levelId") FROM stdin;
+19	kiet	Phoung	male	2024-05-29 00:00:00	Rue des Coteaux 181	1030 Bruxelles	1030 Bruxelles	t	2024-05-30 14:14:19.688	0483/004-929	kiety@gmail.com	$2b$12$gDRjjONlqjZEgvN07tLgV.J0EOLRkHMMSDSBq2IKzIiCLg3Tp30iK	admin	12
+16	kamineas	zaidi	male	1984-12-29 00:00:00	Rue Des coteaux	Schaerbeek	Bruxelles	f	2024-06-02 00:44:06.924	0483004-929	kaminea@hotmail.com	$2b$12$1L3d0Vh9irEvZOPBM7UKsuzsd7qlIfXBz8QX22GCz.sEHTjdfS9ea	member	4
+18	zaidi	Kiet	female	1983-10-14 00:00:00	Rue Des Coteaux 181	shaerbeek	Bruxelles	f	2024-06-02 00:44:31.36	0483/004-929	zak@hotmail.com	$2b$12$Kitkj3Jdo.eCCNV3ryvJDurghdy.nDGpkgo1xv1JpDvULwN6Y41Jm	admin	2
+20	Abdelilah	Zaidi	male	2024-06-04 00:00:00	Rue des Coteaux 181	1030 Bruxelles	1030 Bruxelles	t	2024-06-03 21:58:03.741	0483/004-929	zaab1410@student.iepscf-uccle.be	$2b$12$PxtiwHvh12kMQ0fyaCrOO..Zb89dMypvVShrtyUs1I4/2B7AQEloi	member	12
+21	Maud	Mbella	female	1992-06-07 00:00:00	Rue des diamantaire	Brussels	Brussels	t	2024-06-07 14:54:31.527	0483/004-929	mbella@gmail.com	$2b$12$Z4eX3tmtiQ.S9IutvfjFaueZs59/6S3i3YKE5RbTU8Tz12/4jTlke	responsable	6
+22	Guillaume	Mbella	male	1964-06-07 00:00:00	Rue des diamantaire	Brussels	Brussels	t	2024-06-07 14:54:43.841	0483/004-929	g.mbella@gmail.com	$2b$12$xd42/YgW8RTM6vlKp4RcwOMK.re3s0CmlLHNCiIXi/T/I2B.bADgi	responsable	12
+\.
+
+
+--
+-- Data for Name: user_event; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.user_event ("userId", "eventId") FROM stdin;
+16	1
+18	1
+16	2
+18	2
+\.
+
+
+--
+-- Name: Seance_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."Seance_id_seq"', 1, true);
+
+
+--
+-- Name: abonnement-type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."abonnement-type_id_seq"', 9, true);
+
+
+--
+-- Name: abonnement_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.abonnement_id_seq', 5, true);
+
+
+--
+-- Name: cour_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.cour_id_seq', 11, true);
+
+
+--
+-- Name: datecour_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.datecour_id_seq', 1, false);
+
+
+--
+-- Name: event-type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."event-type_id_seq"', 1, false);
+
+
+--
+-- Name: event_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.event_id_seq', 2, true);
+
+
+--
+-- Name: facture_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.facture_id_seq', 2, true);
+
+
+--
+-- Name: horaire_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.horaire_id_seq', 1, true);
+
+
+--
+-- Name: level_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.level_id_seq', 14, true);
+
+
+--
+-- Name: lieu_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.lieu_id_seq', 3, true);
+
+
+--
+-- Name: message_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.message_id_seq', 4, true);
+
+
+--
+-- Name: program_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.program_id_seq', 14, true);
+
+
+--
+-- Name: seance_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.seance_user_id_seq', 1, false);
+
+
+--
+-- Name: technical-type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."technical-type_id_seq"', 10, true);
+
+
+--
+-- Name: technichal_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.technichal_id_seq', 2, true);
+
+
+--
+-- Name: user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.user_id_seq', 22, true);
+
+
+--
+-- Name: facture PK_0ad1064da893f894e39f961ca67; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.facture
+    ADD CONSTRAINT "PK_0ad1064da893f894e39f961ca67" PRIMARY KEY (id);
+
+
+--
+-- Name: program_technicals_technichal PK_12ec71a5cf9a3c10262432d5985; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.program_technicals_technichal
+    ADD CONSTRAINT "PK_12ec71a5cf9a3c10262432d5985" PRIMARY KEY ("programId", "technichalId");
+
+
+--
+-- Name: abonnement-type PK_2245a38be1f70d33b2c74e72318; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."abonnement-type"
+    ADD CONSTRAINT "PK_2245a38be1f70d33b2c74e72318" PRIMARY KEY (id);
+
+
+--
+-- Name: event PK_30c2f3bbaf6d34a55f8ae6e4614; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.event
+    ADD CONSTRAINT "PK_30c2f3bbaf6d34a55f8ae6e4614" PRIMARY KEY (id);
+
+
+--
+-- Name: program PK_3bade5945afbafefdd26a3a29fb; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.program
+    ADD CONSTRAINT "PK_3bade5945afbafefdd26a3a29fb" PRIMARY KEY (id);
+
+
+--
+-- Name: event-type PK_49bd7390adb6256b9b1714e13a0; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."event-type"
+    ADD CONSTRAINT "PK_49bd7390adb6256b9b1714e13a0" PRIMARY KEY (id);
+
+
+--
+-- Name: technichal PK_4ade7436fd1cc11e114da69fc19; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.technichal
+    ADD CONSTRAINT "PK_4ade7436fd1cc11e114da69fc19" PRIMARY KEY (id);
+
+
+--
+-- Name: horaire PK_66a6c8fc17eb20c1d44fb58172d; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.horaire
+    ADD CONSTRAINT "PK_66a6c8fc17eb20c1d44fb58172d" PRIMARY KEY (id);
+
+
+--
+-- Name: Seance PK_8aea7ec1e19edc219e65b1649dc; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Seance"
+    ADD CONSTRAINT "PK_8aea7ec1e19edc219e65b1649dc" PRIMARY KEY (id);
+
+
+--
+-- Name: program_technical_types_technical-type PK_91eb091fa8a0f7238f1aaee81d7; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."program_technical_types_technical-type"
+    ADD CONSTRAINT "PK_91eb091fa8a0f7238f1aaee81d7" PRIMARY KEY ("programId", "technicalTypeId");
+
+
+--
+-- Name: seance_user PK_9c8d12164b17b7b631e1bb0f2cf; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.seance_user
+    ADD CONSTRAINT "PK_9c8d12164b17b7b631e1bb0f2cf" PRIMARY KEY (id);
+
+
+--
+-- Name: technical-type PK_9fbb9f78d774b85bc797b697198; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."technical-type"
+    ADD CONSTRAINT "PK_9fbb9f78d774b85bc797b697198" PRIMARY KEY (id);
+
+
+--
+-- Name: datecour PK_ae680792c9a6422fa70fee8dc1b; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.datecour
+    ADD CONSTRAINT "PK_ae680792c9a6422fa70fee8dc1b" PRIMARY KEY (id);
+
+
+--
+-- Name: seance_users_user PK_b3e782cf9c42d657ee37792e5c3; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.seance_users_user
+    ADD CONSTRAINT "PK_b3e782cf9c42d657ee37792e5c3" PRIMARY KEY ("seanceId", "userId");
+
+
+--
+-- Name: user_event PK_b3f30a41f28c2a612ddbac08ee5; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_event
+    ADD CONSTRAINT "PK_b3f30a41f28c2a612ddbac08ee5" PRIMARY KEY ("userId", "eventId");
+
+
+--
+-- Name: lieu PK_b80124b694a47de2bad1f00f878; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.lieu
+    ADD CONSTRAINT "PK_b80124b694a47de2bad1f00f878" PRIMARY KEY (id);
+
+
+--
+-- Name: message PK_ba01f0a3e0123651915008bc578; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.message
+    ADD CONSTRAINT "PK_ba01f0a3e0123651915008bc578" PRIMARY KEY (id);
+
+
+--
+-- Name: message_user PK_bed6ad3763467d84cc89f3060df; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.message_user
+    ADD CONSTRAINT "PK_bed6ad3763467d84cc89f3060df" PRIMARY KEY ("messageId", "userId");
+
+
+--
+-- Name: cour PK_c34298245dcc525e25d0477c1eb; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cour
+    ADD CONSTRAINT "PK_c34298245dcc525e25d0477c1eb" PRIMARY KEY (id);
+
+
+--
+-- Name: user PK_cace4a159ff9f2512dd42373760; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY (id);
+
+
+--
+-- Name: level PK_d3f1a7a6f09f1c3144bacdc6bcc; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.level
+    ADD CONSTRAINT "PK_d3f1a7a6f09f1c3144bacdc6bcc" PRIMARY KEY (id);
+
+
+--
+-- Name: abonnement PK_f96a62323810feb0291e767522b; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.abonnement
+    ADD CONSTRAINT "PK_f96a62323810feb0291e767522b" PRIMARY KEY (id);
+
+
+--
+-- Name: level UQ_0226ebdefb259058335bc8d5b74; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.level
+    ADD CONSTRAINT "UQ_0226ebdefb259058335bc8d5b74" UNIQUE ("programId");
+
+
+--
+-- Name: user UQ_e12875dfb3b1d92d7d7c5377e22; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT "UQ_e12875dfb3b1d92d7d7c5377e22" UNIQUE (email);
+
+
+--
+-- Name: IDX_28f58f82a46ec61ee1b1c77fb9; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IDX_28f58f82a46ec61ee1b1c77fb9" ON public.message_user USING btree ("messageId");
+
+
+--
+-- Name: IDX_56e2929357d946717b9231e59c; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IDX_56e2929357d946717b9231e59c" ON public.seance_users_user USING btree ("userId");
+
+
+--
+-- Name: IDX_5cf5ee8160bd07df83367b784f; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IDX_5cf5ee8160bd07df83367b784f" ON public.program_technicals_technichal USING btree ("technichalId");
+
+
+--
+-- Name: IDX_6a41d7c0f21abb37cd273824fa; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IDX_6a41d7c0f21abb37cd273824fa" ON public.user_event USING btree ("eventId");
+
+
+--
+-- Name: IDX_70d280bbdd5d07e2a1487c76d2; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IDX_70d280bbdd5d07e2a1487c76d2" ON public.program_technicals_technichal USING btree ("programId");
+
+
+--
+-- Name: IDX_75aecefc4ffe842e95f7d671c5; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IDX_75aecefc4ffe842e95f7d671c5" ON public."program_technical_types_technical-type" USING btree ("technicalTypeId");
+
+
+--
+-- Name: IDX_77452fe8443c349b0e628507cb; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IDX_77452fe8443c349b0e628507cb" ON public.user_event USING btree ("userId");
+
+
+--
+-- Name: IDX_9591f0e3564991c922f448ca85; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IDX_9591f0e3564991c922f448ca85" ON public.message_user USING btree ("userId");
+
+
+--
+-- Name: IDX_a442ad4d2753b9b3cc8015ac78; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IDX_a442ad4d2753b9b3cc8015ac78" ON public."program_technical_types_technical-type" USING btree ("programId");
+
+
+--
+-- Name: IDX_e78abb7c9584bf961eeb94a828; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "IDX_e78abb7c9584bf961eeb94a828" ON public.seance_users_user USING btree ("seanceId");
+
+
+--
+-- Name: level FK_0226ebdefb259058335bc8d5b74; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.level
+    ADD CONSTRAINT "FK_0226ebdefb259058335bc8d5b74" FOREIGN KEY ("programId") REFERENCES public.program(id);
+
+
+--
+-- Name: message_user FK_28f58f82a46ec61ee1b1c77fb95; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.message_user
+    ADD CONSTRAINT "FK_28f58f82a46ec61ee1b1c77fb95" FOREIGN KEY ("messageId") REFERENCES public.message(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: user FK_50cb127cc28cf5075eda2fbaa85; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT "FK_50cb127cc28cf5075eda2fbaa85" FOREIGN KEY ("levelId") REFERENCES public.level(id);
+
+
+--
+-- Name: seance_users_user FK_56e2929357d946717b9231e59ce; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.seance_users_user
+    ADD CONSTRAINT "FK_56e2929357d946717b9231e59ce" FOREIGN KEY ("userId") REFERENCES public."user"(id);
+
+
+--
+-- Name: program_technicals_technichal FK_5cf5ee8160bd07df83367b784f2; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.program_technicals_technichal
+    ADD CONSTRAINT "FK_5cf5ee8160bd07df83367b784f2" FOREIGN KEY ("technichalId") REFERENCES public.technichal(id);
+
+
+--
+-- Name: user_event FK_6a41d7c0f21abb37cd273824fa6; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_event
+    ADD CONSTRAINT "FK_6a41d7c0f21abb37cd273824fa6" FOREIGN KEY ("eventId") REFERENCES public.event(id);
+
+
+--
+-- Name: program_technicals_technichal FK_70d280bbdd5d07e2a1487c76d29; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.program_technicals_technichal
+    ADD CONSTRAINT "FK_70d280bbdd5d07e2a1487c76d29" FOREIGN KEY ("programId") REFERENCES public.program(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: program_technical_types_technical-type FK_75aecefc4ffe842e95f7d671c54; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."program_technical_types_technical-type"
+    ADD CONSTRAINT "FK_75aecefc4ffe842e95f7d671c54" FOREIGN KEY ("technicalTypeId") REFERENCES public."technical-type"(id);
+
+
+--
+-- Name: user_event FK_77452fe8443c349b0e628507cbb; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_event
+    ADD CONSTRAINT "FK_77452fe8443c349b0e628507cbb" FOREIGN KEY ("userId") REFERENCES public."user"(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: seance_user FK_7cf8527b2af7bf8795bec761263; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.seance_user
+    ADD CONSTRAINT "FK_7cf8527b2af7bf8795bec761263" FOREIGN KEY ("userId") REFERENCES public."user"(id);
+
+
+--
+-- Name: Seance FK_800af8f9032c1de9c5693a33fa3; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Seance"
+    ADD CONSTRAINT "FK_800af8f9032c1de9c5693a33fa3" FOREIGN KEY ("horaireId") REFERENCES public.horaire(id);
+
+
+--
+-- Name: message_user FK_9591f0e3564991c922f448ca85e; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.message_user
+    ADD CONSTRAINT "FK_9591f0e3564991c922f448ca85e" FOREIGN KEY ("userId") REFERENCES public."user"(id);
+
+
+--
+-- Name: Seance FK_96e974e1445864ff3fb11a5f72c; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Seance"
+    ADD CONSTRAINT "FK_96e974e1445864ff3fb11a5f72c" FOREIGN KEY ("courId") REFERENCES public.cour(id);
+
+
+--
+-- Name: facture FK_9b912c4dd857f1de2ba01dddfaf; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.facture
+    ADD CONSTRAINT "FK_9b912c4dd857f1de2ba01dddfaf" FOREIGN KEY ("abonnementId") REFERENCES public.abonnement(id);
+
+
+--
+-- Name: program_technical_types_technical-type FK_a442ad4d2753b9b3cc8015ac781; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."program_technical_types_technical-type"
+    ADD CONSTRAINT "FK_a442ad4d2753b9b3cc8015ac781" FOREIGN KEY ("programId") REFERENCES public.program(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: technichal FK_b7d27f4cef6ca67b7b72b541411; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.technichal
+    ADD CONSTRAINT "FK_b7d27f4cef6ca67b7b72b541411" FOREIGN KEY ("technichalTypeId") REFERENCES public."technical-type"(id);
+
+
+--
+-- Name: message FK_bc096b4e18b1f9508197cd98066; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.message
+    ADD CONSTRAINT "FK_bc096b4e18b1f9508197cd98066" FOREIGN KEY ("senderId") REFERENCES public."user"(id);
+
+
+--
+-- Name: cour FK_c6c233191bde5b3a58f06b14ad8; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cour
+    ADD CONSTRAINT "FK_c6c233191bde5b3a58f06b14ad8" FOREIGN KEY ("lieuId") REFERENCES public.lieu(id);
+
+
+--
+-- Name: seance_user FK_c8ffd72c4e7712d75f3179eed43; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.seance_user
+    ADD CONSTRAINT "FK_c8ffd72c4e7712d75f3179eed43" FOREIGN KEY ("seanceId") REFERENCES public."Seance"(id);
+
+
+--
+-- Name: Seance FK_d5464f8e061a3334e1027fb486a; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Seance"
+    ADD CONSTRAINT "FK_d5464f8e061a3334e1027fb486a" FOREIGN KEY ("dateCourId") REFERENCES public.datecour(id);
+
+
+--
+-- Name: abonnement FK_da5a57340e96d68027ba83c2e99; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.abonnement
+    ADD CONSTRAINT "FK_da5a57340e96d68027ba83c2e99" FOREIGN KEY ("userId") REFERENCES public."user"(id);
+
+
+--
+-- Name: seance_users_user FK_e78abb7c9584bf961eeb94a8286; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.seance_users_user
+    ADD CONSTRAINT "FK_e78abb7c9584bf961eeb94a8286" FOREIGN KEY ("seanceId") REFERENCES public."Seance"(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: abonnement FK_eec5e572ddf2ae52dee662346ba; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.abonnement
+    ADD CONSTRAINT "FK_eec5e572ddf2ae52dee662346ba" FOREIGN KEY ("typeAbonnementId") REFERENCES public."abonnement-type"(id);
+
+
+--
+-- Name: dragonbleu; Type: PUBLICATION; Schema: -; Owner: postgres
+--
+
+CREATE PUBLICATION dragonbleu WITH (publish = 'insert, update, delete, truncate');
+
+
+ALTER PUBLICATION dragonbleu OWNER TO postgres;
+
+--
+-- PostgreSQL database dump complete
+--
+

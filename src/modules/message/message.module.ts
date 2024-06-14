@@ -13,9 +13,11 @@ import { ProgramService } from '../program/program.service';
 import { TechnichalEntity } from '../technichal/entity/technichal.entity';
 import { TechnichalService } from '../technichal/technichal.service';
 import { TechnichalTypeEntity } from '../technical-type/entity/technical-type.entity';
+import { SeanceUserModule } from '../seance-user/seance-user.module';
+import { SeanceUserEntity } from '../seance-user/entity/seance-user.entity';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([MessageEntity,UserEntity,LevelEntity,ProgramEntity,TechnichalEntity,TechnichalTypeEntity])],
+  imports:[TypeOrmModule.forFeature([MessageEntity,UserEntity,LevelEntity,ProgramEntity,TechnichalEntity,TechnichalTypeEntity,SeanceUserEntity])],
   providers: [MessageService,UserService,LevelService,ProgramService,TechnichalService,TechnicalTypeService],
   controllers: [MessageController],
   exports:[MessageService]

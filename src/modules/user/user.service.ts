@@ -19,22 +19,22 @@ import { UserUpdateDTO } from './dto/user-update.dto';
 import * as bcrypt from 'bcrypt';
 import { LevelEntity } from '../level/entity/level.entity';
 import { LevelService } from '../level/level.service';
+import { SeanceUserEntity } from '../seance-user/entity/seance-user.entity';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
-
-  
-
-    private readonly levelService: LevelService
+    private readonly levelService: LevelService,
+    @InjectRepository(SeanceUserEntity)
+    private readonly userSeanceRepository : Repository<SeanceUserEntity>,
   ) {}
   //Features for users
   //List all users
   async all(): Promise<UserI[]> {
     console.log('Hello all');
-    return await this.userRepository.find({select:['id','first_name','last_name','gender','birthDate','attributionDate','rue','commune','ville','actif','gsm','email','status','level'],relations:['level','level.program','level.program.technicals']});
+    return await this.userRepository.find({select:['id','first_name','last_name','gender','birthDate','attributionDate','rue','commune','ville','actif','gsm','email','status','level', ],relations:['level','level.program','level.program.technicals']});
   }
   //Create user
   async create(createUser: UserCreateDTO): Promise<UserI> {
@@ -199,7 +199,7 @@ export class UserService {
   async findOneByLevel(userId: number): Promise<UserI> {
     return await this.userRepository.findOne({
       where: { id: userId },
-      relations: ['level','level.program'],
+      relations: ['level','level.program','level.program.technicals'],
     });
   }
 
@@ -212,4 +212,29 @@ export class UserService {
 
     return user.status;
   }
+
+
+  async updatePresenceSeance(id: number, estPresent: boolean): Promise<void> {
+    try {
+      // Recherche de l'entité SeanceUser par son ID
+      const seanceUser = await this.userSeanceRepository.findOne({ where: { id } });
+      
+      // Vérification si l'entité SeanceUser existe
+      if (!seanceUser) {
+        throw new HttpException('No SeanceUser found by Id', HttpStatus.NOT_FOUND);
+      }
+      
+      // Mise à jour de la présence
+      seanceUser.presence = estPresent;
+      
+      // Sauvegarde des modifications
+      await this.userSeanceRepository.save(seanceUser);
+    } catch (error) {
+      // Gestion des erreurs
+      throw new HttpException('Error updating SeanceUser presence', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  
+  
 }

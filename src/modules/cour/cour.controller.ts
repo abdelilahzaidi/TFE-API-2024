@@ -1,6 +1,7 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { CourService } from './cour.service';
 import { CourEntity } from './entity/cour.entity';
+import { CreateCourDTO } from './dto/cour-create.dto';
 
 @Controller('cour')
 export class CourController {
@@ -13,9 +14,9 @@ export class CourController {
         return await this.courService.all()
     }
 
-    // @Post()
-    // async create(@Body() dto : CreateCourDTO): Promise<CourEntity> {
-    //   console.log(dto)
-    //   return await this.courService.createCour(dto);
-    // }
+    @Post()
+    async create(@Body() dto : CreateCourDTO): Promise<CourEntity> {
+      console.log(dto)
+      return await this.courService.createCour(dto);
+    }
 }

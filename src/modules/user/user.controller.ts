@@ -4,6 +4,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Post,
@@ -16,10 +18,14 @@ import { UserCreateDTO } from './dto/user-create.dto';
 import { UserStatus } from 'src/common/enums/status.enum';
 import { Status } from 'src/common/decorators/status.decorator';
 import { StatusGuard } from 'src/common/guards/status.guards';
+import { UpdatePresenceDto } from './dto/user-seance-update.dto';
 
 @Controller('user')
 export class UserController {
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService
+   
+  ) {}
 
   //List all users
   // @Get()
@@ -106,4 +112,26 @@ export class UserController {
     );
     return await this.userService.update(id, { ...data });
   }
+
+
+  @Put(':id/presence')
+  async updatePresenceSeance(@Param('id') id: number, @Body() updatePresenceDto: UpdatePresenceDto): Promise<void> {
+    const { presence } = updatePresenceDto;
+    try {
+      await this.userService.updatePresenceSeance(id, presence);
+    } catch (error) {
+      console.log('error',error)
+      throw new HttpException('Error updating SeanceUser presence', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  // @Get(':id/message')
+  // async findMessage(@Param('id', ParseIntPipe) id: number): Promise<any> {
+  //   const messages = await this.userService.findUserMessagesByUserId(id);
+  //   if (!messages) {
+  //     throw new BadRequestException(`User ${id} doesn't exist!`);
+  //   }
+  //   return messages;
+  // }
+  
 }

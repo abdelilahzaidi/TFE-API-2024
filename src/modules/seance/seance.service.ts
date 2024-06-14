@@ -1,4 +1,4 @@
-import { Body, ConflictException, Injectable, InternalServerErrorException, Param, Logger } from '@nestjs/common';
+import { Body, ConflictException, Injectable, InternalServerErrorException, Param, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, In } from 'typeorm';
 import { UserEntity } from '../user/entity/user.entity';
@@ -13,11 +13,11 @@ export class SeanceService {
     private readonly logger = new Logger(SeanceService.name);
     constructor(
         @InjectRepository(SeanceEntity) private readonly seanceRepository :Repository<SeanceEntity>,
-        //  private readonly dateCourService : DateCourService,
-        // private readonly courService : CourService,
-        // private readonly horaireService : HoraireService,
-        // @InjectRepository(UserEntity)
-        // private readonly userRepository : Repository<UserEntity>
+        private readonly dateCourService : DateCourService,
+         private readonly courService : CourService,
+        private readonly horaireService : HoraireService,
+         @InjectRepository(UserEntity)
+         private readonly userRepository : Repository<UserEntity>
         
         ){}
 
@@ -41,37 +41,37 @@ export class SeanceService {
     return this.seanceRepository.findOne({where:{id}, relations:["horaire"]});
 }
 
-    // async createSeance(dto: SeanceCreateDTO): Promise<SeanceEntity | null>  {
-    //     try {
-    //       this.logger.debug(`${JSON.stringify(dto)}`)
-    //       const dateCour = await this.dateCourService.findDateCourById(dto.idDateCour)
-    //       if (dateCour) {
-    //         throw new ConflictException('Cette date de Cour existe déjà.');
-    //       }
+    async createSeance(dto: SeanceCreateDTO): Promise<SeanceEntity | null>  {
+        try {
+          this.logger.debug(`${JSON.stringify(dto)}`)
+          const dateCour = await this.dateCourService.findDateCourById(dto.idDateCour)
+          if (dateCour) {
+            throw new ConflictException('Cette date de Cour existe déjà.');
+          }
 
-    //       const cour = await this.courService.findCourById(dto.idCour)
+          const cour = await this.courService.findCourById(dto.idCour)
 
-    //        const horaire = await this.horaireService.findHoraireById(dto.idHoraire)
-    //       if (!horaire) {
-    //         throw new ConflictException('Cet horaire existe déjà.');
-    //       }          
+           const horaire = await this.horaireService.findHoraireById(dto.idHoraire)
+          if (!horaire) {
+            throw new ConflictException('Cet horaire existe déjà.');
+          }          
     
-    //       const seance = new SeanceEntity();
-    //       seance.cour = cour;
-    //       seance.horaire=horaire;
-    //       seance.dateCour=dateCour
+          const seance = new SeanceEntity();
+          seance.cour = cour;
+          seance.horaire=horaire;
+          seance.dateCour=dateCour
     
-    //       const savedSeance = await this.seanceRepository.save(seance);
+          const savedSeance = await this.seanceRepository.save(seance);
     
-    //       console.log('in service', savedSeance);
-    //       return savedSeance;
-    //     } catch (error) {
-    //       throw new InternalServerErrorException(
-    //         error,
-    //         'Une erreur est survenue lors de la création de la seance.',
-    //       );
-    //     }
-    //   }
+          console.log('in service', savedSeance);
+          return savedSeance;
+        } catch (error) {
+          throw new InternalServerErrorException(
+            error,
+            'Une erreur est survenue lors de la création de la seance.',
+          );
+        }
+      }
 
     //   async insertParticipantAction(
     //     @Param('id') id: number,
@@ -84,9 +84,46 @@ export class SeanceService {
     //       seance.seanceUsers = [];
     //     }
     //     seance.seanceUsers.push(...users);
-    
-    //     return this.seanceRepository.save(seance);
+    //     const seanceUser =await this.seanceRepository.save(seance);
+    //     console.log('seanceUser',seanceUser)
+    //     return seanceUser
 
-    //   }    
+    //   }   
+      
+      
+    //   async findSeanceById(id: number): Promise<SeanceEntity | undefined> {
+    //     return this.seanceRepository.findOne({ where: { id } });
+    //   }
+    
+    //   async saveSeance(seance: SeanceEntity): Promise<SeanceEntity> {
+    //     return this.seanceRepository.save(seance);
+    //   }
+
+    async findSeanceById(id: number): Promise<SeanceEntity | undefined> {
+        return this.seanceRepository.findOne({ where: { id }, relations: ['seanceUsers'] });
+      }
+    
+      async saveSeance(seance: SeanceEntity): Promise<SeanceEntity> {
+        return this.seanceRepository.save(seance);
+      }
+    
+      async insertParticipantAction(id: number, userIds: number[]): Promise<SeanceEntity> {
+        const seance = await this.findSeanceById(id);
+        if (!seance) {
+          throw new NotFoundException('Séance non trouvée');
+        }
+    
+        const users = await this.userRepository.find({ where: { id: In(userIds) } });
+        if (!users.length) {
+          throw new NotFoundException('Utilisateurs non trouvés');
+        }
+    
+        if (!seance.users) {
+          seance.users = [];
+        }
+        seance.users.push(...users);
+    
+        return this.saveSeance(seance);
+      }
 
 }

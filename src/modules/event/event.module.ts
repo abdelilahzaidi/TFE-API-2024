@@ -13,10 +13,11 @@ import { TechnichalEntity } from '../technichal/entity/technichal.entity';
 import { TechnichalService } from '../technichal/technichal.service';
 import { TechnicalTypeModule } from '../technical-type/technical-type.module';
 import { TechnicalTypeService } from '../technical-type/technical-type.service';
+import { SeanceUserEntity } from '../seance-user/entity/seance-user.entity';
 
 @Module({
   imports:[TypeOrmModule.forFeature([EventEntity,UserEntity,LevelEntity,ProgramEntity,
-    TechnichalEntity,TechnicalTypeModule])],
+    TechnichalEntity,TechnicalTypeModule,SeanceUserEntity])],
   providers: [EventService,UserService,LevelService,ProgramService,TechnichalService],
   controllers: [EventController],
   exports:[EventService]

@@ -5,6 +5,7 @@ import { AbonnementEntity } from 'src/modules/abonnement/entity/abonnement.entit
 import { EventEntity } from 'src/modules/event/entity/event.entity';
 import { LevelEntity } from 'src/modules/level/entity/level.entity';
 import { MessageEntity } from 'src/modules/message/entity/message.entity';
+import { SeanceUserEntity } from 'src/modules/seance-user/entity/seance-user.entity';
 import { SeanceEntity } from 'src/modules/seance/entity/seance.entity';
 import {
   Entity,
@@ -61,13 +62,20 @@ export class UserEntity {
   @Column({ type: 'enum', enum: UserStatus, default: UserStatus.MEMBER })
   status: UserStatus;
 
-  @ManyToOne(() => LevelEntity, (level) => level.users, { nullable: true ,eager:true})
+  @ManyToOne(() => LevelEntity, (level) => level.users, {
+    nullable: true,
+    eager: true,
+  })
   level: LevelEntity;
 
-  @ManyToMany(() => MessageEntity, (message) => message.receivers, { cascade: true })
+  @ManyToMany(() => MessageEntity, (message) => message.receivers, {
+    cascade: true,
+  })
   receivedMessages: MessageEntity[];
 
-  @OneToMany(() => MessageEntity, (message) => message.sender, { cascade: ['remove'] })
+  @OneToMany(() => MessageEntity, (message) => message.sender, {
+    cascade: ['remove'],
+  })
   sentMessages: MessageEntity[];
 
   @ManyToMany(() => EventEntity, (event) => event.users)
@@ -89,4 +97,6 @@ export class UserEntity {
 
   @ManyToMany(() => SeanceEntity, (seance) => seance.users)
   seances: SeanceEntity[];
+  @OneToMany(() => SeanceUserEntity, (seanceUser) => seanceUser.user)
+  seanceUsers?: SeanceUserEntity[];
 }

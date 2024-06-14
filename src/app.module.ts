@@ -1,3 +1,4 @@
+import { InvoiceModule } from './modules/invoice/invoice.module';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -15,7 +16,12 @@ import { EventModule } from './modules/event/event.module';
 import { TypeEventModule } from './modules/type-event/type-event.module';
 import { AbonnementModule } from './modules/abonnement/abonnement.module';
 import { TypeAbonnementModule } from './modules/type-abonnement/type-abonnement.module';
-
+import { SeanceModule } from './modules/seance/seance.module';
+import { DateCourModule } from './modules/date-cour/date-cour.module';
+import { CourModule } from './modules/cour/cour.module';
+import { LieuModule } from './modules/lieu/lieu.module';
+import { HoraireModule } from './modules/horaire/horaire.module';
+import { SeanceUserModule } from './modules/seance-user/seance-user.module';
 
 @Module({
   imports: [
@@ -34,7 +40,14 @@ import { TypeAbonnementModule } from './modules/type-abonnement/type-abonnement.
     EventModule,
     TypeEventModule,
     AbonnementModule,
-    TypeAbonnementModule
+    TypeAbonnementModule,
+    InvoiceModule,
+    SeanceModule,
+    DateCourModule,
+    CourModule,
+    LieuModule,
+    HoraireModule,
+    SeanceUserModule
   ],
   controllers: [AppController],
   providers: [AppService],

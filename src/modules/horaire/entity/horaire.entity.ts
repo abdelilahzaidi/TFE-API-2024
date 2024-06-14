@@ -8,10 +8,11 @@ export class HoraireEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({type : 'time'})
-  heureDebut: Date;
-  @Column({type : 'time'})
-  heureFin: Date;
+  @Column()
+  heureDebut: string;
+
+  @Column()
+  heureFin: string;
   @Column()
   jour: DayOfWeek;
   @OneToMany(() => SeanceEntity, (seance) => seance.horaire)
