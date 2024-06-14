@@ -37,45 +37,48 @@ export class InvoiceService {
 
     const invoice = new InvoiceEntity();
     invoice.dateEnvoie = new Date();
-    invoice.etatDePaiement = false; // Assuming it's not paid initially
+    invoice.etatDePaiement = false;
     invoice.montant = montant;
     invoice.abonnement = abonnement;
 
     return this.invoiceRepository.save(invoice);
   }
 
-  async assignInvoiceToUser(invoiceId: number, userId: number): Promise<InvoiceEntity> {
-    const user = await this.userRepository.findOne({where:{id :userId}});
+  async assignInvoiceToUser(
+    invoiceId: number,
+    userId: number,
+  ): Promise<InvoiceEntity> {
+    const user = await this.userRepository.findOne({ where: { id: userId } });
     if (!user) {
       throw new Error('User not found');
     }
-
-    const invoice = await this.invoiceRepository.findOne({where:{id : invoiceId}});
+    const invoice = await this.invoiceRepository.findOne({
+      where: { id: invoiceId },
+    });
     if (!invoice) {
       throw new Error('Invoice not found');
     }
-
-    // Vérifier si l'utilisateur a un abonnement
     const abonnement = await this.abonnementRepository.findOne({
-      where: {id :userId },
+      where: { id: userId },
     });
-    console.log('abonnement ',abonnement)
+    console.log('abonnement ', abonnement);
     if (!abonnement) {
       throw new Error('User does not have a subscription');
     }
-
-    // Associer la facture à l'utilisateur
     invoice.abonnement = abonnement;
 
     return this.invoiceRepository.save(invoice);
   }
 
   async getInvoicesByUser(userId: number): Promise<InvoiceEntity[]> {
-    const user = await this.userRepository.findOne( {where:{id : userId},relations:['abonnements', 'abonnements.invoices']});
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['abonnements', 'abonnements.invoices'],
+    });
     if (!user) {
       throw new Error('User not found');
     }
-    console.log('user : ',user)
+    console.log('user : ', user);
 
     const invoices = user.abonnements.reduce((acc, abonnement) => {
       acc.push(...abonnement.invoices);

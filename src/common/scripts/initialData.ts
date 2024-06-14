@@ -101,11 +101,11 @@ export class InitialDataService implements OnModuleInit {
     if (technichalCount === 0) {
       await this.technichalRepository.save([
         {
-          nom: TechnichalEnum.Ciseau_1,          
+          nom: TechnichalEnum.Ciseau_1,
           description: 'Description de DAM_THANG'
         },
         {
-          nom: TechnichalEnum.Coup_de_pied_1,          
+          nom: TechnichalEnum.Coup_de_pied_1,
           description: 'Description de POSITION'
         }
       ]);
