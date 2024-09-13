@@ -11,6 +11,6 @@ export class EventEntity{
     dateDebut:Date;
     @Column()
     dateFin:Date;
-    @ManyToMany(() => UserEntity, (user) => user.events) 
+    @ManyToMany(() => UserEntity, (user) => user.events, { onDelete: 'CASCADE' }) 
     users : UserEntity[]
 }

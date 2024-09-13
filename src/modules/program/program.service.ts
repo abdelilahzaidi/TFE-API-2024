@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ProgramEntity } from './entity/program.entity';
@@ -22,7 +26,8 @@ export class ProgramService {
 
   async all(): Promise<ProgramI[]> {
     const programs = await this.programRepository.find({
-      select: ['technicals'],relations:['technicals']
+      select: ['technicals'],
+      relations: ['technicals'],
     });
 
     return programs.map((program) => ({
@@ -71,12 +76,15 @@ export class ProgramService {
         relations: ['technicals'],
       });
       if (!program) {
-        throw new BadRequestException(`Le programme avec l'ID ${programId} n'existe pas !`);
+        throw new BadRequestException(
+          `Le programme avec l'ID ${programId} n'existe pas !`,
+        );
       }
 
       // Récupérer les techniques par leurs IDs
       console.log('IDs des techniques :', technicalIds);
-      const technicals = await this.technichalService.findAllByIds(technicalIds);
+      const technicals =
+        await this.technichalService.findAllByIds(technicalIds);
       console.log('Techniques trouvées :', technicals);
       const foundTechnicalIds = technicals.map((t) => t.id);
 

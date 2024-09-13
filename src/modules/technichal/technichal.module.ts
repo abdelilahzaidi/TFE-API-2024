@@ -9,10 +9,11 @@ import { LevelEntity } from '../level/entity/level.entity';
 import { TechnichalTypeEntity } from '../technical-type/entity/technical-type.entity';
 import { TechnicalTypeService } from '../technical-type/technical-type.service';
 import { TypeAbonnementEntity } from '../type-abonnement/entity/type-abonnement';
+import { ProgramService } from '../program/program.service';
 
 @Module({
   imports:[TypeOrmModule.forFeature([TechnichalEntity,ProgramEntity,LevelEntity, TechnichalTypeEntity,TypeAbonnementEntity])],
-  providers: [TechnichalService,InitialDataService,TechnicalTypeService],
+  providers: [TechnichalService,InitialDataService,TechnicalTypeService,ProgramService],
   controllers: [TechnichalController],
   exports:[TechnichalService]
 })

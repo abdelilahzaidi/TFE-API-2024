@@ -1,4 +1,3 @@
-
 import { ProgramEnum } from 'src/common/enums/program.enum';
 import { LevelEntity } from 'src/modules/level/entity/level.entity';
 import { TechnichalTypeEntity } from 'src/modules/technical-type/entity/technical-type.entity';
@@ -8,9 +7,7 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  OneToOne,
-  ManyToOne,
-  JoinColumn,
+  OneToOne, 
   ManyToMany,
   JoinTable,
 } from 'typeorm';
@@ -25,9 +22,9 @@ export class ProgramEntity {
   @OneToOne(() => LevelEntity, (level) => level.program)
   grade?: LevelEntity;
   @ManyToMany(
-    type =>TechnichalEntity,
-    TechnichalEntity =>TechnichalEntity.programs
+    (type) => TechnichalEntity,
+    (TechnichalEntity) => TechnichalEntity.programs,
   )
   @JoinTable()
-  technicals:TechnichalEntity[]; 
+  technicals: TechnichalEntity[];
 }

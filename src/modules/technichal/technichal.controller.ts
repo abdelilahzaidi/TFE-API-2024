@@ -4,14 +4,10 @@ import { TechnichalEntity } from './entity/technichal.entity';
 
 @Controller('technichal')
 export class TechnichalController {
-    constructor(
-        private readonly technichalService : TechnichalService
-    ){}
+  constructor(private readonly technichalService: TechnichalService) {}
 
-    @Get()
-    async all():Promise<TechnichalEntity[]>{
-        return await this.technichalService.all();
-    }
-
-    
+  @Get()
+  async all(): Promise<TechnichalEntity[]> {
+    return await this.technichalService.all();
+  }
 }

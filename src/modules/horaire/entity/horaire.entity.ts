@@ -1,7 +1,14 @@
-import { SeanceEntity } from "src/modules/seance/entity/seance.entity";
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { SeanceEntity } from 'src/modules/seance/entity/seance.entity';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
-export type DayOfWeek = 'lundi' | 'mardi' | 'mercredi' | 'jeudi' | 'vendredi' | 'samedi' | 'dimanche';
+export type DayOfWeek =
+  | 'lundi'
+  | 'mardi'
+  | 'mercredi'
+  | 'jeudi'
+  | 'vendredi'
+  | 'samedi'
+  | 'dimanche';
 
 @Entity('horaire')
 export class HoraireEntity {

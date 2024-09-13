@@ -8,12 +8,12 @@ export class CourController {
     constructor(
         private readonly courService : CourService
     ){}
-
+    /*Lister tous les cours*/
     @Get()
     async all():Promise<CourEntity[]>{
         return await this.courService.all()
     }
-
+    /*Creation d'un cour*/
     @Post()
     async create(@Body() dto : CreateCourDTO): Promise<CourEntity> {
       console.log(dto)

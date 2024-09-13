@@ -1,4 +1,4 @@
 export interface TypeEvent {
-    id: number;
-    type: string;
-  }
+  id: number;
+  type: string;
+}

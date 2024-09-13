@@ -1,5 +1,4 @@
-import { IsString, IsDate, IsArray, IsNumber } from "class-validator";
-
+import { IsString, IsDate, IsArray, IsNumber } from 'class-validator';
 
 export class CreateEventDto {
   @IsString()

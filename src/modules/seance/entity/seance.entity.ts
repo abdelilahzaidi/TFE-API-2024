@@ -27,7 +27,7 @@ export class SeanceEntity {
   dateCour: DateCourEntity;
 
   @OneToMany(() => SeanceUserEntity, (seanceUser) => seanceUser.seance)
-  seanceUsers: SeanceUserEntity[]; // Ajout de la propriété seanceUsers
+  seanceUsers: SeanceUserEntity[]; 
 
   @ManyToMany(() => UserEntity, (user) => user.seances)
 @JoinTable({

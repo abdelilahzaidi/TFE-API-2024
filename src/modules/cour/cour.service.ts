@@ -19,7 +19,8 @@ export class CourService {
 
       async createCour(dto: CreateCourDTO): Promise<CourEntity> {
         try {
-            const lieu = await this.lieuService.findLieuById(dto.lieuId); // Récupérez le programme associé
+            /*recuperer le lieu associé*/ 
+            const lieu = await this.lieuService.findLieuById(dto.lieuId); 
             console.log('lieu',lieu)
             const cour = new CourEntity();
             cour.objectifDuCour=dto.objectifDuCour
@@ -34,7 +35,7 @@ export class CourService {
           throw new InternalServerErrorException(
             error,
 
-            "Une erreur est survenue lors de la création du niveau.",
+            "Une erreur est survenue lors de la création du cour.",
 
           );
         }

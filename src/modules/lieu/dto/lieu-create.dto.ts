@@ -1,12 +1,12 @@
-import { IsNotEmpty } from "class-validator";
+import { IsNotEmpty } from 'class-validator';
 
 export class CreateLieuDto {
-    @IsNotEmpty()
-    rue: string;   
-    
-    @IsNotEmpty()
-    commune: string;   
+  @IsNotEmpty()
+  rue: string;
 
-    @IsNotEmpty()
-    ville: string;   
+  @IsNotEmpty()
+  commune: string;
+
+  @IsNotEmpty()
+  ville: string;
 }

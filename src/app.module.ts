@@ -22,6 +22,7 @@ import { CourModule } from './modules/cour/cour.module';
 import { LieuModule } from './modules/lieu/lieu.module';
 import { HoraireModule } from './modules/horaire/horaire.module';
 import { SeanceUserModule } from './modules/seance-user/seance-user.module';
+import { MailerModule } from '@nestjs-modules/mailer';
 
 @Module({
   imports: [
@@ -47,7 +48,16 @@ import { SeanceUserModule } from './modules/seance-user/seance-user.module';
     CourModule,
     LieuModule,
     HoraireModule,
-    SeanceUserModule
+    SeanceUserModule,
+    MailerModule.forRoot({
+      transport: {
+        host: process.env.EMAIL_HOST,
+        auth: {
+          user: process.env.MAIL_USER,
+          pass: process.env.MAIL_PASSWORD,
+        },
+      },
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -4,13 +4,12 @@ import { TechnicalTypeService } from './../technical-type/technical-type.service
 import { TechnichalTypeEntity } from './../technical-type/entity/technical-type.entity';
 import { ProgramService } from './../program/program.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Module, forwardRef } from '@nestjs/common';
+import { Module} from '@nestjs/common';
 import { LevelController } from './level.controller';
 import { LevelService } from './level.service';
 import { LevelEntity } from './entity/level.entity';
 import { InitialDataService } from 'src/common/scripts/initialData';
 import { ProgramEntity } from '../program/entity/program.entity';
-import { ProgramModule } from '../program/program.module';
 import { TechnichalEntity } from '../technichal/entity/technichal.entity';
 import { TechnichalService } from '../technichal/technichal.service';
 import { MessageService } from '../message/message.service';
@@ -22,13 +21,39 @@ import { TypeAbonnementEntity } from '../type-abonnement/entity/type-abonnement'
 import { TypeAbonnementService } from '../type-abonnement/type-abonnement.service';
 import { HoraireEntity } from '../horaire/entity/horaire.entity';
 import { SeanceUserEntity } from '../seance-user/entity/seance-user.entity';
-
-
+import { MailService } from '../mail/mail.service';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([LevelEntity,ProgramEntity,TechnichalTypeEntity,TechnichalEntity,MessageEntity,UserEntity,EventEntity,TypeAbonnementEntity,HoraireEntity,SeanceUserEntity])],
+  imports: [
+    TypeOrmModule.forFeature([
+      LevelEntity,
+      ProgramEntity,
+      TechnichalTypeEntity,
+      TechnichalEntity,
+      MessageEntity,
+      UserEntity,
+      EventEntity,
+      TypeAbonnementEntity,
+      HoraireEntity,
+      SeanceUserEntity,
+    ]),
+  ],
   controllers: [LevelController],
-  providers: [LevelService,InitialDataService,ProgramService,TechnicalTypeService,TechnichalService,MessageService,UserService,EventService,TypeAbonnementService,HoraireService],
-  exports:[LevelService]
+  providers: [
+    LevelService,
+    InitialDataService,
+    ProgramService,
+    TechnicalTypeService,
+    TechnichalService,
+    MessageService,
+    UserService,
+    EventService,
+    TypeAbonnementService,
+    HoraireService,
+    MailService,
+    JwtService
+  ],
+  exports: [LevelService],
 })
 export class LevelModule {}

@@ -15,9 +15,24 @@ import { TechnicalTypeService } from '../technical-type/technical-type.service';
 import { TechnichalService } from '../technichal/technichal.service';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([TypeAbonnementEntity,LevelEntity,ProgramEntity,TechnichalEntity,TechnichalTypeEntity])],
+  imports: [
+    TypeOrmModule.forFeature([
+      TypeAbonnementEntity,
+      LevelEntity,
+      ProgramEntity,
+      TechnichalEntity,
+      TechnichalTypeEntity,
+    ]),
+  ],
   controllers: [TypeAbonnementController],
-  providers: [TypeAbonnementService,InitialDataService,LevelService,ProgramService,TechnicalTypeService,TechnichalService],
-  exports:[TypeAbonnementService]
+  providers: [
+    TypeAbonnementService,
+    InitialDataService,
+    LevelService,
+    ProgramService,
+    TechnicalTypeService,
+    TechnichalService,
+  ],
+  exports: [TypeAbonnementService],
 })
 export class TypeAbonnementModule {}

@@ -12,6 +12,11 @@ export class EventController {
     return this.eventService.findAll();
   }
 
+  @Get(':id')
+  async findOne(@Param('id') id: number) {
+    return this.eventService.findEventById(id);
+  }
+
   @Post()
   async create(@Body() createEventDto: CreateEventDto) {
     return this.eventService.create(createEventDto);
@@ -35,5 +40,9 @@ export class EventController {
   @Post(':id/participate')
   async participate(@Param('id') eventId: number, @Body('userId') userId: number) {
     return this.eventService.participateInEvent(eventId, userId);
+  }
+  @Get(':id/participants')
+  async getUserByEvent(@Param('id') eventId: number){
+    return this.eventService.getEventParticipants(eventId)
   }
 }

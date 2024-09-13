@@ -9,26 +9,24 @@ export class TechnichalService {
   constructor(
     @InjectRepository(TechnichalEntity)
     private readonly technichalRepository: Repository<TechnichalEntity>,
-
-    
   ) {}
 
   async all(): Promise<any[]> {
-    return await this.technichalRepository.find({relations:['technichalType']});
+    return await this.technichalRepository.find({
+      relations: ['technichalType'],
+    });
   }
 
-  async findById(id:number):Promise<any>{
-    return await this.technichalRepository.findOne({where:{id}})
-}
-// async findAllByIds(ids: number[]): Promise<any[]> {
-//   return await this.technichalRepository.findBy({ id: In(ids) });
-// }
-async findAllByIds(ids: number[]): Promise<any[]> {
-  return await this.technichalRepository.createQueryBuilder('technical')
+  async findById(id: number): Promise<any> {
+    return await this.technichalRepository.findOne({ where: { id } });
+  }
+  // async findAllByIds(ids: number[]): Promise<any[]> {
+  //   return await this.technichalRepository.findBy({ id: In(ids) });
+  // }
+  async findAllByIds(ids: number[]): Promise<any[]> {
+    return await this.technichalRepository
+      .createQueryBuilder('technical')
       .whereInIds(ids)
       .getMany();
-}
-
-
-
+  }
 }

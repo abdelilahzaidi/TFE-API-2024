@@ -1,4 +1,3 @@
-
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
 import { ProgramService } from './program.service';
@@ -19,11 +18,38 @@ import { TypeAbonnementService } from '../type-abonnement/type-abonnement.servic
 import { TypeAbonnementEntity } from '../type-abonnement/entity/type-abonnement';
 import { SeanceUserModule } from '../seance-user/seance-user.module';
 import { SeanceUserEntity } from '../seance-user/entity/seance-user.entity';
+import { MailService } from '../mail/mail.service';
+import { JwtService } from '@nestjs/jwt';
+import { MessageService } from '../message/message.service';
+import { MessageEntity } from '../message/entity/message.entity';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([ProgramEntity,TechnichalTypeEntity,TechnichalEntity,EventEntity,UserEntity,LevelEntity,TypeAbonnementEntity,SeanceUserEntity])],
-  providers: [ProgramService,TechnicalTypeService,TechnichalService,EventService,UserService,LevelService,TypeAbonnementService],
+  imports: [
+    TypeOrmModule.forFeature([
+      ProgramEntity,
+      TechnichalTypeEntity,
+      TechnichalEntity,
+      EventEntity,
+      UserEntity,
+      LevelEntity,
+      TypeAbonnementEntity,
+      SeanceUserEntity,
+      MessageEntity
+    ]),
+  ],
+  providers: [
+    ProgramService,
+    TechnicalTypeService,
+    TechnichalService,
+    EventService,
+    UserService,
+    LevelService,
+    TypeAbonnementService,
+    MessageService,
+    MailService,
+    JwtService
+  ],
   controllers: [ProgramController],
-  exports:[ProgramService]
+  exports: [ProgramService],
 })
 export class ProgramModule {}

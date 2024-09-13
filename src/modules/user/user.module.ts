@@ -26,19 +26,47 @@ import { DateCourEntity } from '../date-cour/entity/date.entity';
 import { DateCourModule } from '../date-cour/date-cour.module';
 import { SeanceUserEntity } from '../seance-user/entity/seance-user.entity';
 import { SeanceUserModule } from '../seance-user/seance-user.module';
+import { MailService } from '../mail/mail.service';
+import { JwtService } from '@nestjs/jwt';
+import { TechnichalService } from '../technichal/technichal.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity,LevelEntity,ProgramEntity,TechnichalTypeEntity,TechnichalEntity,MessageEntity,EventEntity,SeanceEntity,CourEntity,HoraireEntity,DateCourEntity,SeanceUserEntity]),
-  forwardRef(()=>ProgramModule),
-  forwardRef(()=>CourModule),
-  forwardRef(()=>DateCourModule),
-  forwardRef(()=>HoraireModule),
-  forwardRef(()=>SeanceModule), forwardRef(()=>SeanceUserModule)
-  
-],
+  imports: [
+    TypeOrmModule.forFeature([
+      UserEntity,
+      LevelEntity,
+      ProgramEntity,
+      TechnichalTypeEntity,
+      TechnichalEntity,
+      MessageEntity,
+      EventEntity,
+      SeanceEntity,
+      CourEntity,
+      HoraireEntity,
+      DateCourEntity,
+      SeanceUserEntity,
+    ]),
+    forwardRef(() => ProgramModule),
+    forwardRef(() => CourModule),
+    forwardRef(() => DateCourModule),
+    forwardRef(() => HoraireModule),
+    forwardRef(() => SeanceModule),
+    forwardRef(() => SeanceUserModule),
+  ],
 
-  providers: [UserService,LevelService,MessageService,EventService,TechnicalTypeService,SeanceService,HoraireService],
+  providers: [
+    UserService,
+    LevelService,
+    MessageService,
+    EventService,
+    TechnicalTypeService,
+    TechnichalService,
+    SeanceService,
+    HoraireService,
+    MailService,JwtService
+    
+  ],
   controllers: [UserController],
-  exports:[UserService]
+  exports: [UserService],
 })
 export class UserModule {}

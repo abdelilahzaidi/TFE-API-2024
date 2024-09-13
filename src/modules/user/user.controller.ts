@@ -19,52 +19,66 @@ import { UserStatus } from 'src/common/enums/status.enum';
 import { Status } from 'src/common/decorators/status.decorator';
 import { StatusGuard } from 'src/common/guards/status.guards';
 import { UpdatePresenceDto } from './dto/user-seance-update.dto';
+import { SentMessages } from './interface/user-sent-message.interface';
 
 @Controller('user')
 export class UserController {
-  constructor(
-    private userService: UserService
-   
-  ) {}
-
-  //List all users
-  // @Get()
-  // async all(): Promise<UserI[]> {
-    
-  //   return await this.userService.all();
-  // }
+  constructor(private userService: UserService) {}
+  //List of users
   @Get()
   async all(): Promise<UserI[]> {
     const users = await this.userService.all();
-    users.forEach(user => {
-      // Supprimer les propriétés 
-      delete user['password'];
+    users.forEach((user) => {
+      // Supprimer la propriété password
+      delete user['password']; 
+      delete user['level'];     
     });
+    console.log("All users : ",users)
     return users;
   }
-  //Get a user by id 
+  //Get a user by id
   @Get(':id')
-  async getById(@Param('id') id: number): Promise<UserI> {
+  async getUserById(@Param('id') id: number) {
     const existingUser = await this.userService.findOneById(id);
 
     if (!existingUser) {
-      console.log('id :' + id + " n'existe pas");
       throw new BadRequestException(`User ${id} doesn't exist!`);
     }
-
-    console.log('id :' + id + '  user :' + existingUser.id);
-    //delete existingUser['status'];
-    delete existingUser['password'];
+    
+    delete existingUser['password']
+    delete existingUser['level']
+    
     return existingUser;
   }
+
+
+    //Get a user by level
+    @Get(':id')
+    async getById(@Param('id') id: number) {
+      const existingUser = await this.userService.findOneByLevel(id)
+  
+      if (!existingUser) {
+        throw new BadRequestException(`User ${id} doesn't exist!`);
+      }
+      
+      delete existingUser['password']
+      
+      return existingUser;
+    }
+
+
+
   //Get a user by level
   @Get(':id/level')
-  async getUserByLevel(@Param('id', ParseIntPipe) id : number):Promise<UserI | undefined>{
+  async getUserByLevel(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<UserI | undefined> {
     const user = await this.userService.findOneByLevel(id);
-    if(!user){
-      throw new BadRequestException(`User ${id} doesn't exist!`)
+    if (!user) {
+      throw new BadRequestException(`User ${id} doesn't exist!`);
     }
-    return user
+    delete user['password']
+    return user;
   }
   //create a user
   // @UseGuards(StatusGuard)
@@ -113,25 +127,58 @@ export class UserController {
     return await this.userService.update(id, { ...data });
   }
 
-
   @Put(':id/presence')
-  async updatePresenceSeance(@Param('id') id: number, @Body() updatePresenceDto: UpdatePresenceDto): Promise<void> {
+  async updatePresenceSeance(
+    @Param('id') id: number,
+    @Body() updatePresenceDto: UpdatePresenceDto,
+  ): Promise<void> {
     const { presence } = updatePresenceDto;
     try {
       await this.userService.updatePresenceSeance(id, presence);
     } catch (error) {
-      console.log('error',error)
-      throw new HttpException('Error updating SeanceUser presence', HttpStatus.INTERNAL_SERVER_ERROR);
+      console.log('error', error);
+      throw new HttpException(
+        'Error updating SeanceUser presence',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
   // @Get(':id/message')
   // async findMessage(@Param('id', ParseIntPipe) id: number): Promise<any> {
-  //   const messages = await this.userService.findUserMessagesByUserId(id);
+  //   const messages = await this.userService.findUserByMessageId(id);
   //   if (!messages) {
   //     throw new BadRequestException(`User ${id} doesn't exist!`);
   //   }
   //   return messages;
   // }
-  
+
+
+
+  @Get(':id/message')
+  async findMessage(@Param('id', ParseIntPipe) id: number): Promise<any> {
+    const messages = await this.userService.findMessageByUserById(id);
+    if (!messages) {
+      throw new BadRequestException(`User ${id} doesn't exist!`);
+    }
+    return messages;
+  }
+
+
+  //message par emetteur
+  @Get(':id/sent-messages')
+  async getSentMessages(@Param('id') id: number): Promise<SentMessages> {
+    return this.userService.findSentMessagesByUserId(id);
+  }
+
+  //Part Reset
+  @Post('request-reset-password')
+  async requestResetPassword(@Body('email') email: string) {
+    return this.userService.requestResetPassword(email);
+  }
+
+  @Post('reset-password')
+  async resetPassword(@Body('token') token: string, @Body('newPassword') newPassword: string) {
+    return this.userService.resetPassword(token, newPassword);
+  }
 }

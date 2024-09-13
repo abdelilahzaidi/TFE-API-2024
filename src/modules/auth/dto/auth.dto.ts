@@ -12,6 +12,7 @@ export interface UserInDTO {
 
 export function signInMapper(token: string, user: UserI): SignInDTO {
     delete user.password
+    
     return { token, user }
 }
 

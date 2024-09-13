@@ -1,18 +1,20 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-
+import {
+  Column,
+  Entity, 
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('lieu')
-export class LieuEntity{
-    @PrimaryGeneratedColumn()
-    id : number;
+export class LieuEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    rue: string;
+  @Column()
+  rue: string;
 
-    @Column()
-    commune:string;
+  @Column()
+  commune: string;
 
-    @Column()
-    ville:string
- 
+  @Column()
+  ville: string;
 }

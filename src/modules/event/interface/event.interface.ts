@@ -4,8 +4,8 @@ import { UserEntity } from "src/modules/user/entity/user.entity";
 export interface Event {
     id: number;
     nom: string;
-    dateDebut: Date;
-    dateFin: Date;
+    dateDebut?: Date;
+    dateFin?: Date;
     users: UserEntity[];
     type: TypeEventEntity;
   }

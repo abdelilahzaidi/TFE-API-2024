@@ -20,22 +20,151 @@ import * as bcrypt from 'bcrypt';
 import { LevelEntity } from '../level/entity/level.entity';
 import { LevelService } from '../level/level.service';
 import { SeanceUserEntity } from '../seance-user/entity/seance-user.entity';
+import { MailService } from '../mail/mail.service';
+import { JwtService } from '@nestjs/jwt';
+import { MessageEntity } from '../message/entity/message.entity';
+import { UserMessages } from './dto/user-message.dto';
+import { SentMessages } from './interface/user-sent-message.interface';
+import { classToPlain } from 'class-transformer';
 
 @Injectable()
 export class UserService {
   constructor(
+
+    @InjectRepository(MessageEntity)
+    private readonly messageRepository : Repository<MessageEntity>,
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
     private readonly levelService: LevelService,
     @InjectRepository(SeanceUserEntity)
     private readonly userSeanceRepository : Repository<SeanceUserEntity>,
-  ) {}
-  
-  //List all users
-  async all(): Promise<UserI[]> {
-    console.log('Hello all');
-    return await this.userRepository.find({select:['id','first_name','last_name','gender','birthDate','attributionDate','rue','commune','ville','actif','gsm','email','status','level', ],relations:['level','level.program','level.program.technicals']});
+    private mailService: MailService,
+    private jwtService: JwtService,
+    
+  ) {} 
+
+
+
+
+// List all users 
+async all(): Promise<UserI[]> {
+  console.log('Hello all');
+  try {
+    // Using await to wait for the query to complete before returning
+    return await this.userRepository.find({
+      select: [
+        'id', 'first_name', 'last_name', 'gender', 'birthDate', 'attributionDate',
+        'rue', 'commune', 'ville', 'actif', 'gsm', 'email', 'status',      
+      ]
+    });
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    throw error; // Propagate the error for handling in higher layers
   }
+}
+
+  //Find a user by id
+  async findOneById(id: number): Promise<UserI> {
+    try {
+      const user = await this.userRepository.findOne({
+        where: { id },        
+      });
+  
+      if (!user) {
+        throw new NotFoundException(`Utilisateur avec l'ID ${id} non trouvé !`);
+      }
+  
+      return user;
+    } catch (error) {
+      throw new InternalServerErrorException(
+        `Une erreur est survenue lors de la récupération de l'utilisateur avec l'ID ${id}.`,
+        error.message,
+      );
+    }
+  }
+
+
+
+    //Find a user by level
+    async findOneByLevel(id: number): Promise<UserI> {
+      try {
+        const user = await this.userRepository.findOne({
+          where: { id },
+          relations: ['level', 'level.program.technicals'], // Incluez 'level.program' pour charger également ProgramEntity
+        });
+    
+        if (!user) {
+          throw new NotFoundException(`Utilisateur avec l'ID ${id} non trouvé !`);
+        }
+    
+        return user;
+      } catch (error) {
+        throw new InternalServerErrorException(
+          `Une erreur est survenue lors de la récupération de l'utilisateur avec l'ID ${id}.`,
+          error.message,
+        );
+      }
+    }
+
+
+    // async findOneByLevel(userId: number): Promise<UserI> {
+    //   return await this.userRepository.findOne({
+    //     where: { id: userId },
+    //     relations: ['level','level.program','level.program.technicals'],
+    //   });
+    // }
+
+
+
+
+// List all users by level
+async allByLevel(): Promise<UserI[]> {
+  console.log('Hello all');
+  try {
+    // Using await to wait for the query to complete before returning
+    return await this.userRepository.find({
+      select: [
+        'id', 'first_name', 'last_name', 'gender', 'birthDate', 'attributionDate',
+        'rue', 'commune', 'ville', 'actif', 'gsm', 'email', 'status', 'level',
+        // 'receivedMessages', 'sentMessages' // Ensure correct field names are used
+      ],
+      relations: [
+        'level', // Fetch related level information
+        'level.program', // Fetch related program information
+        'level.program.technicals', // Fetch related technicals information under program
+        // 'receivedMessages.receivers', // Fetch receivers of received messages
+        // 'sentMessages.sender' // Fetch sender of sent messages
+      ]
+    });
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    throw error; // Propagate the error for handling in higher layers
+  }
+}
+
+
+async getUserWithMessages(userId: number): Promise<Record<string, any> | undefined> {
+  const user = await this.userRepository
+    .createQueryBuilder('user')
+    .leftJoinAndSelect('user.sentMessages', 'sentMessages')
+    .leftJoinAndSelect('sentMessages.receivers', 'receivers')
+    .where('user.id = :userId', { userId })
+    .getOne();
+
+  if (user) {
+    user.sentMessages.forEach(message => {
+      if (message.receivers) {
+        message.receivers.forEach(receiver => {
+          delete receiver.password;
+        });
+      }
+    });
+    return classToPlain(user);
+  }
+
+  return undefined;
+}
+
   //Create user
   async create(createUser: UserCreateDTO): Promise<UserI> {
     // Générer un mot de passe aléatoire ou utiliser un mot de passe par défaut
@@ -77,26 +206,7 @@ export class UserService {
   async findOneByEmail(email: string): Promise<UserI> {
     return this.userRepository.findOneBy({ email });
   }
-  //Find a user by id
-  async findOneById(id: number): Promise<UserI> {
-    try {
-      const user = await this.userRepository.findOne({
-        where: { id },
-        relations: ['level', 'level.program'], // Incluez 'level.program' pour charger également ProgramEntity
-      });
-  
-      if (!user) {
-        throw new NotFoundException(`Utilisateur avec l'ID ${id} non trouvé !`);
-      }
-  
-      return user;
-    } catch (error) {
-      throw new InternalServerErrorException(
-        `Une erreur est survenue lors de la récupération de l'utilisateur avec l'ID ${id}.`,
-        error.message,
-      );
-    }
-  }
+
 
   //Find a user by status
   async findOneByStatus(status: UserStatus): Promise<any> {
@@ -161,7 +271,10 @@ export class UserService {
   }
   
   
-  async findOneByLevel(userId: number): Promise<UserI> {
+
+
+    
+  async findOneByProgram(userId: number): Promise<UserI> {
     return await this.userRepository.findOne({
       where: { id: userId },
       relations: ['level','level.program','level.program.technicals'],
@@ -199,6 +312,140 @@ export class UserService {
     }
   }
 
+  //Reset Part
+
+  async requestResetPassword(email: string): Promise<void> {
+    const user = await this.userRepository.findOne({ where: { email } });
+  
+    if (!user) {
+      throw new Error('Utilisateur non trouvé');
+    }
+  
+    const payload = { email: user.email };
+    const token = this.jwtService.sign(payload, { secret: "14101983", expiresIn: '1h' });
+  
+    const resetLink = `http://localhost:3001/user/reset-password?token=${token}`;
+  
+    await this.mailService.sendResetPasswordEmail(user.email, resetLink);
+  }
+  
+
+  async resetPassword(token: string, newPassword: string): Promise<void> {
+    try {
+      const payload = this.jwtService.verify(token, { secret: process.env.JWT_SECRET });
+      const user = await this.userRepository.findOne({ where: { email: payload.email } });
+
+      if (!user) {
+        throw new Error('Utilisateur non trouvé');
+      }
+
+      user.password = await bcrypt.hash(newPassword, 10);
+      await this.userRepository.save(user);
+    } catch (e) {
+      console.log('error ',e)
+      throw new Error('Jeton invalide ou expiré');
+    }
+  }
+
+  async findUserByMessageId(id: number): Promise<MessageEntity[]> {
+    const messages = await this.messageRepository.find({
+      where: { id },
+      relations: ['receivers', 'sender'],
+    });
+
+    if (!messages.length) {
+      throw new NotFoundException(`No messages found for user with id ${id}`);
+    }
+
+    return messages;
+  } 
+
+  async findMessageByUserById(id: number): Promise<any> {
+    const user = await this.userRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.receivedMessages', 'receivedMessage')
+      .leftJoinAndSelect('receivedMessage.receivers', 'receiver')
+      .where('user.id = :id', { id })
+      .select([
+        'user.id', 'user.first_name', 'user.last_name','user.email', // Sélectionner les informations de l'utilisateur
+        'receivedMessage.id', 'receivedMessage.titre', // Sélectionner les informations du message
+        'receiver.id', 'receiver.first_name', 'receiver.last_name', 'receiver.email' // Sélectionner les informations des destinataires
+      ])
+      .getOne();
+  
+    if (!user) {
+      throw new NotFoundException(`No messages found for user with id ${id}`);
+    }
+  
+    return user;
+  }
+  
+  
+
+
+  // async findMessageByUserById(id: number): Promise<UserMessages[]> {
+  //   const users = await this.userRepository.find({
+  //     where: { id },
+  //     relations: ['receivedMessages.receivers', 'sentMessages.sender'],
+  //   });
+  
+  //   if (!users.length) {
+  //     throw new NotFoundException(`No messages found for user with id ${id}`);
+  //   }
+  
+  //   // Select the specific fields manually
+  //   const selectedUsers: UserMessages[] = users.map(user => ({
+  //     firstName: user.first_name,
+  //     lastName: user.last_name,
+  //     receivedMessages: user.receivedMessages.map(message => ({
+  //       receivers: message.receivers.map(receiver => ({
+  //         firstName: receiver.first_name,
+  //         lastName: receiver.last_name,
+  //       })),
+  //     })),
+  //     sentMessages: user.sentMessages.map(message => ({
+  //       sender: {
+  //         firstName: message.sender.first_name,
+  //         lastName: message.sender.last_name,
+  //       },
+  //     })),
+  //   }));
+  
+  //   return selectedUsers;
+  // }
+  
+
+  //Message par emetteur
+
+  async findSentMessagesByUserId(id: number): Promise<SentMessages> {
+    const user = await this.userRepository.findOne({
+      where: { id },
+      relations: ['sentMessages.sender', 'sentMessages.receivers'],
+    });
+  
+    if (!user) {
+      throw new NotFoundException(`No user found with id ${id}`);
+    }
+  
+    const sentMessages: SentMessages = {
+      sender: {
+        firstName: user.first_name,
+        lastName: user.last_name,
+      },
+      sentMessages: user.sentMessages.map(message => ({
+        id: message.id,
+        titre:message.titre,
+        content: message.contenu, // Assurez-vous que ce champ existe dans votre entité MessageEntity
+        dateHeureEnvoie : message.dateHeureEnvoie,
+        receivers: message.receivers.map(receiver => ({
+          firstName: receiver.first_name,
+          lastName: receiver.last_name,
+        })),
+      })),
+    };
+  
+    return sentMessages;
+  }
   
   
 }

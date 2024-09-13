@@ -7,9 +7,15 @@ import { TypeAbonnementEntity } from '../type-abonnement/entity/type-abonnement'
 import { UserEntity } from '../user/entity/user.entity';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([AbonnementEntity,TypeAbonnementEntity,UserEntity])],
+  imports: [
+    TypeOrmModule.forFeature([
+      AbonnementEntity,
+      TypeAbonnementEntity,
+      UserEntity,
+    ]),
+  ],
   providers: [AbonnementService],
   controllers: [AbonnementController],
-  exports:[AbonnementService]
+  exports: [AbonnementService],
 })
 export class AbonnementModule {}
