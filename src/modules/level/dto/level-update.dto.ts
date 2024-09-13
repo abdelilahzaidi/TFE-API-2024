@@ -1,5 +1,5 @@
 export class LevelUpdateDTO{
-    during:string;
+    during:string;    
     programId?:number;
     technicalIds?: number[];
 }

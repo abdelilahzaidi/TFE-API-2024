@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TechnichalEntity } from './entity/technichal.entity';
 import { In, Repository } from 'typeorm';
@@ -18,8 +18,22 @@ export class TechnichalService {
   }
 
   async findById(id: number): Promise<any> {
-    return await this.technichalRepository.findOne({ where: { id } });
+    try {
+      const technical = await this.technichalRepository.findOne({ where: { id } });
+  
+      if (!technical) {
+        const message = `La technique avec l'ID ${id} n'existe pas !`;
+        throw new BadRequestException(message); 
+      }
+  
+      return technical;
+      
+    } catch (error) {
+      console.error('Erreur lors de la récupération de la technique:', error.message);
+      throw error; 
+    }
   }
+  
   // async findAllByIds(ids: number[]): Promise<any[]> {
   //   return await this.technichalRepository.findBy({ id: In(ids) });
   // }

@@ -13,6 +13,7 @@ import { LevelI } from './interface/level.interface';
 import { TechnicalTypeService } from '../technical-type/technical-type.service';
 import { TechnichalTypeEntity } from '../technical-type/entity/technical-type.entity';
 import { TechnichalEntity } from '../technichal/entity/technichal.entity';
+import { LevelEnum } from '../../common/enums/grade.enum';
 
 @Injectable()
 export class LevelService {
@@ -137,14 +138,15 @@ export class LevelService {
 
         existingLevel.program = program;
       }
-
+      
       existingLevel.during = dto.during;
 
       const updatedLevel = await this.levelRepository.save(existingLevel);
 
       return updatedLevel;
     } catch (error) {
-      throw new InternalServerErrorException('Failed to update level.', error);
+      console.error('Error during level update:', error); // Log plus détaillé
+      throw new InternalServerErrorException('Failed to update level.', error.message);
     }
   }
 }
