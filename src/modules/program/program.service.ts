@@ -37,6 +37,40 @@ export class ProgramService {
       technicals: program.technicals,
     }));
   }
+
+  //Lister les programmes par grades
+  async allByLevels(): Promise<ProgramI[]> {
+    // Récupérer les programmes avec les relations associées
+    const programs = await this.programRepository.find({
+      select: ['id', 'title', 'technicals'],
+      relations: ['technicals'],
+    });
+  
+    // Mapper les programmes pour retourner l'id, le titre et les techniques
+    const mappedPrograms = programs.map((program) => ({
+      id: program.id,
+      title: program.title,
+      technicals: program.technicals,
+    }));
+  
+    // Trier les programmes par titre de programme
+    mappedPrograms.sort((a, b) => a.title.localeCompare(b.title));
+  
+    return mappedPrograms;
+  }
+  
+  // async allByLevels():Promise<ProgramI[]>{
+  //   const programs = await this.programRepository.find({
+  //     select: ['technicals'],
+  //     relations: ['technicals'],
+  //   })
+  //   return programs.map((program) => ({
+  //     id: program.id,
+  //     title: program.title,
+  //     grade: program.grade,
+  //     technicals: program.technicals,
+  //   }));
+  // }
   async findOneByProgram(id: number): Promise<ProgramI> {
     console.log(id);
     return await this.programRepository.findOne({

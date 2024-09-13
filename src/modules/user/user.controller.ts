@@ -36,6 +36,18 @@ export class UserController {
     console.log("All users : ",users)
     return users;
   }
+    //List of users with level
+    @Get('level')
+    async allUserByLevel(): Promise<UserI[]> {
+      const users = await this.userService.allByLevel();
+      users.forEach((user) => {
+        // Supprimer la propriété password
+        delete user['password']; 
+           
+      });
+      console.log("All users : ",users)
+      return users;
+    }
   //Get a user by id
   @Get(':id')
   async getUserById(@Param('id') id: number) {
