@@ -18,10 +18,11 @@ import { SeanceUserEntity } from '../seance-user/entity/seance-user.entity';
 import { MailService } from '../mail/mail.service';
 import { JwtService } from '@nestjs/jwt';
 import { MessageService } from '../message/message.service';
+import { TechnichalTypeEntity } from '../technical-type/entity/technical-type.entity';
 
 @Module({
   imports:[TypeOrmModule.forFeature([EventEntity,UserEntity,LevelEntity,ProgramEntity,
-    TechnichalEntity,TechnicalTypeModule,SeanceUserEntity, MessageEntity])],
+    TechnichalEntity,TechnichalTypeEntity,SeanceUserEntity, MessageEntity])],
   providers: [EventService,UserService,LevelService,ProgramService,TechnichalService,MailService,JwtService,MessageService],
   controllers: [EventController],
   exports:[EventService]

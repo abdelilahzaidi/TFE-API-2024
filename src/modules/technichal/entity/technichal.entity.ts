@@ -26,4 +26,8 @@ export class TechnichalEntity {
     { nullable: true, eager: true },
   )
   technichalType: TechnichalTypeEntity;
+  
 }
+
+
+

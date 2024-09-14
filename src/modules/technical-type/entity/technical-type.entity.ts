@@ -16,4 +16,6 @@ export class TechnichalTypeEntity {
   type: string;
   @OneToMany(() => TechnichalEntity, (technichal) => technichal.technichalType)
   technichals?: TechnichalEntity[];
+
+  
 }

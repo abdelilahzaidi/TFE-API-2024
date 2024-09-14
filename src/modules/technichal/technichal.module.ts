@@ -12,8 +12,8 @@ import { TypeAbonnementEntity } from '../type-abonnement/entity/type-abonnement'
 import { ProgramService } from '../program/program.service';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([TechnichalEntity,ProgramEntity,LevelEntity, TechnichalTypeEntity,TypeAbonnementEntity])],
-  providers: [TechnichalService,InitialDataService,TechnicalTypeService,ProgramService],
+  imports:[TypeOrmModule.forFeature([TechnichalEntity,ProgramEntity,LevelEntity, TechnichalTypeEntity,TypeAbonnementEntity,TechnichalEntity])],
+  providers: [TechnichalService,InitialDataService,TechnicalTypeService,ProgramService,TechnichalService],
   controllers: [TechnichalController],
   exports:[TechnichalService]
 })

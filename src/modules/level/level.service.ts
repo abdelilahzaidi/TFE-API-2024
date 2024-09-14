@@ -39,13 +39,6 @@ export class LevelService {
       throw error;
     }
   }
-  // async findLevelById(id: number): Promise<LevelEntity | undefined> {
-  //   const existingLevel = await this.levelRepository.findOne({ where: { id },relations:['users'] });
-  //   if (!existingLevel) {
-  //     throw new NotFoundException(`Level ${id} don't exist!!!`);
-  //   }
-  //   return this.levelRepository.findOne({ where: { id } });
-  // }
   async findLevelById(id: number): Promise<LevelEntity | undefined> {
     const existingLevel = await this.levelRepository.findOne({
       where: { id },
@@ -58,53 +51,6 @@ export class LevelService {
 
     return existingLevel;
   }
-
-  // async update(id: number, dto: LevelUpdateDTO): Promise<LevelI> {
-  //   try {
-  //     // Récupérer l'entité Level existante par son ID
-  //     const existingLevel = await this.levelRepository.findOne({ where: { id } });
-
-  //     // Vérifier si l'entité Level existe
-  //     if (!existingLevel) {
-  //       throw new NotFoundException(`Level with ID ${id} not found.`);
-  //     }
-
-  //     // Vérifier si un ID de programme est fourni dans le DTO
-  //     if (dto.programId) {
-  //       // Récupérer l'entité Program correspondante par son ID
-  //       const program = await this.programService.findOneByProgram(dto.programId);
-
-  //       // Vérifier si le programme correspondant existe
-  //       if (!program) {
-  //         throw new NotFoundException(`Program with ID ${dto.programId} not found.`);
-  //       }
-
-  //       // Mettre à jour la relation 'program' dans l'entité 'LevelEntity'
-  //       existingLevel.program = program;
-
-  //       // Si des technicalTypes sont fournis, les récupérer et les associer au program
-  //       if (dto.technicalTypeIds && dto.technicalTypeIds.length > 0) {
-  //         const technicalTypes = await this.technicalTypeService.findById(id);
-  //         program.technicalTypes = technicalTypes;
-  //       }
-  //     }
-
-  //     // Mettre à jour d'autres champs si nécessaire
-  //     existingLevel.during = dto.during;
-
-  //     // Enregistrer les modifications dans la base de données
-  //     const updatedLevel = await this.levelRepository.save(existingLevel);
-
-  //     return updatedLevel;
-  //   } catch (error) {
-  //     // Gérer les erreurs avec une exception InternalServerError
-  //     throw new InternalServerErrorException(
-  //       'Failed to update level.',
-  //       error,
-  //     );
-  //   }
-  // }
-
   async update(id: number, dto: LevelUpdateDTO): Promise<LevelI> {
     try {
       const existingLevel = await this.levelRepository.findOne({

@@ -12,9 +12,9 @@ import { TechnichalService } from '../technichal/technichal.service';
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([TechnichalTypeEntity,EventEntity,ProgramEntity,TechnichalEntity])],
+  imports: [TypeOrmModule.forFeature([TechnichalTypeEntity,EventEntity,ProgramEntity,TechnichalEntity,TechnichalTypeEntity])],
   controllers: [TechnicalTypeController],
-  providers: [TechnicalTypeService,ProgramService,TechnichalService],
+  providers: [TechnicalTypeService,ProgramService,TechnichalService,TechnicalTypeService],
   exports: [TechnicalTypeService], // Exportez TypeOrmModule
 })
 export class TechnicalTypeModule {}
