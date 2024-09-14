@@ -10,7 +10,11 @@ export class TechnichalController {
 
   @Get()
   async all(): Promise<TechnichalEntity[]> {
-    return await this.technichalService.all();
+    const technichal =await this.technichalService.all();
+    technichal.sort(
+      (a,b)=>a.id - b.id
+    )
+    return technichal
   }
   @Get(':id')
   async gettechnicalById(@Param('id') id: number):Promise<TechnichalEntity>{
