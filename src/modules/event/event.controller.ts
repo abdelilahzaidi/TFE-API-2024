@@ -12,6 +12,25 @@ export class EventController {
     return this.eventService.findAll();
   }
 
+  @Get('users')
+  async findUsersByEvnts(): Promise<any[]> {
+    const events = await this.eventService.findUsersByEvent();
+
+  // Use map to return a new array of events with users, but without passwords
+  const eventsWithoutPasswords = events.map(event => {
+    // For each event, map through the users and remove the password field from each user
+    const usersWithoutPasswords = event.users.map(user => {
+      const { password, ...userWithoutPassword } = user;  // Remove password from each user
+      return userWithoutPassword;
+    });
+
+    // Return event object with users without passwords
+    return { ...event, users: usersWithoutPasswords };
+  });
+
+  return eventsWithoutPasswords;  
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: number) {
     return this.eventService.findEventById(id);

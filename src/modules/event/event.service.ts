@@ -16,6 +16,10 @@ export class EventService {
   ) {}
 
   async findAll(): Promise<EventEntity[]> {
+    return this.eventRepository.find();
+  }
+
+  async findUsersByEvent(): Promise<EventEntity[]> {
     return this.eventRepository.find({ relations: ['users'] });
   }
 
