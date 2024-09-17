@@ -23,6 +23,8 @@ import { HoraireEntity } from '../horaire/entity/horaire.entity';
 import { SeanceUserEntity } from '../seance-user/entity/seance-user.entity';
 import { MailService } from '../mail/mail.service';
 import { JwtService } from '@nestjs/jwt';
+import { TypeEventEntity } from '../type-event/entity/type-event.entity';
+import { TypeEventService } from '../type-event/type-event.service';
 
 @Module({
   imports: [
@@ -37,6 +39,7 @@ import { JwtService } from '@nestjs/jwt';
       TypeAbonnementEntity,
       HoraireEntity,
       SeanceUserEntity,
+      TypeEventEntity
     ]),
   ],
   controllers: [LevelController],
@@ -51,6 +54,7 @@ import { JwtService } from '@nestjs/jwt';
     EventService,
     TypeAbonnementService,
     HoraireService,
+    TypeEventService,
     MailService,
     JwtService
   ],

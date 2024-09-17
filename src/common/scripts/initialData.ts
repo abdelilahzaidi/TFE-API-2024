@@ -13,6 +13,9 @@ import { TechnichalEnum } from '../enums/tecnichal.enum';
 import { TypeAbonnementEnum } from '../enums/abonnement.enum';
 import { TypeAbonnementEntity } from 'src/modules/type-abonnement/entity/type-abonnement';
 
+import { TypeEventEntity } from 'src/modules/type-event/entity/type-event.entity';
+import { TypeEventEnum } from '../enums/type-event.enum';
+
 @Injectable()
 export class InitialDataService implements OnModuleInit {
   constructor(
@@ -25,7 +28,9 @@ export class InitialDataService implements OnModuleInit {
     @InjectRepository(TechnichalEntity) 
     private readonly technichalRepository : Repository<TechnichalEntity>,
     @InjectRepository(TypeAbonnementEntity) 
-    private readonly typeAbonnemntRepository : Repository<TypeAbonnementEntity>
+    private readonly typeAbonnemntRepository : Repository<TypeAbonnementEntity>,
+    @InjectRepository(TypeEventEntity)
+    private readonly typeEventRepository : Repository<TypeEventEntity>
   ) {}
 
   async onModuleInit() {
@@ -36,11 +41,13 @@ export class InitialDataService implements OnModuleInit {
     const technichalTypeCount = await this.technicalTypeRepository.count();
     const technichalCount = await this.technichalRepository.count();
     const typeAbonnementCount = await this.typeAbonnemntRepository.count();
+    const typeEventCount = await this.typeEventRepository.count();
 
     console.log(`Level count: ${levelCount}`);
     console.log(`Program count: ${programCount}`);
     console.log(`TechnichalType count: ${technichalTypeCount}`);
     console.log(`Technichal count: ${technichalCount}`);
+    console.log(`Type Event count: ${typeEventCount}`);
 
     if (levelCount === 0) {
       await this.levelRepository.save([
@@ -129,6 +136,21 @@ export class InitialDataService implements OnModuleInit {
         }
       ]);
       console.log('Technichal data initialized.');
+    }
+    if (typeEventCount === 0) {
+      console.log('Saving TypeEvent data...');
+      await this.typeEventRepository.save([
+        { type: TypeEventEnum.CHAMPIONNAT },
+        { type: TypeEventEnum.EXAM },
+        { type: TypeEventEnum.Excursion },
+        { type: TypeEventEnum.FETE },
+        { type: TypeEventEnum.LUDIQUE },
+        { type: TypeEventEnum.REPRISE },
+        { type: TypeEventEnum.RUNION },
+      ]);
+      console.log('TypeEvent data saved successfully.');
+    } else {
+      console.log('TypeEvent data already exists, skipping initialization.');
     }
   }
 }

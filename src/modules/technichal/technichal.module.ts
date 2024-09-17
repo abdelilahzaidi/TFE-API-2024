@@ -10,10 +10,12 @@ import { TechnichalTypeEntity } from '../technical-type/entity/technical-type.en
 import { TechnicalTypeService } from '../technical-type/technical-type.service';
 import { TypeAbonnementEntity } from '../type-abonnement/entity/type-abonnement';
 import { ProgramService } from '../program/program.service';
+import { TypeEventEntity } from '../type-event/entity/type-event.entity';
+import { TypeEventService } from '../type-event/type-event.service';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([TechnichalEntity,ProgramEntity,LevelEntity, TechnichalTypeEntity,TypeAbonnementEntity,TechnichalEntity])],
-  providers: [TechnichalService,InitialDataService,TechnicalTypeService,ProgramService,TechnichalService],
+  imports:[TypeOrmModule.forFeature([TechnichalEntity,ProgramEntity,LevelEntity, TechnichalTypeEntity,TypeAbonnementEntity,TechnichalEntity,TypeEventEntity])],
+  providers: [TechnichalService,InitialDataService,TechnicalTypeService,ProgramService,TechnichalService,TypeEventService],
   controllers: [TechnichalController],
   exports:[TechnichalService]
 })

@@ -13,6 +13,8 @@ import { TechnichalTypeEntity } from '../technical-type/entity/technical-type.en
 import { ProgramService } from '../program/program.service';
 import { TechnicalTypeService } from '../technical-type/technical-type.service';
 import { TechnichalService } from '../technichal/technichal.service';
+import { TypeEventEntity } from '../type-event/entity/type-event.entity';
+import { TypeEventService } from '../type-event/type-event.service';
 
 @Module({
   imports: [
@@ -22,6 +24,7 @@ import { TechnichalService } from '../technichal/technichal.service';
       ProgramEntity,
       TechnichalEntity,
       TechnichalTypeEntity,
+      TypeEventEntity
     ]),
   ],
   controllers: [TypeAbonnementController],
@@ -32,6 +35,7 @@ import { TechnichalService } from '../technichal/technichal.service';
     ProgramService,
     TechnicalTypeService,
     TechnichalService,
+    TypeEventService
   ],
   exports: [TypeAbonnementService],
 })

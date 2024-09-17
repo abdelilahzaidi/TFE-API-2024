@@ -1,4 +1,4 @@
-export interface TypeEvent {
+export interface TypeEventI {
   id: number;
   type: string;
 }
