@@ -13,4 +13,7 @@ export class CreateEventDto {
   @IsArray()
   @IsNumber({}, { each: true })
   userIds: number[];
+
+  //@IsNumber()
+  typeEventId: number; // L'ID du TypeEvent
 }

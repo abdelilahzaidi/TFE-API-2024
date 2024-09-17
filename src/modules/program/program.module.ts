@@ -22,6 +22,8 @@ import { MailService } from '../mail/mail.service';
 import { JwtService } from '@nestjs/jwt';
 import { MessageService } from '../message/message.service';
 import { MessageEntity } from '../message/entity/message.entity';
+import { TypeEventEntity } from '../type-event/entity/type-event.entity';
+import { TypeEventService } from '../type-event/type-event.service';
 
 @Module({
   imports: [
@@ -34,7 +36,9 @@ import { MessageEntity } from '../message/entity/message.entity';
       LevelEntity,
       TypeAbonnementEntity,
       SeanceUserEntity,
-      MessageEntity
+      MessageEntity,
+      TypeEventEntity
+
     ]),
   ],
   providers: [
@@ -46,6 +50,7 @@ import { MessageEntity } from '../message/entity/message.entity';
     LevelService,
     TypeAbonnementService,
     MessageService,
+    TypeEventService,
     MailService,
     JwtService
   ],

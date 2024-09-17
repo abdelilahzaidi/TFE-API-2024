@@ -2,9 +2,10 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../user/entity/user.entity';
-import { CreateEventDto } from './dto/event-crete.dto';
+import { CreateEventDto } from './dto/event-create.dto';
 import { UpdateEventDto } from './dto/event-update.dto';
 import { EventEntity } from './entity/event.entity';
+import { TypeEventEntity } from '../type-event/entity/type-event.entity';
 
 @Injectable()
 export class EventService {
@@ -13,6 +14,8 @@ export class EventService {
     private readonly eventRepository: Repository<EventEntity>,
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(TypeEventEntity)
+    private readonly typeEventRepository: Repository<TypeEventEntity>,
   ) {}
 
   async findAll(): Promise<EventEntity[]> {
@@ -33,15 +36,22 @@ export class EventService {
   }
 
   async create(createEventDto: CreateEventDto): Promise<EventEntity> {
-    const { nom, dateDebut, dateFin, userIds } = createEventDto;
+    const event = this.eventRepository.create(createEventDto);
 
-    const users = await this.userRepository.findByIds(userIds);
-    if (users.length !== userIds.length) {
-      throw new NotFoundException(`One or more users not found`);
+    // Récupérer le type d'événement par son ID
+    const typeEvent = await this.typeEventRepository.findOne({
+      where: { id: createEventDto.typeEventId },
+    });
+    console.log('Eventsss',event)
+    if (!typeEvent) {
+      throw new NotFoundException(`Type d'événement avec l'ID ${createEventDto.typeEventId} non trouvé`);
     }
 
-    const event = this.eventRepository.create({ nom, dateDebut, dateFin });
-    return this.eventRepository.save(event);
+    // Associer le type d'événement
+    event.typeEvents = typeEvent;
+
+    // Sauvegarder l'événement
+    return await this.eventRepository.save(event);
   }
 
   // async update(id: number, updateEventDto: UpdateEventDto): Promise<EventEntity> {

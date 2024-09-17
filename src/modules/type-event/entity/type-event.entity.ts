@@ -1,5 +1,6 @@
 import { TypeEventEnum } from 'src/common/enums/type-event.enum';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { EventEntity } from 'src/modules/event/entity/event.entity';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('event-type')
 export class TypeEventEntity {
@@ -7,4 +8,6 @@ export class TypeEventEntity {
   id: number;
   @Column({ type: 'enum', enum: TypeEventEnum, default: TypeEventEnum.REPRISE })
   type: TypeEventEnum;
+  @OneToMany(() => EventEntity, (event) => event.typeEvents) // Relation One-to-Many
+  events: EventEntity[];
 }

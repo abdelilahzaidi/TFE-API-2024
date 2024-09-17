@@ -1,5 +1,6 @@
+import { TypeEventEntity } from "src/modules/type-event/entity/type-event.entity";
 import { UserEntity } from "src/modules/user/entity/user.entity";
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('event')
 export class EventEntity{
@@ -12,5 +13,7 @@ export class EventEntity{
     @Column()
     dateFin:Date;
     @ManyToMany(() => UserEntity, (user) => user.events, { onDelete: 'CASCADE' }) 
-    users : UserEntity[]
+    users : UserEntity[];
+    @ManyToOne(() => TypeEventEntity, (typeEvent) => typeEvent.events, { onDelete: 'SET NULL' }) // Relation Many-to-One
+    typeEvents: TypeEventEntity;
 }

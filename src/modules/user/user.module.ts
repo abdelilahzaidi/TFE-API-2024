@@ -29,6 +29,8 @@ import { SeanceUserModule } from '../seance-user/seance-user.module';
 import { MailService } from '../mail/mail.service';
 import { JwtService } from '@nestjs/jwt';
 import { TechnichalService } from '../technichal/technichal.service';
+import { TypeEventEntity } from '../type-event/entity/type-event.entity';
+import { TypeEventService } from '../type-event/type-event.service';
 
 @Module({
   imports: [
@@ -45,6 +47,7 @@ import { TechnichalService } from '../technichal/technichal.service';
       HoraireEntity,
       DateCourEntity,
       SeanceUserEntity,
+      TypeEventEntity
     ]),
     forwardRef(() => ProgramModule),
     forwardRef(() => CourModule),
@@ -63,7 +66,9 @@ import { TechnichalService } from '../technichal/technichal.service';
     TechnichalService,
     SeanceService,
     HoraireService,
-    MailService,JwtService
+    MailService,
+    TypeEventService,
+    JwtService
     
   ],
   controllers: [UserController],
