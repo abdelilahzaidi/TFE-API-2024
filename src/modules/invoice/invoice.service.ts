@@ -24,7 +24,7 @@ export class InvoiceService {
   ) {}
 
   async all(): Promise<any[]> {
-    return await this.invoiceRepository.find({relations:['abonnement']});
+    return await this.invoiceRepository.find({select:[],relations:['abonnement','abonnement.typeAbonnement']});
   }
 
 
@@ -66,196 +66,50 @@ export class InvoiceService {
     return await this.invoiceRepository.save(newInvoice);
   }
 
-  // async createInvoice(id: number, montant: number): Promise<InvoiceEntity> {
-  //   const abonnement = await this.abonnementRepository.findOne({
-  //     where: { id },
-  //   });
-  //   if (!abonnement) {
-  //     throw new Error('Abonnement not found for user');
-  //   }
 
-  //   const invoice = new InvoiceEntity();
-  //   invoice.dateEnvoie = new Date();
-  //   invoice.etatDePaiement = false;
-  //   invoice.montant = montant; // Assurez-vous de fournir la valeur du montant ici
-  //   invoice.abonnement = abonnement;
-  //   const facture = this.invoiceRepository.save(invoice);
-  //   console.log(facture);
-  //   return facture;
-  // }
-
-
-
-  // async assignInvoiceToUser(
-  //   invoiceId: number,
-  //   userId: number,
-  // ): Promise<InvoiceEntity> {
-  //   const invoice = await this.invoiceRepository.findOne({
-  //     where: { id: invoiceId },
-  //     relations: ['abonnement'],
-  //   });
-
-  //   if (!invoice) {
-  //     throw new NotFoundException(`Invoice with id ${invoiceId} not found`);
-  //   }
-
-  //   if (!invoice.abonnement) {
-  //     throw new NotFoundException(
-  //       `Abonnement for invoice with id ${invoiceId} not found`,
-  //     );
-  //   }
-
-  //   const user = await this.userRepository.findOne({ where: { id: userId } });
-  //   if (!user) {
-  //     throw new NotFoundException(`User with id ${userId} not found`);
-  //   }
-
-  //   invoice.abonnement.user = user;
-  //   return await this.invoiceRepository.save(invoice);
-  // }
- 
-
-  // async getInvoicesByUser(userId: number): Promise<InvoiceEntity[]> {
-  //   try {
-  //     // Trouver l'utilisateur avec les relations nécessaires
-  //     const user = await this.userRepository.findOne({
-  //       where: { id: userId },
-  //       relations: ['abonnements', 'abonnements.invoices'],
-  //     });
-
-  //     // Vérifier si l'utilisateur existe
-  //     if (!user) {
-  //       throw new Error('User not found');
-  //     }
-  //     console.log('User found:', user);
-
-  //     // Vérifier les abonnements de l'utilisateur
-  //     if (!user.abonnements || user.abonnements.length === 0) {
-  //       throw new Error('No abonnements found for the user');
-  //     }
-  //     console.log('Abonnements:', user.abonnements);
-
-  //     // Récupérer les factures à partir des abonnements de l'utilisateur
-  //     const invoices = user.abonnements.reduce((acc, abonnement) => {
-  //       console.log(
-  //         `Abonnement ID ${abonnement.id} invoices:`,
-  //         abonnement.invoices,
-  //       );
-  //       if (abonnement.invoices && abonnement.invoices.length > 0) {
-  //         acc.push(...abonnement.invoices);
-  //       }
-  //       return acc;
-  //     }, []);
-
-  //     // Vérifier si des factures ont été trouvées
-  //     if (invoices.length === 0) {
-  //       throw new Error('No invoices found for the user');
-  //     }
-  //     console.log('Invoices:', invoices);
-
-  //     return invoices;
-  //   } catch (error) {
-  //     console.error('Error in getInvoicesByUser:', error);
-  //     throw error;
-  //   }
-  // }
-
-  // async findByUserId(userId: number): Promise<any[]> {
-  //   const user = await this.userRepository.findOne({
-  //     where: { id: userId },
-  //     relations: [
-  //       'abonnements',
-  //       'abonnements.typeAbonnement',
-  //       'abonnements.invoices',
-  //     ],
-  //   });
-
-  //   if (!user) {
-  //     throw new NotFoundException(`User with ID ${userId} not found`);
-  //   }
-
-  //   // Extract necessary information
-  //   const invoices = user.abonnements.flatMap((abonnement) =>
-  //     abonnement.invoices.map((invoice) => ({
-  //       id: invoice.id,
-  //       dateEnvoie: invoice.dateEnvoie,
-  //       etatDePaiement: invoice.etatDePaiement,
-  //       montant: invoice.montant,
-  //       nom: user.last_name, // Assuming these are properties of UserEntity
-  //       prenom: user.first_name, // Assuming these are properties of UserEntity
-  //       typeAbonnement: abonnement.typeAbonnement.type, // Assuming 'type' is the property in TypeAbonnementEntity
-  //     })),
-  //   );
-
-  //   return invoices;
-  // }
-
-  // async findById(id: number): Promise<InvoiceEntity> {
-  //   return this.invoiceRepository.findOne({ where: { id } });
-  // }
-
-  // // Nouvelle méthode pour obtenir les factures d'un utilisateur
-  // async getInvoicesByUserId(userId: number): Promise<InvoiceEntity[]> {
-  //   const user = await this.userRepository.findOne({
-  //     where: { id: userId },
-  //     relations: ['abonnements'],
-  //   });
-  //   if (!user) {
-  //     throw new NotFoundException(`User with id ${userId} not found`);
-  //   }
-
-  //   const invoices = await this.invoiceRepository
-  //     .createQueryBuilder('invoice')
-  //     .leftJoinAndSelect('invoice.abonnement', 'abonnement')
-  //     .where('abonnement.userId = :userId', { userId })
-  //     .getMany();
-
-  //   return invoices;
-  // }
-
-  // async creerFacturesParTypeAbonnement(
-  //   typeAbonnement: TypeAbonnementEnum,
-  // ): Promise<void> {
-  //   // Étape 1 : Utilisation de QueryBuilder pour faire des joins
-  //   const abonnements = await this.abonnementRepository
-  //     .createQueryBuilder('abonnement')
-  //     .innerJoinAndSelect('abonnement.user', 'user') // Join avec l'utilisateur
-  //     .innerJoinAndSelect('abonnement.typeAbonnement', 'typeAbonnement') // Join avec le type d'abonnement
-  //     .where('typeAbonnement.type = :type', { type: typeAbonnement }) // Filtrer par type d'abonnement
-  //     .getMany();
-
-  //   if (abonnements.length === 0) {
-  //     console.log(`Aucun abonnement trouvé pour le type ${typeAbonnement}`);
-  //     return;
-  //   }
-
-  //   // Étape 2 : Générer une facture pour chaque abonnement
-  //   for (const abonnement of abonnements) {
-  //     const nouvelleFacture = new InvoiceEntity();
-  //     nouvelleFacture.dateEnvoie = new Date(); // La date d'envoi de la facture
-  //     nouvelleFacture.etatDePaiement = false; // Par défaut, la facture n'est pas payée
-  //     nouvelleFacture.montant = this.calculerMontant(abonnement); // Fonction pour calculer le montant
-  //     nouvelleFacture.abonnement = abonnement; // Assigner l'abonnement à la facture
-
-  //     // Sauvegarder la facture dans la base de données
-  //     await this.invoiceRepository.save(nouvelleFacture);
-
-  //     console.log(
-  //       `Facture créée pour l'utilisateur ${abonnement.user.id} avec un montant de ${nouvelleFacture.montant}`,
-  //     );
-  //   }
-  // }
-
-  // private calculerMontant(abonnement: AbonnementEntity): number {
-  //   // Vous pouvez personnaliser cette logique selon vos besoins
-  //   const tarif = abonnement.typeAbonnement.tarif;
-  //   switch (tarif) {
-  //     case TarifEnum.MENSUEL:
-  //       return 100; // Exemple de tarif mensuel
-  //     case TarifEnum.ANNUEL:
-  //       return 1000; // Exemple de tarif annuel
-  //     default:
-  //       return 0;
-  //   }
-  // }
+  
+  async assignInvoiceToUsersByAbonnementType(
+    userIds: number[], // Liste des utilisateurs à associer
+    abonnementType: 'MENSUEL' | 'ANNUEL', // Type d'abonnement
+    invoiceData: { dateEnvoie: Date; montant: number }, // Données de la facture
+  ): Promise<InvoiceEntity[]> {
+    const invoices: InvoiceEntity[] = [];
+  
+    for (const userId of userIds) {
+      // Trouver l'utilisateur et ses abonnements
+      const user = await this.userRepository.findOne({
+        where: { id: userId },
+        relations: ['abonnements', 'abonnements.typeAbonnement'], // Récupérer les types d'abonnements
+      });
+  
+      if (!user) {
+        throw new NotFoundException(`Utilisateur non trouvé pour l'ID ${userId}`);
+      }
+  
+      // Filtrer l'abonnement de l'utilisateur par le type d'abonnement (mensuel ou annuel)
+      const abonnement = user.abonnements.find(
+        (ab) => ab.typeAbonnement.type === TypeAbonnementEnum[abonnementType.toUpperCase()],
+      );
+  
+      if (!abonnement) {
+        throw new NotFoundException(
+          `Aucun abonnement de type ${abonnementType} trouvé pour l'utilisateur ${userId}`,
+        );
+      }
+  
+      // Créer une nouvelle facture pour cet abonnement
+      const newInvoice = this.invoiceRepository.create({
+        dateEnvoie: invoiceData.dateEnvoie,
+        montant: invoiceData.montant,
+        etatDePaiement: false, // Par défaut, la facture n'est pas payée
+        abonnement: abonnement, // Associe l'abonnement à la facture
+      });
+  
+      // Sauvegarder la facture et l'ajouter à la liste des factures assignées
+      const savedInvoice = await this.invoiceRepository.save(newInvoice);
+      invoices.push(savedInvoice); // Ajouter la facture créée à la liste
+    }
+  
+    return invoices; // Retourner toutes les factures créées
+  }
 }

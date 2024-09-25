@@ -13,6 +13,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+import { CreateInvoiceDto } from './dto/create-invoice.dto';
 
 @Controller('invoice')
 export class InvoiceController {
@@ -35,6 +36,45 @@ export class InvoiceController {
     );
   }
 
+  // @Post('assign-to-users')
+  // async assignInvoiceToUsers(
+  //   @Body() assignInvoiceDto: { userIds: number[]; abonnementType: 'MENSUEL' | 'ANNUEL'; dateEnvoie: Date; montant: number; invoiceId?: number }
+  // ) {
+  //   return await this.invoiceService.assignInvoiceToUsersByAbonnementType(
+  //     assignInvoiceDto.userIds, // Assurez-vous que c'est un tableau
+  //     assignInvoiceDto.abonnementType,
+  //     {
+  //       dateEnvoie: assignInvoiceDto.dateEnvoie,
+  //       montant: assignInvoiceDto.montant,
+  //       invoiceId: assignInvoiceDto.invoiceId,
+  //     }
+  //   );
+  // }
+
+
+
+  @Post('/assign-by-abonnement-type')
+  async assignInvoiceToUsers(
+    @Body() createInvoiceDto: CreateInvoiceDto,
+  ): Promise<InvoiceEntity[]> {
+    const { userIds, abonnementType, dateEnvoie, montant } = createInvoiceDto;
+
+    // Conversion de la chaîne en objet Date
+    const convertedDateEnvoie = new Date(dateEnvoie);
+
+    try {
+      // Passer les informations sans `invoiceId`
+      return await this.invoiceService.assignInvoiceToUsersByAbonnementType(
+        userIds,
+        abonnementType,
+        { dateEnvoie: convertedDateEnvoie, montant },
+      );
+    } catch (error) {
+      throw new BadRequestException(
+        `Erreur lors de la création des factures : ${error.message}`,
+      );
+    }
+  }
 
 
   //Créer une facture pour un user
