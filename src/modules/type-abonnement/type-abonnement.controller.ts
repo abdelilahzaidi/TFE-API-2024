@@ -1,5 +1,5 @@
 import { TypeAbonnementService } from './type-abonnement.service';
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Delete, Get, Param } from '@nestjs/common';
 
 @Controller('type-abonnement')
 export class TypeAbonnementController {
@@ -14,4 +14,11 @@ export class TypeAbonnementController {
     const result = await this.typeAbonnementServive.findUsersByType(id);
     return result;
   }
+
+
+  @Delete(':id')
+  async delete(@Param('id') id: number) {
+    return this.typeAbonnementServive.deleteType(id);
+  }
+
 }

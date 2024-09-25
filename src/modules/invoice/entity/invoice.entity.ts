@@ -11,6 +11,6 @@ export class InvoiceEntity{
     etatDePaiement : boolean;
     @Column()
     montant : number;
-    @ManyToOne(()=>AbonnementEntity,(abonnement)=>abonnement.invoices)
+    @ManyToOne(()=>AbonnementEntity,(abonnement)=>abonnement.invoices, {cascade:['remove']})
     abonnement : AbonnementEntity
 }

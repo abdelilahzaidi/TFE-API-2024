@@ -124,11 +124,11 @@ export class InitialDataService implements OnModuleInit {
           type:TypeAbonnementEnum.MENSUEL,
           tarif:TarifEnum.MENSUEL
         },
-        {
-          type:TypeAbonnementEnum.TRIMESTRIEL,
-          tarif:TarifEnum.TRIMESTRE,
-          //dateFin: new Date('2024-12-31') 
-        },
+        // {
+        //   type:TypeAbonnementEnum.TRIMESTRIEL,
+        //   tarif:TarifEnum.TRIMESTRE,
+        //   //dateFin: new Date('2024-12-31') 
+        // },
         {
           type:TypeAbonnementEnum.ANNUEL,
           tarif:TarifEnum.ANNUEL,

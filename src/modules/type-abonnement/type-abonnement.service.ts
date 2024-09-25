@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { TypeAbonnementEntity } from './entity/type-abonnement';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -32,5 +32,20 @@ export class TypeAbonnementService {
     }));
 
     return { typeAbonnement, users };
+  }
+  async deleteType(id: number): Promise<any> {
+    const type = await this.typeAbonnementRepository.find({
+      where: { id },
+    });
+    const result = await this.typeAbonnementRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`type abonnement with ID ${id} not found`);
+    }
+    if (!type) {
+      throw new NotFoundException(`type abonnement with ID ${id} not found`);
+    }
+
+    // Return a success message
+    return `Type abonnement ${type} is deleted!!!`;
   }
 }

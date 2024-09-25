@@ -23,6 +23,20 @@ export class InvoiceController {
   async all(): Promise<any[]> {
     return await this.invoiceService.all();
   }
+
+  @Post('assign-to-user')
+  async assignInvoice(
+    @Body() assignInvoiceDto: { userId: number; abonnementId: number; dateEnvoie: Date; montant: number }
+  ) {
+    return await this.invoiceService.assignInvoiceToUser(
+      assignInvoiceDto.userId,
+      assignInvoiceDto.abonnementId,
+      { dateEnvoie: assignInvoiceDto.dateEnvoie, montant: assignInvoiceDto.montant }
+    );
+  }
+
+
+
   //Créer une facture pour un user
   // @Post(':id')
   // async createInvoice(
@@ -31,66 +45,60 @@ export class InvoiceController {
   // ): Promise<InvoiceEntity> {
   //   return this.invoiceService.createInvoice(idAbonnement, montant);
   // }
-  @Post(':id')
-  async createInvoice(
-    @Param('id', ParseIntPipe) idAbonnement: number,
-    @Body('montant', ParseIntPipe) montant: number,
-  ): Promise<InvoiceEntity> {
-    return this.invoiceService.createInvoiceBis(idAbonnement);
-  }
+
   //assigne une facture à un user
-  @Post(':invoiceId/assign/:userId')
-  async assignInvoiceToUser(
-    @Param('invoiceId') invoiceId: number,
-    @Param('userId') userId: number,
-  ) {
-    return await this.invoiceService.assignInvoiceToUser(invoiceId, userId);
-  }
+  // @Post(':invoiceId/assign/:userId')
+  // async assignInvoiceToUser(
+  //   @Param('invoiceId') invoiceId: number,
+  //   @Param('userId') userId: number,
+  // ) {
+  //   return await this.invoiceService.assignInvoiceToUser(invoiceId, userId);
+  // }
 
-  @Get(':userId/user')
-  async getInvoicesByUser(@Param('userId') userId: number) {
-    try {
-      const invoices = await this.invoiceService.getInvoicesByUser(userId);
-      console.log('invoice-user : ', invoices, userId);
-      return invoices;
-    } catch (error) {
-      throw new NotFoundException(error.message);
-    }
-  }
-
-
-  @Get('user/:userId')
-  async findByUserId(@Param('userId', ParseIntPipe) userId: number) {
-    return this.invoiceService.findByUserId(userId);
-  }
-
-  @Get(':id')
-  async getInvoiceById(@Param('id', ParseIntPipe) id: number): Promise<InvoiceEntity> {
-    return this.invoiceService.findById(id);
-  }
-
-  // Nouvelle route pour obtenir les factures d'un utilisateur
-  @Get('user/:userId')
-  async getInvoicesByUserId(@Param('userId') userId: number): Promise<InvoiceEntity[]> {
-    return this.invoiceService.getInvoicesByUserId(userId);
-  }
+  // @Get(':userId/user')
+  // async getInvoicesByUser(@Param('userId') userId: number) {
+  //   try {
+  //     const invoices = await this.invoiceService.getInvoicesByUser(userId);
+  //     console.log('invoice-user : ', invoices, userId);
+  //     return invoices;
+  //   } catch (error) {
+  //     throw new NotFoundException(error.message);
+  //   }
+  // }
 
 
+  // @Get('user/:userId')
+  // async findByUserId(@Param('userId', ParseIntPipe) userId: number) {
+  //   return this.invoiceService.findByUserId(userId);
+  // }
 
-  @Post()
-  async genererFactures(@Body('type') type: string) {
-    // Vérification manuelle de l'enum
-    if (!(type in TypeAbonnementEnum)) {
-      throw new BadRequestException(`Invalid subscription type: ${type}`);
-    }
+  // @Get(':id')
+  // async getInvoiceById(@Param('id', ParseIntPipe) id: number): Promise<InvoiceEntity> {
+  //   return this.invoiceService.findById(id);
+  // }
 
-    // Convertir en TypeAbonnementEnum
-    const enumType = TypeAbonnementEnum[type as keyof typeof TypeAbonnementEnum];
+  // // Nouvelle route pour obtenir les factures d'un utilisateur
+  // @Get('user/:userId')
+  // async getInvoicesByUserId(@Param('userId') userId: number): Promise<InvoiceEntity[]> {
+  //   return this.invoiceService.getInvoicesByUserId(userId);
+  // }
 
-    // Appeler le service pour créer les factures
-    await this.invoiceService.creerFacturesParTypeAbonnement(enumType);
-    return { message: `Factures générées pour le type d'abonnement ${enumType}` };
-  }
+
+
+  // @Post()
+  // async genererFactures(@Body('type') type: string) {
+  //   // Vérification manuelle de l'enum
+  //   if (!(type in TypeAbonnementEnum)) {
+  //     throw new BadRequestException(`Invalid subscription type: ${type}`);
+  //   }
+
+  //   // Convertir en TypeAbonnementEnum
+  //   const enumType = TypeAbonnementEnum[type as keyof typeof TypeAbonnementEnum];
+
+  //   // Appeler le service pour créer les factures
+  //   await this.invoiceService.creerFacturesParTypeAbonnement(enumType);
+  //   return { message: `Factures générées pour le type d'abonnement ${enumType}` };
+  // }
 
 //   @Post('creer')
 //   async creerFacture(

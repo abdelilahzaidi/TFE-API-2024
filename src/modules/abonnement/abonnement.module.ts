@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AbonnementEntity } from './entity/abonnement.entity';
 import { TypeAbonnementEntity } from '../type-abonnement/entity/type-abonnement';
 import { UserEntity } from '../user/entity/user.entity';
+import { InvoiceEntity } from '../invoice/entity/invoice.entity';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { UserEntity } from '../user/entity/user.entity';
       AbonnementEntity,
       TypeAbonnementEntity,
       UserEntity,
+      InvoiceEntity
     ]),
   ],
   providers: [AbonnementService],

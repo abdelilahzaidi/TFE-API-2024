@@ -16,6 +16,6 @@ export class TypeAbonnementEntity {
 
   @Column({ type: 'enum', enum: TarifEnum, default: TarifEnum.MENSUEL })
   tarif: TarifEnum;
-  @OneToMany(() => AbonnementEntity, (abonnement) => abonnement.typeAbonnement)
+  @OneToMany(() => AbonnementEntity, (abonnement) => abonnement.typeAbonnement, { cascade: ['remove'] })
   abonnements: AbonnementEntity[];
 }

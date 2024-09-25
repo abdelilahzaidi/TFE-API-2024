@@ -1,6 +1,16 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  NotFoundException,
+  Param,
+  Post,
+} from '@nestjs/common';
 import { AbonnementEntity } from './entity/abonnement.entity';
 import { AbonnementService } from './abonnement.service';
+import { SelectAbonnementDTO } from './dto/seleccted-abonnement.dto';
+import { AbonnementI } from './interface/abonnement.interfacte';
 
 @Controller('abonnement')
 export class AbonnementController {
@@ -10,30 +20,26 @@ export class AbonnementController {
     return await this.abonnementService.all();
   }
 
-  // @Get(':id/type-abonnement')
-  // async allByType(@Param('id') id : number):Promise<any>{
-  //     return await this.abonnementService.findAllUsersByType(id)
-  // }
-
   //Recuperer un abonnement par type d'abonnement
   @Get(':id/type-abonnement')
   async getUsersByType(@Param('typeId') typeId: number) {
     const users = await this.abonnementService.findAllUsersByType(typeId);
     return users;
   }
-  //Création d'un abonnement
-  @Post()
-  async createAbonnement(
-    @Body('userId') userId: number,
-    @Body('typeAbonnementId') typeAbonnementId: number,
-    @Body('dateDebut') dateDebut: Date,
-    @Body('dateFin') dateFin: Date,
-  ): Promise<AbonnementEntity> {
-    return this.abonnementService.createAbonnement(
-      userId,
-      typeAbonnementId,
-      dateDebut,
-      dateFin,
-    );
+
+  @Delete(':id')
+  async delete(@Param('id') id: number) {
+    return this.abonnementService.deleteAbonnement(id);
+  }
+
+  @Post('choose')
+  async chooseAbonnement(
+    @Body() selectAbonnementDTO: SelectAbonnementDTO,
+  ): Promise<{ abonnement: AbonnementI; message: string }> {
+    try {
+      return await this.abonnementService.chooseAbonnement(selectAbonnementDTO);
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
   }
 }

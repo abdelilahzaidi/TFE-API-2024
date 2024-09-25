@@ -3,7 +3,7 @@ import { TypeAbonnementEntity } from 'src/modules/type-abonnement/entity/type-ab
 import { UserEntity } from 'src/modules/user/entity/user.entity';
 import {
   Column,
-  Entity,  
+  Entity,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -23,9 +23,12 @@ export class AbonnementEntity {
   @ManyToOne(
     () => TypeAbonnementEntity,
     (typeAbonnement) => typeAbonnement.abonnements,
+    { onDelete: 'SET NULL' },
   )
   typeAbonnement: TypeAbonnementEntity;
 
-  @OneToMany(() => InvoiceEntity, (invoice) => invoice.abonnement)
+  @OneToMany(() => InvoiceEntity, (invoice) => invoice.abonnement, {
+    onDelete: 'SET NULL',
+  })
   invoices: InvoiceEntity[];
 }
