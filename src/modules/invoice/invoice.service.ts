@@ -24,9 +24,20 @@ export class InvoiceService {
   ) {}
 
   async all(): Promise<any[]> {
-    return await this.invoiceRepository.find({select:[],relations:['abonnement','abonnement.typeAbonnement']});
+    // Récupérer les factures avec les relations nécessaires (abonnement, typeAbonnement, user)
+    const invoices = await this.invoiceRepository.find({
+      relations: ['abonnement', 'abonnement.typeAbonnement', 'abonnement.user'],
+    });
+  
+    // Supprimer le champ `password` pour chaque utilisateur
+    invoices.forEach(invoice => {
+      if (invoice.abonnement && invoice.abonnement.user) {
+        delete invoice.abonnement.user.password;
+      }
+    });
+  
+    return invoices;
   }
-
 
 
   // Méthode pour assigner une facture à un utilisateur par abonnement
@@ -111,5 +122,19 @@ export class InvoiceService {
     }
   
     return invoices; // Retourner toutes les factures créées
+  }
+
+  async updatePaymentStatus(invoiceId: number, etatDePaiement: boolean): Promise<InvoiceEntity> {
+    const invoice = await this.invoiceRepository.findOne({where:{id:invoiceId}});
+
+    if (!invoice) {
+      throw new NotFoundException(`Facture avec l'ID ${invoiceId} non trouvée`);
+    }
+
+    // Mettre à jour l'état de paiement
+    invoice.etatDePaiement = etatDePaiement;
+
+    // Sauvegarder la mise à jour dans la base de données
+    return this.invoiceRepository.save(invoice);
   }
 }

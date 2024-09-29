@@ -68,27 +68,6 @@ export class UserEntity {
   })
   level: LevelEntity;
 
-
-
-
-  // @ManyToMany(() => MessageEntity, message => message.receivers, { cascade: true })
-  // @JoinTable({
-  //   name: 'message_user',
-  //   joinColumn: {
-  //     name: 'userId',
-  //     referencedColumnName: 'id',
-  //   },
-  //   inverseJoinColumn: {
-  //     name: 'messageId',
-  //     referencedColumnName: 'id',
-  //   },
-  // })
-  // receivedMessages: MessageEntity[];
-
-  // @OneToMany(() => MessageEntity, message => message.sender, { cascade: true })
-  // sentMessages: MessageEntity[];
-
-
   @ManyToMany(() => MessageEntity, (message) => message.receivers)
   @JoinTable({
     name: 'message_user',

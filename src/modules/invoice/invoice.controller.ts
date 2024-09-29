@@ -11,6 +11,7 @@ import {
   ParseEnumPipe,
   ParseIntPipe,
   Post,
+  Put,
   Query,
 } from '@nestjs/common';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
@@ -74,6 +75,14 @@ export class InvoiceController {
         `Erreur lors de la création des factures : ${error.message}`,
       );
     }
+  }
+
+  @Put(':id/payment-status')
+  async updatePaymentStatus(
+    @Param('id') invoiceId: number,
+    @Body('etatDePaiement') etatDePaiement: boolean,
+  ) {
+    return await this.invoiceService.updatePaymentStatus(invoiceId, etatDePaiement);
   }
 
 

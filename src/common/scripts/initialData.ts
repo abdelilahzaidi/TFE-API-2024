@@ -54,7 +54,7 @@ export class InitialDataService implements OnModuleInit {
         { grade: LevelEnum.BLEU_0, during: '6 mois' },
         { grade: LevelEnum.BLEU_1, during: '6 mois' },
         { grade: LevelEnum.BLEU_2, during: '6 mois' },
-        { grade: LevelEnum.BLEU_3, during: '6 mois' },
+        { grade: LevelEnum.BLEU_3, during: '12 mois' },
         { grade: LevelEnum.JAUNE_1, during: '6 mois' },
         { grade: LevelEnum.JAUNE_2, during: '6 mois' },
         { grade: LevelEnum.JAUNE_3, during: '6 mois' },
