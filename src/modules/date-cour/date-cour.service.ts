@@ -15,32 +15,10 @@ export class DateCourService {
   async all(): Promise<DateCourEntity[]> {
     return await this.dateCourRepository.find();
   }
-  //cration de date de cour
-  // async createDateCour(dto: CreateDateCourDTO): Promise<DateCourEntity> {
-  //   try {
-  //     const dateCour = new DateCourEntity();
-  //     dateCour.dateCour = dto.dateCour;
 
-  //     const savedDateCour = await this.dateCourRepository.save(dateCour);
-
-  //     console.log('in service', savedDateCour);
-  //     return savedDateCour;
-  //   } catch (error) {
-  //     throw new InternalServerErrorException(
-  //       error,
-  //       'Une erreur est survenue lors de la création de la date du cour.',
-  //     );
-  //   }
-  // }
   async findDateCourById(id: number): Promise<DateCourEntity | undefined> {
     return this.dateCourRepository.findOne({ where: { id } });
   }
-  // async findDateCourByDate(
-  //   dateCour: Date,
-  // ): Promise<DateCourEntity | undefined> {
-  //   return this.dateCourRepository.findOne({ where: { dateCour } });
-  // }
-
 
 
   async findDateCourByDate(
@@ -51,7 +29,7 @@ export class DateCourService {
 
   private allday(date: Date): boolean {
     const day = date.getDay();
-    return day >= 1 && day <= 7; // Matches Monday to Sunday
+    return day >= 1 && day <= 7; 
   }
 
   private generateDaysOfWeek(year: number): DateCourEntity[] {
@@ -64,7 +42,7 @@ export class DateCourService {
     while (currentDate <= endYear) {
       if (this.allday(currentDate)) {
         const dateCour = new DateCourEntity();
-        dateCour.dateCour = currentDate; // Assign the Date object directly
+        dateCour.dateCour = currentDate; 
         daysOfWeek.push(dateCour);
       }
       currentDate = addDays(currentDate, 1);

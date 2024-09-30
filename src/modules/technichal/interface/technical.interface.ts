@@ -5,8 +5,8 @@ export interface ITechnichal {
     id: number;
     nom: string;
     description: string;
-    programs: ProgramEntity[];  // Une relation avec plusieurs entités ProgramEntity
-    technichalType: TechnichalTypeEntity | null;  // Une relation optionnelle avec TechnichalTypeEntity
+    programs: ProgramEntity[]; 
+    technichalType: TechnichalTypeEntity | null;  
   }
   
   

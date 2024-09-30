@@ -13,7 +13,7 @@ export class SelectAbonnementDTO {
     @IsDate({ message: "dateDebut doit être une instance de Date" })
     dateDebut: Date;
 
-    @Type(() => Date) // Transforme la chaîne en instance de Date
+    @Type(() => Date) 
     @IsDate({ message: "dateDebut doit être une instance de Date" })
     @CompareDates('dateDebut', { message: 'dateFin doit être supérieure à dateDebut' })
     dateFin: Date;

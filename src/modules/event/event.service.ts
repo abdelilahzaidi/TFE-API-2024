@@ -32,13 +32,13 @@ export class EventService {
       console.log('Event not found with ID:', id);
       throw new NotFoundException(`Event with ID ${id} not found`);
     }
-    return event; // Retourne directement l'événement trouvé, pas dans un tableau
+    return event; 
   }
 
   async create(createEventDto: CreateEventDto): Promise<EventEntity> {
     const event = this.eventRepository.create(createEventDto);
 
-    // Récupérer le type d'événement par son ID
+    
     const typeEvent = await this.typeEventRepository.findOne({
       where: { id: createEventDto.typeEventId },
     });
@@ -47,39 +47,14 @@ export class EventService {
       throw new NotFoundException(`Type d'événement avec l'ID ${createEventDto.typeEventId} non trouvé`);
     }
 
-    // Associer le type d'événement
+    
     event.typeEvents = typeEvent;
 
-    // Sauvegarder l'événement
+    
     return await this.eventRepository.save(event);
   }
 
-  // async update(id: number, updateEventDto: UpdateEventDto): Promise<EventEntity> {
-  //   const { userIds, ...updateData } = updateEventDto;
 
-  //   const event = await this.eventRepository.findOne({ where: { id } });
-  //   console.log('event ',event)
-  //   if (!event) {
-  //     throw new NotFoundException(`Event with ID ${id} not found`);
-  //   }
-
-  //   if (userIds) {
-  //     const users = await this.userRepository.findByIds(userIds);
-  //     if (users.length !== userIds.length) {
-  //       throw new NotFoundException(`One or more users not found`);
-  //     }
-  //     event.users = users;
-  //   }
-
-  //   console.log('Date de début reçue :', updateData.dateDebut);
-  //   console.log('Date de fin reçue :', updateData.dateFin);
-
-  //   event.nom = updateData.nom;
-  //   event.dateDebut = updateData.dateDebut;
-  //   event.dateFin = updateData.dateFin;
-
-  //   return this.eventRepository.save(event);
-  // }
 
   async update(
     id: number,
@@ -95,12 +70,12 @@ export class EventService {
       throw new NotFoundException(`Event with ID ${id} not found`);
     }
 
-    // Mettre à jour les champs de l'événement
+    
     event.nom = updateData.nom;
     event.dateDebut = dateDebut;
     event.dateFin = dateFin;
 
-    // Enregistrer et retourner l'événement mis à jour
+    
     return this.eventRepository.save(event);
   }
 
@@ -127,24 +102,7 @@ export class EventService {
     });
   }
 
-  // async participateInEvent(eventId: number, userId: number): Promise<void> {
-  //   const event = await this.eventRepository.findOne({ where: { id: eventId }, relations: ['users'] });
-  //   if (!event) {
-  //     throw new NotFoundException(`Event with ID ${eventId} not found`);
-  //   }
-
-  //   const user = await this.userRepository.findOne({ where: { id: userId } });
-  //   if (!user) {
-  //     throw new NotFoundException(`User with ID ${userId} not found`);
-  //   }
-
-  //   if (event.users.find(u => u.id === user.id)) {
-  //     throw new Error(`User with ID ${userId} is already participating in the event`);
-  //   }
-
-  //   event.users.push(user);
-  //   await this.eventRepository.save(event);
-  // }
+ 
   async participateInEvent(eventId: number, userId: number): Promise<string> {
     const event = await this.eventRepository.findOne({
       where: { id: eventId },
@@ -161,12 +119,12 @@ export class EventService {
 
     const existingUserIndex = event.users.findIndex((u) => u.id === user.id);
     if (existingUserIndex !== -1) {
-      // User is already participating, remove from the event
+      
       event.users.splice(existingUserIndex, 1);
       await this.eventRepository.save(event);
       return `You have successfully removed your participation from the event ${event.nom}`;
     } else {
-      // User is not participating, add to the event
+      
       event.users.push(user);
       await this.eventRepository.save(event);
       return `You are now participating in the event ${event.nom}`;
@@ -174,26 +132,26 @@ export class EventService {
   }
 
   async getEventParticipants(eventId: number): Promise<any[] | undefined> {
-    // Fetch the event along with its users
+    
     const event = await this.eventRepository
       .createQueryBuilder('event')
       .leftJoinAndSelect('event.users', 'user_event')
       .where('event.id = :eventId', { eventId })
       .getOne();
   
-    // If the event is not found, throw a NotFoundException
+    
     if (!event) {
       throw new NotFoundException(`Event with ID ${eventId} not found`);
     }
   
-    // If users exist, return them; otherwise, return an empty array
+    
     const users = event.users ? event.users : [];
 
     if(users.length === 0){
       throw new NotFoundException(`No participants for event with ${eventId}`)
     }
     
-    // Log the event details (for debugging purposes)
+    
     console.log('Event:', event);
   
     return users;

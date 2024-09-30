@@ -19,7 +19,7 @@ export class CourService {
 
       async createCour(dto: CreateCourDTO): Promise<CourEntity> {
         try {
-            /*recuperer le lieu associé*/ 
+            
             const lieu = await this.lieuService.findLieuById(dto.lieuId); 
             console.log('lieu',lieu)
             const cour = new CourEntity();

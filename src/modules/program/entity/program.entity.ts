@@ -18,7 +18,7 @@ export class ProgramEntity {
   id: number;
   @Column()
   title?: string;
-  //@OneToOne(() => LevelEntity, level => level.program,{eager:true})
+  
   @OneToOne(() => LevelEntity, (level) => level.program)
   grade?: LevelEntity;
   @ManyToMany(

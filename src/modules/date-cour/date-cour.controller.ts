@@ -10,12 +10,7 @@ export class DateCourController {
   @Get()
   async all(): Promise<DateCourEntity[]> {
     return await this.dateCourService.all();
-  }
-  // @Post()
-  // async create(@Body() dto: CreateDateCourDTO): Promise<DateCourEntity> {
-  //   console.log(dto);
-  //   return await this.dateCourService.createDateCour(dto);
-  // }
+  }  
 
 
   @Post('create/:year')

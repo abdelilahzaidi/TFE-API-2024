@@ -12,7 +12,6 @@ import { TechnichalEntity } from 'src/modules/technichal/entity/technichal.entit
 import { TechnichalEnum } from '../enums/tecnichal.enum';
 import { TypeAbonnementEnum } from '../enums/abonnement.enum';
 import { TypeAbonnementEntity } from 'src/modules/type-abonnement/entity/type-abonnement';
-
 import { TypeEventEntity } from 'src/modules/type-event/entity/type-event.entity';
 import { TypeEventEnum } from '../enums/type-event.enum';
 
@@ -123,16 +122,10 @@ export class InitialDataService implements OnModuleInit {
         {
           type:TypeAbonnementEnum.MENSUEL,
           tarif:TarifEnum.MENSUEL
-        },
-        // {
-        //   type:TypeAbonnementEnum.TRIMESTRIEL,
-        //   tarif:TarifEnum.TRIMESTRE,
-        //   //dateFin: new Date('2024-12-31') 
-        // },
+        },       
         {
           type:TypeAbonnementEnum.ANNUEL,
-          tarif:TarifEnum.ANNUEL,
-          //dateFin: new Date('2024-12-31') 
+          tarif:TarifEnum.ANNUEL,          
         }
       ]);
       console.log('Technichal data initialized.');

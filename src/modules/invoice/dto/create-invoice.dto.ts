@@ -2,19 +2,19 @@ import { IsArray, IsNotEmpty, IsEnum, IsDate, IsNumber, IsDateString } from "cla
 import { TypeAbonnementEnum } from "src/common/enums/abonnement.enum";
 
 export class CreateInvoiceDto {
-    @IsArray() // On s'assure que c'est un tableau
-    @IsNumber({}, { each: true }) // On s'assure que chaque élément du tableau est un nombre
+    @IsArray() 
+    @IsNumber({}, { each: true }) 
     @IsNotEmpty({ each: true })
     userIds: number[];
   
     @IsEnum(TypeAbonnementEnum)
     abonnementType: 'MENSUEL' | 'ANNUEL';
   
-    @IsDateString() // On valide que la date est une chaîne au format ISO
+    @IsDateString() 
     @IsNotEmpty()
     dateEnvoie: string;
   
-    @IsNumber() // On s'assure que le montant est un nombre
+    @IsNumber() 
     @IsNotEmpty()
     montant: number;  
  

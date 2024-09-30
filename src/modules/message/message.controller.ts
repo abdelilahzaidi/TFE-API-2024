@@ -32,13 +32,7 @@ export class MessageController {
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.messageService.findOne(id);
   }
-  // @Post()
-  // async create(
-  //   @Body() createMessageDto: CreateMessageDto,
-  // ): Promise<MessageEntity> {
-  //   console.log('create message', createMessageDto);
-  //   return await this.messageService.createMessage(createMessageDto);
-  // }
+
 
   @Post()
   async createMessage(@Body() createMessageDto: CreateMessageDto) {
@@ -51,10 +45,7 @@ export class MessageController {
     }
   }
 
-  // @Get(':receiverId')
-  // async getMessagesByReceiver(@Param('receiverId') receiverId: number): Promise<MessageEntity[]> {
-  //   return this.messageService.getMessagesByReceiver(receiverId);
-  // }
+
 
   @Get(':id/user')
   async getMessagesByReceiver(

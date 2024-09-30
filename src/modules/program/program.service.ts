@@ -16,13 +16,10 @@ export class ProgramService {
   constructor(
     @InjectRepository(ProgramEntity)
     private readonly programRepository: Repository<ProgramI>,
-    // @InjectRepository(TechnichalEntity)
-    // private readonly technichalRepository: Repository<TechnichalEntity>,
+ 
     private readonly technichalService: TechnichalService,
   ) {}
-  // async all(): Promise<ProgramI[]> {
-  //   return await this.programRepository.find({relations:['technicals']});
-  // }
+
 
   async all(): Promise<ProgramI[]> {
     const programs = await this.programRepository.find({
@@ -59,18 +56,7 @@ export class ProgramService {
     return mappedPrograms;
   }
   
-  // async allByLevels():Promise<ProgramI[]>{
-  //   const programs = await this.programRepository.find({
-  //     select: ['technicals'],
-  //     relations: ['technicals'],
-  //   })
-  //   return programs.map((program) => ({
-  //     id: program.id,
-  //     title: program.title,
-  //     grade: program.grade,
-  //     technicals: program.technicals,
-  //   }));
-  // }
+
   async findOneByProgram(id: number): Promise<ProgramI> {
     console.log(id);
     return await this.programRepository.findOne({
@@ -79,25 +65,7 @@ export class ProgramService {
     });
   }
 
-  // async updateProgramTechnicals(programId: number, technicalIds: number[]): Promise<ProgramEntity> {
-  //   // Récupérer le programme par son ID
-  //   const program = await this.programRepository.findOne({ where: { id: programId }, relations: ['technicals'] });
-  //   if (!program) {
-  //     throw new Error('Program not found');
-  //   }
-
-  //   // Récupérer les technicals par leurs IDs
-  //   const technicals = await this.technichalService.findAllByIds(technicalIds);
-  //   if (technicals.length !== technicalIds.length) {
-  //     throw new Error('Some technicals not found');
-  //   }
-
-  //   // Mettre à jour les relations
-  //   program.technicals = technicals;
-
-  //   // Enregistrer les modifications
-  //   return await this.programRepository.save(program);
-  // }
+ 
 
   async updateProgramTechnicals(
     programId: number,
@@ -131,10 +99,10 @@ export class ProgramService {
         );
       }
 
-      // Mettre à jour les relations
+
       program.technicals = technicals;
 
-      // Enregistrer les modifications
+     
       return await this.programRepository.save(program);
     } catch (error) {
       console.error(

@@ -20,7 +20,7 @@ export class TypeEventService {
       // Créer un nouveau type d'événement
       async create(typeEventDto: CreateTypeEventDto): Promise<TypeEventEntity> {
         const newTypeEvent = this.typeRepository.create(typeEventDto);
-        return await this.typeRepository.save(newTypeEvent);  // Sauvegarde un seul objet
+        return await this.typeRepository.save(newTypeEvent);  
       }
     
       // Mettre à jour un type d'événement

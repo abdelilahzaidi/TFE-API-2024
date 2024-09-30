@@ -15,5 +15,5 @@ export class CreateEventDto {
   userIds: number[];
 
   //@IsNumber()
-  typeEventId: number; // L'ID du TypeEvent
+  typeEventId: number; 
 }

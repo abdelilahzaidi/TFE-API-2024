@@ -23,7 +23,7 @@ export class LevelService {
     private readonly programService: ProgramService,
     @InjectRepository(TechnichalEntity)
     private readonly technichalRepository: Repository<TechnichalEntity>,
-    //private readonly technicalTypeService : TechnicalTypeService
+    
   ) {}
 
   async all(): Promise<LevelEntity[]> {
@@ -42,7 +42,7 @@ export class LevelService {
   async findLevelById(id: number): Promise<LevelEntity | undefined> {
     const existingLevel = await this.levelRepository.findOne({
       where: { id },
-      relations: ['users'], // Charge les utilisateurs associés
+      relations: ['users'], 
     });
 
     if (!existingLevel) {
@@ -91,7 +91,7 @@ export class LevelService {
 
       return updatedLevel;
     } catch (error) {
-      console.error('Error during level update:', error); // Log plus détaillé
+      console.error('Error during level update:', error);
       throw new InternalServerErrorException('Failed to update level.', error.message);
     }
   }

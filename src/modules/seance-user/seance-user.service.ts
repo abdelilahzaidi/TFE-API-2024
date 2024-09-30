@@ -25,10 +25,8 @@ export class SeanceUserService {
             const seanceUsers = await this.seanceUserEntity.createQueryBuilder('seanceUser')
                 .innerJoinAndSelect('seanceUser.user', 'user')
                 .innerJoinAndSelect('seanceUser.seance', 'seance')
-                .innerJoinAndSelect('seance.cour', 'cour')    // Ensure 'cour' is correctly referenced                
-                .innerJoinAndSelect('cour.lieu', 'lieu') 
-                //.innerJoinAndSelect('datecour.dateCour', 'datecour') 
-                //.innerJoinAndSelect('seance.horaire', 'horaire') // Ensure 'horaire' is correctly referenced
+                .innerJoinAndSelect('seance.cour', 'cour')           
+                .innerJoinAndSelect('cour.lieu', 'lieu')                
                 .where('seanceUser.seanceId = :seanceId', { seanceId })
                 .getMany();
     
@@ -45,14 +43,7 @@ export class SeanceUserService {
                 error.message,
             );
         }
-    }
-    
-    
-    
-    
-
-  
-  
+    }  
     
     
       async findAll(): Promise<EventEntity[]> {
@@ -69,63 +60,7 @@ export class SeanceUserService {
         return this.eventRepository.save(event);
       }
     
-      // async update(id: number, updateEventDto: UpdateEventDto): Promise<EventEntity> {
-      //   const { userIds, ...updateData } = updateEventDto;
-    
-      //   const event = await this.eventRepository.preload({
-      //     id,
-      //     ...updateData,
-      //   });
-    
-      //   if (!event) {
-      //     throw new NotFoundException(`Event with ID ${id} not found`);
-      //   }
-    
-      //   if (userIds) {
-      //     const users = await this.userRepository.findByIds(userIds);
-      //     if (users.length !== userIds.length) {
-      //       throw new NotFoundException(`One or more users not found`);
-      //     }
-      //     event.users = users;
-      //   }
-    
-      //   return this.eventRepository.save(event);
-      // }
-    
-      // async create(createEventDto: CreateEventDto): Promise<EventEntity> {
-      //   const { nom, dateDebut, dateFin, userIds } = createEventDto;
-    
-      //   const users = await this.userRepository.findByIds(userIds);
-      //   if (users.length !== userIds.length) {
-      //     throw new NotFoundException(`One or more users not found`);
-      //   }
-    
-      //   const event = this.eventRepository.create({ nom, dateDebut, dateFin, users });
-      //   return this.eventRepository.save(event);
-      // }
-    
-      // async update(id: number, updateEventDto: UpdateEventDto): Promise<EventEntity> {
-      //   const { userIds, ...updateData } = updateEventDto;
-    
-      //   const event = await this.eventRepository.preload({
-      //     id,
-      //     ...updateData,
-      //   });
-    
-      //   if (!event) {
-      //     throw new NotFoundException(`Event with ID ${id} not found`);
-      //   }
-    
-      //   if (userIds) {
-      //     const users = await this.userRepository.findByIds(userIds);
-      //     if (users.length !== userIds.length) {
-      //       throw new NotFoundException(`One or more users not found`);
-      //     }
-      //     event.users = users;
-      //   }
-    
-      //   return this.eventRepository.save(event);
-      // }
+      
     
       async delete(id: number): Promise<void> {
         const result = await this.eventRepository.delete(id);
@@ -179,7 +114,7 @@ export class SeanceUserService {
             seanceUser.presence = presence;
             return this.seanceUserEntity.save(seanceUser);
           } else {
-            // Optionnel : gérer le cas où l'utilisateur n'est pas trouvé
+           
             return null;
           }
         });
@@ -187,27 +122,7 @@ export class SeanceUserService {
         return Promise.all(updatePromises);
       }
 
-      // async findOne(conditions: any): Promise<SeanceUserEntity> {
-      //   return this.seanceUserEntity.findOneBy(conditions);
-      // }
-    
-      // async save(seanceUser: SeanceUserEntity): Promise<SeanceUserEntity> {
-      //   return this.seanceUserEntity.save(seanceUser);
-      // }
-
-
-      // async findBySeanceAndUsers(seanceId: number, userIds: number[]): Promise<SeanceUserEntity[]> {
-      //   return this.seanceUserEntity.find({
-      //     where: {
-      //       seanceId,
-      //       userId: In(userIds), // 'In' est importé depuis 'typeorm'
-      //     },
-      //   });
-      // }
-    
-      // async save(seanceUser: SeanceUserEntity): Promise<SeanceUserEntity> {
-      //   return this.seanceUserEntity.save(seanceUser);
-      // }
+     
       async updateUserPresence(seanceId: number, userIds: number[], presence: boolean): Promise<SeanceUserEntity[]> {
         const updatedUsers: SeanceUserEntity[] = [];
     
@@ -223,9 +138,8 @@ export class SeanceUserService {
           seanceUser.presence = presence;
           const updatedUser = await this.seanceUserEntity.save(seanceUser);
           updatedUsers.push(updatedUser);
-        }
-    
-        // Retourner la liste des utilisateurs mis à jour
+        }    
+       
         return updatedUsers;
       }
 }

@@ -29,7 +29,7 @@ export class TechnicalTypeService {
           throw new Error('Technichal or Type not found');
         }
     
-        // Associer le technichal au type
+        
         type.technichals.push(technichal);
         await this.technicalTypeRepository.save(type);
       }

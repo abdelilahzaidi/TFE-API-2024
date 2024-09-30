@@ -29,9 +29,7 @@ export class SeanceService {
     private readonly userRepository: Repository<UserEntity>,
   ) {}
 
-  // async getAllSeances(): Promise<SeanceEntity[]> {
-  //     return this.seanceRepository.find();
-  // }
+
 
   async getAllSeances(): Promise<SeanceEntity[]> {
     return this.seanceRepository.find({
@@ -60,68 +58,9 @@ export class SeanceService {
       relations: ['seanceUsers','users'],
     });
   }
-// async createSeance(dto: SeanceCreateDTO): Promise<SeanceEntity | null> {
-//   try {
-//     this.logger.debug(`${JSON.stringify(dto)}`);
-
-//     const dateCour = await this.dateCourService.findDateCourById(dto.idDateCour);
-//     // if (dateCour) {
-//     //   throw new ConflictException('Cette date de Cour existe déjà.');
-//     // }
-
-//     const cour = await this.courService.findCourById(dto.idCour);
-//     // if (!cour) {
-//     //   throw new NotFoundException('Cours non trouvé.');
-//     // }
-
-//     const horaire = await this.horaireService.findHoraireById(dto.idHoraire);
-//     // if (!horaire) {
-//     //   throw new ConflictException('Cet horaire existe déjà.');
-//     // }
-
-//     const seance = new SeanceEntity();
-//     seance.cour = cour;
-//     seance.horaire = horaire;
-//     seance.dateCour = dateCour;
-
-//     const savedSeance = await this.seanceRepository.save(seance);
-
-//     this.logger.debug('Séance créée avec succès:', savedSeance);
-//     return savedSeance;
-
-//   } catch (error) {
-//     throw new InternalServerErrorException(
-//       error,
-//       'Une erreur est survenue lors de la création de la séance.',
-//     );
-//   }
-// }
 
 
-  //   async insertParticipantAction(
-  //     @Param('id') id: number,
-  // @Body() { userIds }: any,
-  //   ){
-  //     const seance = await this.seanceRepository.findOne({where:{id}});
-  //     const users=await this.userRepository.find({ where: { id: In(userIds) } });
 
-  //     if (!seance.seanceUsers) {
-  //       seance.seanceUsers = [];
-  //     }
-  //     seance.seanceUsers.push(...users);
-  //     const seanceUser =await this.seanceRepository.save(seance);
-  //     console.log('seanceUser',seanceUser)
-  //     return seanceUser
-
-  //   }
-
-  //   async findSeanceById(id: number): Promise<SeanceEntity | undefined> {
-  //     return this.seanceRepository.findOne({ where: { id } });
-  //   }
-
-  //   async saveSeance(seance: SeanceEntity): Promise<SeanceEntity> {
-  //     return this.seanceRepository.save(seance);
-  //   }
 
   async createSeance(dto: SeanceCreateDTO): Promise<SeanceEntity | null> {
     try {

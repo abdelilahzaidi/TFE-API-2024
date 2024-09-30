@@ -16,11 +16,11 @@ export class SeanceUserController {
 
     @Get(':seanceId')
     async getSeanceUsers(@Param('seanceId') seanceId: number): Promise<SeanceUserEntity[]> {
-        console.log('Seance ID:', seanceId); // Log pour vérifier la valeur de seanceId
+        console.log('Seance ID:', seanceId); 
         return this.seanceUserService.filterBySeanceId(seanceId);
     }
 
-    // Route pour mettre à jour la présence pour une liste d'utilisateurs
+   
     @Patch(':seanceId/presence')
     async updatePresence(
       @Param('seanceId') seanceId: number,
@@ -30,14 +30,14 @@ export class SeanceUserController {
         console.log('Données reçues pour la mise à jour des présences:', body);
         const { userIds, presence } = body;
         
-        // Appeler le service pour mettre à jour les présences
+       
         const result = await this.seanceUserService.updateUserPresence(seanceId, userIds, presence);
   
         return { message: 'Présences mises à jour avec succès', result };
       } catch (error) {
         console.error('Erreur serveur lors de la mise à jour des présences:', error);
   
-        // Retourner une erreur 500 en cas de problème
+        
         if (error instanceof HttpException) {
           throw error;
         }

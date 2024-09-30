@@ -14,6 +14,6 @@ export class EventEntity{
     dateFin:Date;
     @ManyToMany(() => UserEntity, (user) => user.events, { onDelete: 'CASCADE' }) 
     users : UserEntity[];
-    @ManyToOne(() => TypeEventEntity, (typeEvent) => typeEvent.events, { onDelete: 'SET NULL' }) // Relation Many-to-One
+    @ManyToOne(() => TypeEventEntity, (typeEvent) => typeEvent.events, { onDelete: 'SET NULL' }) 
     typeEvents: TypeEventEntity;
 }

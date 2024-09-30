@@ -42,9 +42,7 @@ export class TechnichalService {
     }
   }
 
-  // async findAllByIds(ids: number[]): Promise<any[]> {
-  //   return await this.technichalRepository.findBy({ id: In(ids) });
-  // }
+
   async findAllByIds(ids: number[]): Promise<ITechnichal[]> {
     return await this.technichalRepository
       .createQueryBuilder('technical')
@@ -58,33 +56,33 @@ export class TechnichalService {
   ): Promise<ITechnichal> {
     const { nom, description, technichalTypeId, programIds } = createTechnicalDto;
   
-    // Créer une nouvelle instance de Technichal
+  
     const newTechnichal = new TechnichalEntity();
     newTechnichal.nom = nom;
     newTechnichal.description = description;
   
-    // Utiliser un JOIN pour récupérer le technichalType associé
+ 
     console.log('Before', technichalTypeId);
   
     if (technichalTypeId) {
-      // Trouver le technichalType correspondant à l'ID fourni
+     
       const technichalType = await this.technichalTypeRepository
         .createQueryBuilder('technichalType')
         .where('technichalType.id = :technichalTypeId', { technichalTypeId })
         .getOne();
   
-      // Vérifier si le technichalType a bien été trouvé
+    
       if (!technichalType) {
         throw new Error('Technichal Type not found');
       }
   
-      // Assigner directement l'objet technichalType au nouvel objet Technichal
+     
       newTechnichal.technichalType = technichalType;
   
       console.log('Id', technichalTypeId);
     }
   
-    // Sauvegarder la nouvelle technique dans la base de données
+   
     return await this.technichalRepository.save(newTechnichal);
   }
   

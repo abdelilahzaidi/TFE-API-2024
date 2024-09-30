@@ -24,12 +24,12 @@ export class InvoiceService {
   ) {}
 
   async all(): Promise<any[]> {
-    // Récupérer les factures avec les relations nécessaires (abonnement, typeAbonnement, user)
+    
     const invoices = await this.invoiceRepository.find({
       relations: ['abonnement', 'abonnement.typeAbonnement', 'abonnement.user'],
     });
   
-    // Supprimer le champ `password` pour chaque utilisateur
+    
     invoices.forEach(invoice => {
       if (invoice.abonnement && invoice.abonnement.user) {
         delete invoice.abonnement.user.password;
@@ -46,7 +46,7 @@ export class InvoiceService {
     abonnementId: number,
     invoiceData: { dateEnvoie: Date; montant: number }
   ): Promise<InvoiceEntity> {
-    // Trouver l'utilisateur
+    
     const user = await this.userRepository.findOne({
       where: { id: userId },
       relations: ['abonnements'],
@@ -56,7 +56,7 @@ export class InvoiceService {
       throw new NotFoundException('Utilisateur non trouvé');
     }
 
-    // Vérifier si l'abonnement appartient à l'utilisateur
+    
     const abonnement = await this.abonnementRepository.findOne({
       where: { id: abonnementId, user: { id: userId } },
       relations: ['user'],
@@ -70,8 +70,8 @@ export class InvoiceService {
     const newInvoice = this.invoiceRepository.create({
       dateEnvoie: invoiceData.dateEnvoie,
       montant: invoiceData.montant,
-      etatDePaiement: false, // Par défaut, la facture n'est pas payée
-      abonnement: abonnement, // Associe l'abonnement à la facture
+      etatDePaiement: false, 
+      abonnement: abonnement, 
     });
 
     return await this.invoiceRepository.save(newInvoice);
@@ -80,24 +80,24 @@ export class InvoiceService {
 
   
   async assignInvoiceToUsersByAbonnementType(
-    userIds: number[], // Liste des utilisateurs à associer
-    abonnementType: 'MENSUEL' | 'ANNUEL', // Type d'abonnement
-    invoiceData: { dateEnvoie: Date; montant: number }, // Données de la facture
+    userIds: number[], 
+    abonnementType: 'MENSUEL' | 'ANNUEL', 
+    invoiceData: { dateEnvoie: Date; montant: number }, 
   ): Promise<InvoiceEntity[]> {
     const invoices: InvoiceEntity[] = [];
   
     for (const userId of userIds) {
-      // Trouver l'utilisateur et ses abonnements
+      
       const user = await this.userRepository.findOne({
         where: { id: userId },
-        relations: ['abonnements', 'abonnements.typeAbonnement'], // Récupérer les types d'abonnements
+        relations: ['abonnements', 'abonnements.typeAbonnement'], 
       });
   
       if (!user) {
         throw new NotFoundException(`Utilisateur non trouvé pour l'ID ${userId}`);
       }
   
-      // Filtrer l'abonnement de l'utilisateur par le type d'abonnement (mensuel ou annuel)
+      
       const abonnement = user.abonnements.find(
         (ab) => ab.typeAbonnement.type === TypeAbonnementEnum[abonnementType.toUpperCase()],
       );
@@ -108,20 +108,20 @@ export class InvoiceService {
         );
       }
   
-      // Créer une nouvelle facture pour cet abonnement
+      
       const newInvoice = this.invoiceRepository.create({
         dateEnvoie: invoiceData.dateEnvoie,
         montant: invoiceData.montant,
-        etatDePaiement: false, // Par défaut, la facture n'est pas payée
-        abonnement: abonnement, // Associe l'abonnement à la facture
+        etatDePaiement: false, 
+        abonnement: abonnement, 
       });
   
-      // Sauvegarder la facture et l'ajouter à la liste des factures assignées
+      
       const savedInvoice = await this.invoiceRepository.save(newInvoice);
-      invoices.push(savedInvoice); // Ajouter la facture créée à la liste
+      invoices.push(savedInvoice); 
     }
   
-    return invoices; // Retourner toutes les factures créées
+    return invoices; 
   }
 
   async updatePaymentStatus(invoiceId: number, etatDePaiement: boolean): Promise<InvoiceEntity> {
@@ -131,10 +131,10 @@ export class InvoiceService {
       throw new NotFoundException(`Facture avec l'ID ${invoiceId} non trouvée`);
     }
 
-    // Mettre à jour l'état de paiement
+    
     invoice.etatDePaiement = etatDePaiement;
 
-    // Sauvegarder la mise à jour dans la base de données
+   
     return this.invoiceRepository.save(invoice);
   }
 }

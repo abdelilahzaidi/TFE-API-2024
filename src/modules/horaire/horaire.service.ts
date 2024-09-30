@@ -15,41 +15,9 @@ export class HoraireService {
         return await this.horaireRepository.find();
       }
     
-      // async createHoraire(dto: CreateHoraireDto): Promise<HoraireEntity> {
-      //   try {
-      //     // Vérifiez d'abord s'il existe déjà un horaire avec la même heure pour le même jour
-      //     const existingHoraire = await this.horaireRepository.findOne({
-      //       where: {
-      //         heureDebut: dto.heureDebut),
-      //         jour: dto.,
-      //       },
-      //     });
-    
-      //     if (existingHoraire) {
-      //       throw new ConflictException('Un horaire avec la même heure existe déjà pour ce jour.');
-      //     }
-    
-      //     // Si aucun horaire existant n'a été trouvé, créez un nouvel horaire
-      //     const horaire = new HoraireEntity();
-      //     horaire.heureDebut = dto.heureDebut;
-      //     horaire.heureFin = dto.heureFin;
-      //     horaire.jour = dto.jour;
-    
-      //     const savedHoraire = await this.horaireRepository.save(horaire);
-    
-      //     console.log('in service', savedHoraire);
-      //     return savedHoraire;
-      //   } catch (error) {
-      //     throw new InternalServerErrorException(
-      //       error,
-      //       "Une erreur est survenue lors de la creation de l'horaire.",
-      //     );
-      //   }
-      // }
-
       async createHoraire(dto: CreateHoraireDto): Promise<HoraireEntity> {
         try {
-            // Vérifiez d'abord s'il existe déjà un horaire avec la même heure pour le même jour
+           
             const existingHoraire = await this.horaireRepository.findOne({
                 where: {
                     heureDebut: dto.heureDebut,
@@ -61,7 +29,7 @@ export class HoraireService {
                 throw new ConflictException('Un horaire avec la même heure existe déjà pour ce jour.');
             }
     
-            // Si aucun horaire existant n'a été trouvé, créez un nouvel horaire
+            
             const horaire = new HoraireEntity();
             horaire.heureDebut = dto.heureDebut;
             horaire.heureFin = dto.heureFin;

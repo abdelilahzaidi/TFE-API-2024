@@ -41,87 +41,24 @@ export class MessageService {
               };
           });
       }
-      // async createMessage(createMessageDto: CreateMessageDto): Promise<MessageEntity> {
-      //   try {
-      //     const { senderId, titre, contenu, receivers } = createMessageDto;
-    
-      //     // Utilisez findOneOrFail avec l'option { where: { id: senderId } } pour rechercher par ID
-      //     const sender = await this.userRepository.findOneOrFail({
-      //       where: { id: senderId },
-      //     });
-    
-      //     // Utilisation de findByIds pour récupérer plusieurs destinataires par leurs IDs
-      //     const receiversEntities = await this.userRepository.findByIds(receivers);
-    
-      //     // Filtrer les destinataires pour exclure l'utilisateur expéditeur
-      //     const filteredReceivers = receiversEntities.filter(receiver => receiver.id !== senderId);
-    
-      //     const message = new MessageEntity();
-      //     message.titre = titre;
-      //     message.contenu = contenu;
-      //     message.dateHeureEnvoie = new Date();
-      //     message.sender = sender;
-      //     message.receivers = filteredReceivers;
-    
-      //     return await this.messageRepository.save(message);
-      //   } catch (error) {
-      //     throw new Error(`Could not create message: ${error.message}`);
-      //   }
-      // }
-      // async createMessage(createMessageDto: CreateMessageDto): Promise<MessageEntity> {
-      //   try {
-      //     const { titre, contenu, dateHeureEnvoie, senderId, receiverIds } = createMessageDto;
       
-      //   // Vérification de l'existence de l'expéditeur
-      //   // Pour une version récente de TypeORM
-      //   const sender = await this.userRepository.findOneBy({ id: senderId });
-
-      //   if (!sender) {
-      //     throw new NotFoundException(`Sender with ID ${senderId} not found`);
-      //   }
-      
-      //   // Vérification de l'existence des destinataires
-      //   const receivers = await this.userRepository.findByIds(receiverIds);
-      //   if (receivers.length !== receiverIds.length) {
-      //     throw new NotFoundException('One or more receivers not found');
-      //   }
-      //   console.log(receiverIds)
-      
-      //   // Création du message
-      //   const message = this.messageRepository.create({
-      //     titre,
-      //     contenu,
-      //     dateHeureEnvoie :new Date(),
-      //     sender,
-      //     receivers,
-      //   });
-      
-      //   // Sauvegarde du message avec les relations
-      //   console.log("message", message)
-      //   return this.messageRepository.save(message);
-          
-      //   } catch (error) {
-      //     console.error('Error:', error.message);
-      //     throw new Error(`Could not create message: ${error.message}`);
-      //   }
-      // }
       async createMessage(createMessageDto: CreateMessageDto): Promise<MessageEntity> {
         try {
             const { titre, contenu, senderId, receiverIds } = createMessageDto;
     
-            // Vérification de l'existence de l'expéditeur
+            
             const sender = await this.userRepository.findOne({ where: { id: senderId }});
             if (!sender) {
                 throw new NotFoundException(`Sender with ID ${senderId} not found`);
             }
     
-            // Vérification de l'existence des destinataires
+           
             const receivers = await this.userRepository.findByIds(receiverIds);
             if (receivers.length !== receiverIds.length) {
                 throw new NotFoundException('One or more receivers not found');
             }
     
-            // Création du message
+            
             const message = this.messageRepository.create({
                 titre,
                 contenu,
@@ -130,7 +67,7 @@ export class MessageService {
                 receivers
             });
     
-            // Sauvegarde du message avec les relations
+            
             return await this.messageRepository.save(message);
     
         } catch (error) {
@@ -144,23 +81,7 @@ export class MessageService {
     
       
 
-    // async getMessagesBySenders(senderIds: number[]): Promise<MessageEntity[]> {
-    //   return await this.messageRepository.find({
-    //     where: {
-    //       sender: {
-    //         id: In(senderIds)
-    //       }
-    //     },
-    //     relations: ['sender', 'receivers'] // Include relations if necessary
-    //   });
-    // }
-
-    // async getMessagesByReceiver(receiverId: number): Promise<MessageEntity[]> {
-    //   return await this.messageRepository.createQueryBuilder('message')
-    //     .leftJoinAndSelect('message.receivers', 'receiver')
-    //     .where('receiver.id = :receiverId', { receiverId })
-    //     .getMany();
-    // }
+   
 
     //Find a message by user
     async findUserByMessageId(id: number): Promise<MessageEntity[]> {
@@ -189,7 +110,7 @@ export class MessageService {
         throw new NotFoundException(`User with ID ${userId} not found`);
       }
   
-      // Remove passwords from receivers
+     
       user.receivedMessages.forEach(message => {
         message.receivers.forEach(receiver => delete receiver.password);
       });
@@ -201,7 +122,7 @@ export class MessageService {
       return await this.userRepository
         .createQueryBuilder('user')
         .leftJoinAndSelect('user.sentMessages', 'sentMessages')
-        .leftJoinAndSelect('user.receiver', 'receiver') // Si vous avez un destinataire spécifique
+        .leftJoinAndSelect('user.receiver', 'receiver') 
         .where('user.id = :userId', { userId })
         .getOne();
     }
@@ -224,7 +145,7 @@ export class MessageService {
         sentMessages: user.sentMessages.map(message => ({
           id: message.id,
           titre:message.titre,
-          content: message.contenu, // Assurez-vous que ce champ existe dans votre entité MessageEntity
+          content: message.contenu, 
           dateHeureEnvoie : message.dateHeureEnvoie,
           receivers: message.receivers.map(receiver => ({
             id: receiver.id,

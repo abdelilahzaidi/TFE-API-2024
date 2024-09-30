@@ -8,6 +8,6 @@ export class TypeEventEntity {
   id: number;
   @Column({ type: 'enum', enum: TypeEventEnum, default: TypeEventEnum.REPRISE })
   type: TypeEventEnum;
-  @OneToMany(() => EventEntity, (event) => event.typeEvents) // Relation One-to-Many
+  @OneToMany(() => EventEntity, (event) => event.typeEvents) 
   events: EventEntity[];
 }

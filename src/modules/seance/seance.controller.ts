@@ -31,35 +31,7 @@ export class SeanceController {
     return await this.seanceService.createSeance(dto);
   }
 
-  // @Post(':id/participants')
-  // async insertParticipantAction(
-  //   @Param('id') id: number,
-  //   @Body() { userIds }: { userIds: number[] },
-  // ): Promise<SeanceEntity> {
-  //   try {
-  //     const seance = await this.seanceService.findSeanceById(id);
-  //     if (!seance) {
-  //       throw new NotFoundException('Séance non trouvée');
-  //     }
 
-  //     const users = await this.userRepository.find({ where: { id: In(userIds) } });
-  //     if (!users.length) {
-  //       throw new NotFoundException('Utilisateurs non trouvés');
-  //     }
-  //     console.log('users ', users)
-
-  //     if (!seance.seanceUsers) {
-  //       seance.seanceUsers = [];
-  //     }
-  //     seance.seanceUsers.push(...users);
-
-  //     return await this.seanceService.saveSeance(seance);
-  //   } catch (error) {
-  //     console.log('error' , error)
-  //     throw new InternalServerErrorException('Une erreur est survenue lors de l\'ajout des participants',error);
-
-  //   }
-  // }
 
   @Post(':id/participants')
   async insertParticipantAction(
@@ -78,7 +50,7 @@ export class SeanceController {
 
   @Get(':seanceId')
   async getSeanceUsers(@Param('seanceId') seanceId: number): Promise<SeanceEntity[]> {
-      console.log('Seance ID:', seanceId); // Log pour vérifier la valeur de seanceId
+      console.log('Seance ID:', seanceId); 
       return await this.seanceService.findSeanceUserById(seanceId);
   }
   
