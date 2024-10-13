@@ -23,10 +23,32 @@ export function CompareDates(property: string, validationOptions?: ValidationOpt
       options: validationOptions,
       constraints: [property],
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: string, args: ValidationArguments) {
           const [relatedPropertyName] = args.constraints;
           const relatedValue = (args.object as any)[relatedPropertyName];
-          return value && relatedValue && value > relatedValue; // Vérifie que la dateFin est plus grande que dateDebut
+
+          console.log('Comparaison:', {
+            [propertyName]: value,
+            [relatedPropertyName]: relatedValue,
+          });
+
+          // Vérifie que les deux valeurs sont définies
+          if (!value || !relatedValue) return false;
+
+          // Convertir les heures au format Date sans décalage horaire
+          const valueDate = new Date(`1970-01-01T${value}:00`);
+          const relatedDate = new Date(`1970-01-01T${relatedValue}:00`);
+
+          // Logs des dates comparées
+          console.log('Dates:', {
+            valueDate: valueDate.toISOString(),
+            relatedDate: relatedDate.toISOString(),
+          });
+
+          // Utiliser getTime() pour la comparaison
+          const isValid = valueDate.getTime() > relatedDate.getTime();
+          console.log(`Validation Result: ${isValid}`);
+          return isValid; // Vérifie que l'heureFin est plus grande que l'heureDebut
         },
         defaultMessage(args: ValidationArguments) {
           const [relatedPropertyName] = args.constraints;
@@ -36,3 +58,6 @@ export function CompareDates(property: string, validationOptions?: ValidationOpt
     });
   };
 }
+
+
+

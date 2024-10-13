@@ -15,5 +15,5 @@ export class CreateMessageDto {
   senderId: number;
 
 
-  dateHeureEnvoie : Date
+  dateHeureEnvoie ?: Date
 }

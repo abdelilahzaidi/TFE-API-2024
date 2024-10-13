@@ -18,24 +18,34 @@ import { HoraireModule } from '../horaire/horaire.module';
 import { UserModule } from '../user/user.module';
 import { LieuEntity } from '../lieu/entity/lieu.entity';
 import { LieuService } from '../lieu/lieu.service';
+import { SeanceUserModule } from '../seance-user/seance-user.module';
+import { SeanceUserEntity } from '../seance-user/entity/seance-user.entity';
 
-@Module({
-  imports: [
-    TypeOrmModule.forFeature([
-      SeanceEntity,
-      CourEntity,
-      LieuEntity,
-      HoraireEntity,
-      DateCourEntity,
-      UserEntity,
-    ]),
-    forwardRef(() => HoraireModule),
-    forwardRef(() => CourModule),
-    forwardRef(() => DateCourModule),
-    forwardRef(() => UserModule),
-  ],
-  providers: [SeanceService, CourService, LieuService, HoraireService],
-  controllers: [SeanceController],
-  exports: [SeanceService],
-})
+@Module({  
+    imports: [
+      TypeOrmModule.forFeature([
+        SeanceEntity,
+        CourEntity,
+        LieuEntity,
+        HoraireEntity,
+        DateCourEntity,
+        UserEntity,
+        SeanceUserEntity,
+      ]),
+      forwardRef(() => HoraireModule),
+      forwardRef(() => CourModule),
+      forwardRef(() => DateCourModule),
+      forwardRef(() => UserModule),
+      SeanceUserModule,  // Ajout du module ici
+    ],
+    providers: [
+      SeanceService,
+      CourService,
+      LieuService,
+      HoraireService,
+      DateCourService,
+    ],
+    controllers: [SeanceController],
+    exports: [SeanceService],
+  })
 export class SeanceModule {}

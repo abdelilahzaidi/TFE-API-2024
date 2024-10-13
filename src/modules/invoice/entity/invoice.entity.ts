@@ -11,6 +11,10 @@ export class InvoiceEntity{
     etatDePaiement : boolean;
     @Column()
     montant : number;
-    @ManyToOne(()=>AbonnementEntity,(abonnement)=>abonnement.invoices, {cascade:['remove']})
-    abonnement : AbonnementEntity
+    // @ManyToOne(()=>AbonnementEntity,(abonnement)=>abonnement.invoices, {cascade:['remove']})
+    // abonnement : AbonnementEntity
+    @ManyToOne(() => AbonnementEntity, (abonnement) => abonnement.invoices, {
+        onDelete: 'SET NULL',  // Lorsque l'abonnement est supprimé, la facture reste mais sans référence à un abonnement.
+      })
+      abonnement: AbonnementEntity;
 }

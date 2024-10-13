@@ -12,6 +12,7 @@ import { LevelModule } from '../level/level.module';
 import { SeanceUserEntity } from '../seance-user/entity/seance-user.entity';
 import { MailService } from '../mail/mail.service';
 import { JwtService } from '@nestjs/jwt';
+import { SeanceEntity } from '../seance/entity/seance.entity';
 
 @Module({
   imports: [
@@ -20,7 +21,8 @@ import { JwtService } from '@nestjs/jwt';
       UserEntity,
       LevelEntity,
       SeanceUserEntity,
-      MessageEntity
+      MessageEntity,
+      SeanceEntity
     ]),
     forwardRef(() => UserModule),
     forwardRef(() => LevelModule),

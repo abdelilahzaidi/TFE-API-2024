@@ -3,8 +3,8 @@ import { TechnichalTypeEntity } from "src/modules/technical-type/entity/technica
 
 export interface ITechnichal {
     id: number;
-    nom: string;
-    description: string;
+    nom?: string;
+    description?: string;
     programs: ProgramEntity[]; 
     technichalType: TechnichalTypeEntity | null;  
   }

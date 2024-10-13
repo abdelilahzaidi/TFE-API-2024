@@ -1,10 +1,12 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { CreateEventDto } from '../event/dto/event-create.dto';
 import { EventEntity } from '../event/entity/event.entity';
 import { UserEntity } from '../user/entity/user.entity';
 import { SeanceUserEntity } from './entity/seance-user.entity';
+import { SeanceEntity } from '../seance/entity/seance.entity';
+
 
 @Injectable()
 export class SeanceUserService {
@@ -12,6 +14,7 @@ export class SeanceUserService {
         @InjectRepository(SeanceUserEntity) private readonly seanceUserEntity : Repository<SeanceUserEntity>,
         @InjectRepository(EventEntity) private readonly eventRepository: Repository<EventEntity>,
         @InjectRepository(UserEntity) private readonly userRepository: Repository<UserEntity>,
+        @InjectRepository(SeanceEntity) private readonly seanceRepository: Repository<SeanceEntity>,
       ) {}
 
       async findAllSeanceUser(): Promise<SeanceUserEntity[]> {
@@ -78,25 +81,111 @@ export class SeanceUserService {
         });
       }
     
-      async participateInEvent(eventId: number, userId: number): Promise<void> {
-        const event = await this.eventRepository.findOne({ where: { id: eventId }, relations: ['users'] });
-        if (!event) {
-          throw new NotFoundException(`Event with ID ${eventId} not found`);
-        }
-    
-        const user = await this.userRepository.findOne({ where: { id: userId } });
-        if (!user) {
-          throw new NotFoundException(`User with ID ${userId} not found`);
-        }
-    
-        if (event.users.find(u => u.id === user.id)) {
-          throw new Error(`User with ID ${userId} is already participating in the event`);
-        }
-    
-        event.users.push(user);
-        await this.eventRepository.save(event);
+   
+
+      async participateSeance(seanceId: number, userIds: number[]): Promise<SeanceUserEntity[]> {
+          // Vérifier que userIds est un tableau et non vide
+          if (!Array.isArray(userIds) || userIds.length === 0) {
+              throw new BadRequestException(`La liste des IDs d'utilisateurs est vide ou mal formée`);
+          }
+      
+          // Trouver la séance et s'assurer qu'elle existe
+          const seance = await this.seanceRepository.findOne({ where: { id: seanceId } });
+          if (!seance) {
+              throw new NotFoundException(`Séance avec ID ${seanceId} non trouvée`);
+          }
+      
+          // Trouver les utilisateurs par leurs IDs
+          const users = await this.userRepository.findBy({
+              id: In(userIds)
+          });
+          if (users.length === 0) {
+              throw new NotFoundException(`Aucun utilisateur trouvé avec les IDs ${userIds}`);
+          }
+      
+          // Créer une liste pour stocker les entités de participation
+          const seanceUsers: SeanceUserEntity[] = [];
+      
+          // Boucle à travers les utilisateurs et créer une nouvelle entrée SeanceUserEntity
+          for (const user of users) {
+              // Vérifier si l'utilisateur participe déjà à cette séance
+              const existingSeanceUser = await this.seanceUserEntity.findOne({
+                  where: { seanceId: seanceId, userId: user.id }
+              });
+      
+              if (existingSeanceUser) {
+                  throw new Error(`L'utilisateur avec l'ID ${user.id} participe déjà à la séance`);
+              }
+      
+              // Créer une nouvelle entrée dans SeanceUserEntity
+              const seanceUser = this.seanceUserEntity.create({
+                  seanceId: seanceId,
+                  userId: user.id,
+                  presence: false // Par défaut, l'utilisateur n'est pas encore marqué comme présent
+              });
+      
+              seanceUsers.push(seanceUser);
+          }
+      
+          // Sauvegarder toutes les nouvelles entrées de participation
+          await this.seanceUserEntity.save(seanceUsers);
+      
+          // Retourner les entités créées
+          return seanceUsers;
       }
 
+
+
+      async participate(seanceId: number, userId: number): Promise<SeanceUserEntity> {
+        try {
+            // Vérifier si la séance existe
+            const seance = await this.seanceRepository.findOne({ where: { id: seanceId } });
+            if (!seance) {
+                throw new NotFoundException(`Séance avec ID ${seanceId} non trouvée`);
+            }
+    
+            // Vérifier si l'utilisateur existe
+            const user = await this.userRepository.findOne({ where: { id: userId } });
+            if (!user) {
+                throw new NotFoundException(`Utilisateur avec ID ${userId} non trouvé`);
+            }
+    
+            // Vérifier si l'utilisateur participe déjà à cette séance
+            const existingSeanceUser = await this.seanceUserEntity.findOne({
+                where: { seanceId: seanceId, userId: user.id }
+            });
+    
+            if (existingSeanceUser) {
+                throw new Error(`L'utilisateur avec l'ID ${user.id} participe déjà à la séance ${seance.id}`);
+            }
+    
+            // Créer une nouvelle entrée dans SeanceUserEntity
+            const seanceUser = this.seanceUserEntity.create({
+                seanceId: seanceId,
+                userId: user.id,
+                presence: false // Par défaut, l'utilisateur n'est pas encore marqué comme présent
+            });
+    
+            // Sauvegarder la nouvelle entrée
+            await this.seanceUserEntity.save(seanceUser);
+    
+            // Retourner l'entité créée
+            return seanceUser;
+        } catch (error) {
+            // Gérer et loguer l'erreur si nécessaire
+            console.error('Erreur lors de la participation à la séance:', error.message);
+            
+            // Tu peux relancer l'erreur si tu souhaites la propager ou renvoyer une réponse plus spécifique
+            throw new BadRequestException('Une erreur est survenue lors de l’inscription à la séance');
+        }
+    }
+    
+    
+      
+    
+      
+    
+      
 
 
 
@@ -142,4 +231,41 @@ export class SeanceUserService {
        
         return updatedUsers;
       }
+
+
+
+      async updateUserPresences(seanceId: number, seanceUsers: { userId: number, presence: boolean }[]): Promise<SeanceUserEntity[]> {
+        if (!Array.isArray(seanceUsers)) {
+          throw new TypeError('seanceUsers is not an array');
+        }
+      
+        const updatedUsers: SeanceUserEntity[] = [];
+      
+        for (const { userId, presence } of seanceUsers) {
+          // Vérification du type des données
+          if (typeof userId !== 'number' || typeof presence !== 'boolean') {
+            throw new TypeError('Invalid data format in seanceUsers');
+          }
+      
+          // Cherche l'utilisateur pour la séance
+          const seanceUser = await this.seanceUserEntity.findOne({
+            where: { seanceId: seanceId, userId: userId },
+          });
+      
+          if (!seanceUser) {
+            throw new NotFoundException(`User with ID ${userId} not found for seance ${seanceId}`);
+          }
+      
+          // Met à jour la présence de l'utilisateur
+          seanceUser.presence = presence;
+      
+          // Sauvegarde la modification
+          const updatedUser = await this.seanceUserEntity.save(seanceUser);
+          updatedUsers.push(updatedUser);
+        }
+      
+        return updatedUsers;
+      }
+      
+      
 }

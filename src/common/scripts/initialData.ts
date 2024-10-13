@@ -108,7 +108,7 @@ export class InitialDataService implements OnModuleInit {
       await this.technichalRepository.save([
         {
           nom: TechnichalEnum.Ciseau_1,
-          description: 'Description de DAM_THANG'
+          description: 'Techniques de ciseau 1'
         },
         {
           nom: TechnichalEnum.Coup_de_pied_1,

@@ -19,6 +19,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
         entities: [], 
         autoLoadEntities: true, // Charge automatiquement les entités
         synchronize: true, 
+        //logging: true,
        
       }),
       inject: [ConfigService],

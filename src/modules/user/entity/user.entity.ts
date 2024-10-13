@@ -20,7 +20,7 @@ import {
 @Entity('user')
 export class UserEntity {
   @PrimaryGeneratedColumn()
-  id?: number;
+  id: number;
 
   @Column()
   first_name: string;
@@ -68,25 +68,15 @@ export class UserEntity {
   })
   level: LevelEntity;
 
+  // Relation Many-to-Many avec les messages reçus
   @ManyToMany(() => MessageEntity, (message) => message.receivers)
-  @JoinTable({
-    name: 'message_user',
-    joinColumn: {
-      name: 'userId',
-      referencedColumnName: 'id',
-    },
-    inverseJoinColumn: {
-      name: 'messageId',
-      referencedColumnName: 'id',
-    },
-  })
-   receivedMessages?: MessageEntity[];
+  receivedMessages: MessageEntity[];
 
+  // Relation One-to-Many avec les messages envoyés
   @OneToMany(() => MessageEntity, (message) => message.sender)
-  sentMessages?: MessageEntity[];
+  sentMessages: MessageEntity[];
 
-
-  
+  // Relations avec d'autres entités (pas besoin de modifier ces parties si elles fonctionnent correctement)
   @ManyToMany(() => EventEntity, (event) => event.users)
   @JoinTable({
     name: 'user_event',
@@ -106,6 +96,7 @@ export class UserEntity {
 
   @ManyToMany(() => SeanceEntity, (seance) => seance.users)
   seances: SeanceEntity[];
+
   @OneToMany(() => SeanceUserEntity, (seanceUser) => seanceUser.user)
   seanceUsers?: SeanceUserEntity[];
 }

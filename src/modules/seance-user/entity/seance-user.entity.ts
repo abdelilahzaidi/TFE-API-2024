@@ -3,11 +3,16 @@ import { UserEntity } from 'src/modules/user/entity/user.entity';
 import { Entity, PrimaryGeneratedColumn, ManyToOne, Column } from 'typeorm';
 
 @Entity('seance_user')
+
+
+
 export class SeanceUserEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => SeanceEntity, (seance) => seance.seanceUsers)
+  @ManyToOne(() => SeanceEntity, (seance) => seance.seanceUsers, {
+    onDelete: 'CASCADE', // Suppression en cascade
+  })
   seance: SeanceEntity;
 
   @ManyToOne(() => UserEntity, (user) => user.seanceUsers)
@@ -21,3 +26,5 @@ export class SeanceUserEntity {
   @Column()
   seanceId: number;
 }
+
+

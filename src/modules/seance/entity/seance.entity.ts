@@ -12,6 +12,30 @@ import {
   JoinTable,
 } from 'typeorm';
 
+// @Entity('Seance')
+// export class SeanceEntity {
+//   @PrimaryGeneratedColumn()
+//   id: number;
+
+//   @ManyToOne(() => HoraireEntity, (horaire) => horaire.seances)
+//   horaire: HoraireEntity;
+
+//   @ManyToOne(() => CourEntity, (cour) => cour.seances)
+//   cour: CourEntity;
+
+//   @ManyToOne(() => DateCourEntity, (dateCour) => dateCour.seances)
+//   dateCour: DateCourEntity;
+
+//   @OneToMany(() => SeanceUserEntity, (seanceUser) => seanceUser.seance)
+//   seanceUsers: SeanceUserEntity[]; 
+
+//   @ManyToMany(() => UserEntity, (user) => user.seances)
+// @JoinTable({
+
+// })
+// users: UserEntity[];
+// }
+
 @Entity('Seance')
 export class SeanceEntity {
   @PrimaryGeneratedColumn()
@@ -26,12 +50,13 @@ export class SeanceEntity {
   @ManyToOne(() => DateCourEntity, (dateCour) => dateCour.seances)
   dateCour: DateCourEntity;
 
-  @OneToMany(() => SeanceUserEntity, (seanceUser) => seanceUser.seance)
-  seanceUsers: SeanceUserEntity[]; 
+  @OneToMany(() => SeanceUserEntity, (seanceUser) => seanceUser.seance, {
+    cascade: true, // Pour les mises à jour et suppressions
+  })
+  seanceUsers: SeanceUserEntity[];
 
   @ManyToMany(() => UserEntity, (user) => user.seances)
-@JoinTable({
-
-})
-users: UserEntity[];
+  @JoinTable()
+  users: UserEntity[];
 }
+

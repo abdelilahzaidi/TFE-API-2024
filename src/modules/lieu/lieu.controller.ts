@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Put } from '@nestjs/common';
 import { CreateLieuDto } from './dto/lieu-create.dto';
 import { LieuEntity } from './entity/lieu.entity';
 import { LieuService } from './lieu.service';
+import { UpdateLieuDto } from './dto/lieu-update.dto';
 
 @Controller('lieu')
 export class LieuController {
@@ -20,5 +21,15 @@ export class LieuController {
   @Get(':id')
   async getLieuById(@Param('id') id: number) {
     return this.lieuService.findLieuById(id);
+  }
+
+  @Put(':id')
+  async updateLieu(
+    @Param('id') id: string,
+    @Body() updateLieuDto: UpdateLieuDto,
+  ) {
+    console.log('Received request to update lieu with id:', id);
+    console.log('Data received for update:', updateLieuDto);
+    return this.lieuService.update(+id, updateLieuDto);
   }
 }

@@ -24,15 +24,9 @@ import {
 
 //   @ManyToMany(() => UserEntity, (user) => user.receivedMessages)
 //   @JoinTable({
-//     name: 'message_user',
-//     joinColumn: {
-//       name: 'messageId',
-//       referencedColumnName: 'id',
-//     },
-//     inverseJoinColumn: {
-//       name: 'userId',
-//       referencedColumnName: 'id',
-//     },
+//       name: 'message_user',
+//       joinColumn: { name: 'messageId', referencedColumnName: 'id' },
+//       inverseJoinColumn: { name: 'userId', referencedColumnName: 'id' },
 //   })
 //   receivers: UserEntity[];
 
@@ -50,23 +44,21 @@ export class MessageEntity {
 
   @Column()
   contenu: string;
-  @Column()
-  dateHeureEnvoie : Date
 
-  @ManyToMany(() => UserEntity, (user) => user.receivedMessages)
-  // @JoinTable({
-  //   name: 'message_user',
-  //   joinColumn: {
-  //     name: 'messageId',
-  //     referencedColumnName: 'id',
-  //   },
-  //   inverseJoinColumn: {
-  //     name: 'userId',
-  //     referencedColumnName: 'id',
-  //   },
-  // })
-  receivers: UserEntity[];
+  @Column({ type: 'timestamp' })
+  dateHeureEnvoie: Date;
 
   @ManyToOne(() => UserEntity, (user) => user.sentMessages)
   sender: UserEntity;
+
+  @ManyToMany(() => UserEntity, (user) => user.receivedMessages)
+  @JoinTable({
+    name: 'message_user',
+    joinColumn: { name: 'messageId', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'userId', referencedColumnName: 'id' },
+  })
+  receivers: UserEntity[];
 }
+
+
+

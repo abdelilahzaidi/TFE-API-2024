@@ -13,9 +13,9 @@ export class TechnichalEntity {
   @PrimaryGeneratedColumn()
   id: number;
   @Column()
-  nom: string;
+  nom?: string;
   @Column()
-  description: string;
+  description?: string;
   @ManyToMany(() => ProgramEntity, (program) => program.technicals, {
     eager: true,
   })

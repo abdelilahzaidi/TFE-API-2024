@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../user/entity/user.entity';
@@ -104,32 +104,85 @@ export class EventService {
 
  
   async participateInEvent(eventId: number, userId: number): Promise<string> {
-    const event = await this.eventRepository.findOne({
-      where: { id: eventId },
-      relations: ['users'],
-    });
-    if (!event) {
-      throw new NotFoundException(`Event with ID ${eventId} not found`);
-    }
-
-    const user = await this.userRepository.findOne({ where: { id: userId } });
-    if (!user) {
-      throw new NotFoundException(`User with ID ${userId} not found`);
-    }
-
-    const existingUserIndex = event.users.findIndex((u) => u.id === user.id);
-    if (existingUserIndex !== -1) {
-      
-      event.users.splice(existingUserIndex, 1);
-      await this.eventRepository.save(event);
-      return `You have successfully removed your participation from the event ${event.nom}`;
-    } else {
-      
+    try {
+      // Récupérer l'événement avec les utilisateurs inscrits
+      const event = await this.eventRepository.findOne({
+        where: { id: eventId },
+        relations: ['users'],
+      });
+      if (!event) {
+        throw new NotFoundException(`Event with ID ${eventId} not found`);
+      }
+  
+      // Récupérer l'utilisateur
+      const user = await this.userRepository.findOne({
+        where: { id: userId },
+        relations: ['events'], // Charger également les événements auxquels l'utilisateur participe
+      });
+      if (!user) {
+        throw new NotFoundException(`User with ID ${userId} not found`);
+      }
+  
+      // Vérifier si l'utilisateur est déjà inscrit à cet événement
+      const existingUserIndex = event.users.findIndex((u) => u.id === user.id);
+      if (existingUserIndex !== -1) {
+        // Si l'utilisateur est déjà inscrit, le retirer de l'événement
+        event.users.splice(existingUserIndex, 1);
+        await this.eventRepository.save(event);
+        return `You have successfully removed your participation from the event ${event.nom}`;
+      }
+  
+      // Vérifier si l'utilisateur participe déjà à un autre événement qui se chevauche avec cet événement
+      const userEvents = await this.eventRepository.find({
+        where: { users: { id: userId } },
+      });
+  
+      for (const userEvent of userEvents) {
+        const eventOverlap =
+          (event.dateDebut >= userEvent.dateDebut && event.dateDebut <= userEvent.dateFin) ||
+          (event.dateFin >= userEvent.dateDebut && event.dateFin <= userEvent.dateFin) ||
+          (userEvent.dateDebut >= event.dateDebut && userEvent.dateDebut <= event.dateFin) ||
+          (userEvent.dateFin >= event.dateDebut && userEvent.dateFin <= event.dateFin);
+  
+        if (eventOverlap) {
+          // Récupérer les dates formatées
+          const startDate = new Date(userEvent.dateDebut);
+          const endDate = new Date(userEvent.dateFin);
+          const formattedStartDate = startDate.toLocaleDateString('fr-FR', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          });
+          const formattedEndDate = endDate.toLocaleDateString('fr-FR', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          });
+  
+          // Gestion du conflit sans lancer d'exception
+          return `You are already participating in another event: ${userEvent.nom} from ${formattedStartDate} to ${formattedEndDate}. You need to unsubscribe from that event to participate in this one.`;
+        }
+      }
+  
+      // Si aucune collision de date/heure, ajouter l'utilisateur à l'événement
       event.users.push(user);
       await this.eventRepository.save(event);
+  
       return `You are now participating in the event ${event.nom}`;
+  
+    } catch (error) {
+      // Gestion des erreurs globales
+      if (error instanceof NotFoundException) {
+        return error.message; // Retourner le message si c'est un NotFoundException
+      }
+      console.error('An error occurred while processing the event participation:', error);
+      return 'An unexpected error occurred. Please try again later.';
     }
   }
+  
+  
 
   async getEventParticipants(eventId: number): Promise<any[] | undefined> {
     
